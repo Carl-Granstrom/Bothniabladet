@@ -18,13 +18,17 @@ namespace Bothniabladet.Data
         }
 
         /*VARIABLES*/
-        public int ImageID { get; set; }
-        public int ImageLicenseId { get; set; }
-        public int ImageMetaDataId { get; set; }
+        public int ImageId { get; set; }
+        public int ImageLicenseId { get; set; }     //1-1 unidirectional(?) to the image license object
+        public int ImageMetaDataId { get; set; }    //1-1 unidirectional(?) to the metadata object
         public int basePrice { get; set; }
         public DateTime issue { get; set; }
         public NewsSection sectionPublished { get; set; }
-        public HashSet<string> keywords { get; set; }      //Using a Hashset
+        //the below line has been edited out to make the db migration work while testing, needs an advanced solution.
+        //public HashSet<string> keywords { get; set; }      //Using a Hashset
+
+        /*LINKS*/
+        public ICollection<EditedImage> EditedImages { get; set; }
 
         /*METHODS*/
 

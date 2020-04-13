@@ -9,7 +9,7 @@ namespace Bothniabladet.Data
     public class GPSCoordinate
     {
         /*VARIABLES*/
-        public int GPSCoordinateID { get; set; }
+        public int GPSCoordinateId { get; set; }
 
 
         //Convenience fields

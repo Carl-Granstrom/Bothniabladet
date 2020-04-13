@@ -8,6 +8,6 @@ namespace Bothniabladet.Data
     public class Photographer
     {
         /*VARIABLES*/
-        public int PhotographerID { get; set; }
+        public int PhotographerId { get; set; }
     }
 }

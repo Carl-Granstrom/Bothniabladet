@@ -11,7 +11,7 @@
         }
 
         /*VARIABLES*/
-        public int ImageLicenseID { get; set; }
+        public int ImageLicenseId { get; set; }
         public LicenseType imageType { get; set; }
         public int usesLeft { get; set; }  //this should probably not be get/set via these methods, but need to think about it. Also, use -1 as gatekeeper for OWNED and BOUGHT types and specify in constructor?
 

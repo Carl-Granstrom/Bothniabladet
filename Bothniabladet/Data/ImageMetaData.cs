@@ -10,7 +10,7 @@ namespace Bothniabladet.Data
     public class ImageMetaData
     {
         /*VARIABLES*/
-        public int ImageMetaDataID { get; set; }
+        public int ImageMetaDataId { get; set; }
         private int height { get; set;}     //height in pixels
         private int width { get; set; }     //width in pixels
         private long fileSize { get; set; } //Placeholder, not sure how to handle this
