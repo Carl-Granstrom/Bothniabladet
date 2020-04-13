@@ -9,7 +9,7 @@ namespace Bothniabladet.Data
     public class EditedImage
     {
         /*VARIABLES*/
-        public int EditedImageID { get; set; }
+        public int EditedImageId { get; set; }
 
         //Convenience variables
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,14 +14,27 @@ namespace Bothniabladet
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            BuildWebHost(args).Run();
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IWebHost BuildWebHost(string[] args) =>
+        new WebHostBuilder()
+        .UseKestrel()
+        .UseContentRoot(Directory.GetCurrentDirectory())
+        .ConfigureAppConfiguration(AddAppConfiguration)
+        .ConfigureLogging(
+        (hostingContext, logging) => { /* Detail not shown */ })
+        .UseIISIntegration()
+        .UseDefaultServiceProvider(
+        (context, options) => { /* Detail not shown */ })
+        .UseStartup<Startup>()
+        .Build();
+        public static void AddAppConfiguration(
+        WebHostBuilderContext hostingContext,
+        IConfigurationBuilder config)
+        {
+            config.AddJsonFile("appsettings.json", optional: true);
+            config.AddUserSecrets<Startup>();   //I'm not sure what I'm doing here, this might be all wrong!!!
+            
+        }
     }
 }
