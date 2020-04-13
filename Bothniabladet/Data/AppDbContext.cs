@@ -11,6 +11,7 @@ namespace Bothniabladet.Data
         {
         }
 
+        //adding redundant comment to check commit in branch
         public DbSet<Image> Images { get; set; }
     }
 }
