@@ -5,10 +5,14 @@ using System.Threading.Tasks;
 
 namespace Bothniabladet.Data
 {
-    public class Photographer
+    public class Keyword
     {
         /*VARIABLES*/
-        public int PhotographerId { get; set; }
-        public string PhotographerName { get; set; }
+        public int KeywordId { get; set; }
+        public string Word { get; set; }
+
+        /*LINKS*/
+
+        /*METHODS*/
     }
 }

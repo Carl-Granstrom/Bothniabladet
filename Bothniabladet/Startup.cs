@@ -27,7 +27,7 @@ namespace Bothniabladet
         {
             services.AddControllersWithViews();
             var connString = Configuration.GetConnectionString("TestDatabase");    //get the connection string from the configuration file
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

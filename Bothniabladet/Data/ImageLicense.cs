@@ -1,5 +1,10 @@
-﻿namespace Bothniabladet.Data
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Bothniabladet.Data
 {
+    [Owned]
     public class ImageLicense
     {
         /* ENUMS */
@@ -11,9 +16,10 @@
         }
 
         /*VARIABLES*/
+        [Key]
         public int ImageLicenseId { get; set; }
-        public LicenseType imageType { get; set; }
-        public int usesLeft { get; set; }  //this should probably not be get/set via these methods, but need to think about it. Also, use -1 as gatekeeper for OWNED and BOUGHT types and specify in constructor?
+        public LicenseType ImageType { get; set; }
+        public int UsesLeft { get; set; }  //this should probably not be get/set via these methods, but need to think about it. Also, use -1 as gatekeeper for OWNED and BOUGHT types and specify in constructor?
 
         /*METHODS*/
     }

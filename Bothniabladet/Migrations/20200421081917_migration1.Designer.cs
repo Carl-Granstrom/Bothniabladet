@@ -4,15 +4,17 @@ using Bothniabladet.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200421081917_migration1")]
+    partial class migration1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,7 +88,7 @@ namespace Bothniabladet.Migrations
                     b.Property<int>("Section")
                         .HasColumnType("int");
 
-                    b.Property<int>("SectionPublished")
+                    b.Property<int>("sectionPublished")
                         .HasColumnType("int");
 
                     b.HasKey("ImageId");
@@ -122,26 +124,6 @@ namespace Bothniabladet.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("Bothniabladet.Data.Keyword", b =>
-                {
-                    b.Property<int>("KeywordId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Word")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("KeywordId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Keyword");
                 });
 
             modelBuilder.Entity("Bothniabladet.Data.EditedImage", b =>
@@ -214,13 +196,6 @@ namespace Bothniabladet.Migrations
                     b.HasOne("Bothniabladet.Data.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("Bothniabladet.Data.Keyword", b =>
-                {
-                    b.HasOne("Bothniabladet.Data.Image", null)
-                        .WithMany("Keywords")
-                        .HasForeignKey("ImageId");
                 });
 #pragma warning restore 612, 618
         }

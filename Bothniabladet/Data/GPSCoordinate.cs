@@ -14,6 +14,6 @@ namespace Bothniabladet.Data
 
         //Convenience fields
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime createdAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
