@@ -10,6 +10,7 @@ namespace Bothniabladet.Data
         /*VARIABLES*/
         public int ClientId { get; set; }
         public string ClientName { get; set; }
+        public float PriceReduction { get; set;}
 
         /*LINKS*/
         public ICollection<Invoice> Invoices { get; set; }

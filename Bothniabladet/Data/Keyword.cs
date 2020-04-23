@@ -14,5 +14,6 @@ namespace Bothniabladet.Data
         /*LINKS*/
 
         /*METHODS*/
+
     }
 }

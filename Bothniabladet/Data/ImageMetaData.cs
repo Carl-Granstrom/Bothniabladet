@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using GeoAPI.Geometries;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using NetTopologySuite.Geometries;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,10 +22,5 @@ namespace Bothniabladet.Data
 
         [Column(TypeName = "geometry")]
         public Point Location { get; set; }
-
-        //Convenience fields
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; }
-
     }
 }
