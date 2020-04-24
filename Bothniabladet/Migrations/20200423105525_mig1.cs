@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class migration1 : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,6 +15,7 @@ namespace Bothniabladet.Migrations
                     ClientId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientName = table.Column<string>(nullable: true),
+                    PriceReduction = table.Column<float>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -23,22 +24,14 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "Enums",
                 columns: table => new
                 {
-                    ImageId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageTitle = table.Column<string>(nullable: true),
-                    ImageData = table.Column<byte[]>(nullable: true),
-                    BasePrice = table.Column<int>(nullable: false),
-                    Issue = table.Column<DateTime>(nullable: false),
-                    sectionPublished = table.Column<int>(nullable: false),
-                    Section = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.ImageId);
+                    table.PrimaryKey("PK_Enums", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +55,30 @@ namespace Bothniabladet.Migrations
                         principalTable: "Clients",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageTitle = table.Column<string>(nullable: true),
+                    ImageData = table.Column<byte[]>(nullable: true),
+                    BasePrice = table.Column<int>(nullable: false),
+                    Issue = table.Column<DateTime>(nullable: false),
+                    Section = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ImageId);
+                    table.ForeignKey(
+                        name: "FK_Images_Enums_Section",
+                        column: x => x.Section,
+                        principalTable: "Enums",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +129,6 @@ namespace Bothniabladet.Migrations
                     ImageMetaDataId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Location = table.Column<Point>(type: "geometry", nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
                     ImageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -124,6 +140,37 @@ namespace Bothniabladet.Migrations
                         principalTable: "Images",
                         principalColumn: "ImageId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Keyword",
+                columns: table => new
+                {
+                    KeywordId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Word = table.Column<string>(nullable: true),
+                    ImageId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Keyword", x => x.KeywordId);
+                    table.ForeignKey(
+                        name: "FK_Keyword_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Enums",
+                column: "Name",
+                values: new object[]
+                {
+                    "CULTURE",
+                    "ECONOMY",
+                    "NEWS",
+                    "SPORTS"
                 });
 
             migrationBuilder.CreateIndex(
@@ -144,9 +191,19 @@ namespace Bothniabladet.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_Section",
+                table: "Images",
+                column: "Section");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Invoices_ClientId",
                 table: "Invoices",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Keyword_ImageId",
+                table: "Keyword",
+                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -164,10 +221,16 @@ namespace Bothniabladet.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Keyword");
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Enums");
         }
     }
 }

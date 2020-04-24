@@ -25,16 +25,55 @@ namespace Bothniabladet.Data
             //storing the NewsSection enum as an integer
             modelBuilder.Entity<Image>()
                 .Property(c => c.Section)
-                .HasConversion<int>();
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Image>()
+                .HasOne(c => c.SectionRelation)
+                .WithMany()
+                .HasForeignKey(c => c.Section);
+
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
                 .OwnsOne(s => s.ImageLicense)
                 .ToTable("ImageLicense");
+
+            //configuring Ownedproperty
             modelBuilder.Entity<Image>()
                 .OwnsOne(s => s.ImageMetaData)
                 .ToTable("ImageMetaData");
 
+            //storing the enums in their own table
+            modelBuilder.Entity<SectionEnum>()
+                .ToTable("Enums");
+
+            modelBuilder.Entity<SectionEnum>()
+                .Property(s => s.Name)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<SectionEnum>()
+                .HasKey(s => s.Name);
+
             base.OnModelCreating(modelBuilder);
+
+            //Create the enums in the database on startup
+            modelBuilder.Entity<SectionEnum>().HasData(
+                new SectionEnum
+                {
+                    Name = NewsSection.CULTURE
+                },
+                new SectionEnum
+                {
+                    Name = NewsSection.ECONOMY
+                },
+                new SectionEnum
+                {
+                    Name = NewsSection.NEWS
+                },
+                new SectionEnum
+                {
+                    Name = NewsSection.SPORTS
+                }
+                );
         }
     }
 }

@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200421111500_migration2")]
-    partial class migration2
+    [Migration("20200423105525_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace Bothniabladet.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
+
+                    b.Property<float>("PriceReduction")
+                        .HasColumnType("real");
 
                     b.HasKey("ClientId");
 
@@ -62,6 +65,34 @@ namespace Bothniabladet.Migrations
                     b.ToTable("EditedImage");
                 });
 
+            modelBuilder.Entity("Bothniabladet.Data.Enum", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Enums");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "CULTURE"
+                        },
+                        new
+                        {
+                            Name = "ECONOMY"
+                        },
+                        new
+                        {
+                            Name = "NEWS"
+                        },
+                        new
+                        {
+                            Name = "SPORTS"
+                        });
+                });
+
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
                     b.Property<int>("ImageId")
@@ -85,13 +116,13 @@ namespace Bothniabladet.Migrations
                     b.Property<DateTime>("Issue")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Section")
-                        .HasColumnType("int");
-
-                    b.Property<int>("sectionPublished")
-                        .HasColumnType("int");
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("Section");
 
                     b.ToTable("Images");
                 });
@@ -126,6 +157,26 @@ namespace Bothniabladet.Migrations
                     b.ToTable("Invoices");
                 });
 
+            modelBuilder.Entity("Bothniabladet.Data.Keyword", b =>
+                {
+                    b.Property<int>("KeywordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Word")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KeywordId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Keyword");
+                });
+
             modelBuilder.Entity("Bothniabladet.Data.EditedImage", b =>
                 {
                     b.HasOne("Bothniabladet.Data.Image", null)
@@ -135,6 +186,12 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
+                    b.HasOne("Bothniabladet.Data.Enum", "SectionRelation")
+                        .WithMany()
+                        .HasForeignKey("Section")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Bothniabladet.Data.ImageLicense", "ImageLicense", b1 =>
                         {
                             b1.Property<int>("ImageLicenseId")
@@ -169,10 +226,6 @@ namespace Bothniabladet.Migrations
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("datetime2");
-
                             b1.Property<int>("ImageId")
                                 .HasColumnType("int");
 
@@ -196,6 +249,13 @@ namespace Bothniabladet.Migrations
                     b.HasOne("Bothniabladet.Data.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.Keyword", b =>
+                {
+                    b.HasOne("Bothniabladet.Data.Image", null)
+                        .WithMany("Keywords")
+                        .HasForeignKey("ImageId");
                 });
 #pragma warning restore 612, 618
         }

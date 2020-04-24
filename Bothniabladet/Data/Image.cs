@@ -8,14 +8,6 @@ namespace Bothniabladet.Data
 {
     public class Image
     {
-        /* ENUMS */
-        public enum NewsSection
-        {
-            CULTURE,
-            NEWS,
-            ECONOMY,
-            SPORTS
-        }
 
         /*VARIABLES*/
         public int ImageId { get; set; }
@@ -23,7 +15,6 @@ namespace Bothniabladet.Data
         public byte[] ImageData { get; set; }
         public int BasePrice { get; set; }
         public DateTime Issue { get; set; }
-        public NewsSection SectionPublished { get; set; }
 
 
         /*LINKS*/
@@ -31,7 +22,7 @@ namespace Bothniabladet.Data
         public ImageLicense ImageLicense { get; set; }     //1-1 unidirectional(?) to the image license object
         public ImageMetaData ImageMetaData { get; set; }    //1-1 unidirectional(?) to the metadata object
         public NewsSection Section { get; set; }        //using the enum
-                                                        //the below line has been edited out to make the db migration work while testing, needs an advanced solution.
+        public SectionEnum SectionRelation { get; set; }
         public HashSet<Keyword> Keywords { get; set; }      //Using a Hashset, doesn't help tho because all Keywords are unique anyway. This needs more work.
 
         /*METHODS*/
