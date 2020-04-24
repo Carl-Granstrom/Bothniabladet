@@ -7,9 +7,9 @@ using Bothniabladet.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 
-namespace Bothniabladet.Models
+namespace Bothniabladet.Models.ImageModels
 {
-    public class CreateImageModel
+    public class CreateImageViewModel
     {
         public byte[] ImageData { get; set; }
         public string ImageTitle { get; set; }

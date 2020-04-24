@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Bothniabladet.Services;
 
 namespace Bothniabladet
 {
@@ -28,6 +29,7 @@ namespace Bothniabladet
             services.AddControllersWithViews();
             var connString = Configuration.GetConnectionString("TestDatabase");    //get the connection string from the configuration file
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
+            services.AddScoped<ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

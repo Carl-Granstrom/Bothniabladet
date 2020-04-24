@@ -63,34 +63,6 @@ namespace Bothniabladet.Migrations
                     b.ToTable("EditedImage");
                 });
 
-            modelBuilder.Entity("Bothniabladet.Data.Enum", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("Enums");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "CULTURE"
-                        },
-                        new
-                        {
-                            Name = "ECONOMY"
-                        },
-                        new
-                        {
-                            Name = "NEWS"
-                        },
-                        new
-                        {
-                            Name = "SPORTS"
-                        });
-                });
-
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
                     b.Property<int>("ImageId")
@@ -110,6 +82,9 @@ namespace Bothniabladet.Migrations
 
                     b.Property<string>("ImageTitle")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Issue")
                         .HasColumnType("datetime2");
@@ -175,6 +150,34 @@ namespace Bothniabladet.Migrations
                     b.ToTable("Keyword");
                 });
 
+            modelBuilder.Entity("Bothniabladet.Data.SectionEnum", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Enums");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "CULTURE"
+                        },
+                        new
+                        {
+                            Name = "ECONOMY"
+                        },
+                        new
+                        {
+                            Name = "NEWS"
+                        },
+                        new
+                        {
+                            Name = "SPORTS"
+                        });
+                });
+
             modelBuilder.Entity("Bothniabladet.Data.EditedImage", b =>
                 {
                     b.HasOne("Bothniabladet.Data.Image", null)
@@ -184,7 +187,7 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
-                    b.HasOne("Bothniabladet.Data.Enum", "SectionRelation")
+                    b.HasOne("Bothniabladet.Data.SectionEnum", "SectionRelation")
                         .WithMany()
                         .HasForeignKey("Section")
                         .OnDelete(DeleteBehavior.Cascade)

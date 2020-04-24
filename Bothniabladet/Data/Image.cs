@@ -15,6 +15,7 @@ namespace Bothniabladet.Data
         public byte[] ImageData { get; set; }
         public int BasePrice { get; set; }
         public DateTime Issue { get; set; }
+        public bool IsDeleted { get; set; }
 
 
         /*LINKS*/

@@ -8,18 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bothniabladet.Data;
-using Bothniabladet.Models;
+using Bothniabladet.Models.ImageModels;
 using System.Web;
+using System.IO;
+using Bothniabladet.Services;
 
 namespace Bothniabladet.Controllers
 {
     public class ImagesController : Controller
     {
+        //possible to remove the AppDbContext once Services are fully implemented
         private readonly AppDbContext _context;
-
-        public ImagesController(AppDbContext context)
+        public ImageService _service;
+        public ImagesController(AppDbContext context, ImageService service)
         {
             _context = context;
+            _service = service;
         }
 
         // GET: Images
@@ -49,10 +53,7 @@ namespace Bothniabladet.Controllers
         // GET: Images/Create
         public IActionResult Create()
         {
-
-            //I need to be able to populate the CreateImageModel from the DB and then bind it so it can be displayed in the view
-
-            return View(new CreateImageModel());
+            return View(new CreateImageCommand());
         }
 
         // POST: Images/Create
@@ -60,15 +61,28 @@ namespace Bothniabladet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageId,ImageTitle,ImageData,BasePrice,Issue,SectionPublished,Section,CreatedAt")] Image image)
+        public async Task<IActionResult> Create(CreateImageCommand cmd)
         {
-            if (ModelState.IsValid)
+            using (var memoryStream = new MemoryStream())
             {
-                _context.Add(image);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream);
+
+                // Upload the file if less than 102ish MB
+                if (memoryStream.Length < 102097152)
+                {
+                    cmd.ImageDataByte = memoryStream.ToArray();
+                    var id = _service.CreateImage(cmd);
+                    return RedirectToAction("");
+                    //return RedirectToAction(nameof(View), new { id = id });
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
+                }
             }
-            return View(image);
+
+            //If we got to here, something went wrong
+            return View(cmd);
         }
 
         // GET: Images/Edit/5
