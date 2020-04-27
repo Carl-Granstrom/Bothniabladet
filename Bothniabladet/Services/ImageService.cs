@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Bothniabladet.Data;
@@ -23,15 +24,25 @@ namespace Bothniabladet.Services
         //This collection can be used when loading many images for a search query, optimally we'd have some kind of thumbnail here as well.
         public ICollection<ImageSummaryViewModel> GetImages()
         {
+            List<string> placeholderKeywords = new List<string>()
+                    {
+                        "Kungen",
+                        "Stockholm",
+                        "Skandal",
+                        "Ferrari",
+                        "Fortkörning"
+                    };
             //this is translated into a database SELECT query
             return _context.Images
                 //This Where-method implements a "soft delete" which hides the data from the application, but does not actually delete it from the Database
-                .Where(r => !r.IsDeleted)                
-                .Select(x => new ImageSummaryViewModel
+                .Where(image => !image.IsDeleted)                
+                .Select(image => new ImageSummaryViewModel
                 {
-                    Id = x.ImageId,
-                    Name = x.ImageTitle,
-                    Section = x.Section.ToString()
+                    Name = image.ImageTitle,
+                    Section = image.Section.ToString(),
+                    //statiska nyckelord för test, ändra när keywords är implementerat 
+                    Keywords = placeholderKeywords,
+                    Date = image.Issue
                 })
                 .ToList();
         }

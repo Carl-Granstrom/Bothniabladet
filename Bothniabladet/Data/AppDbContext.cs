@@ -34,13 +34,11 @@ namespace Bothniabladet.Data
 
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
-                .OwnsOne(s => s.ImageLicense)
-                .ToTable("ImageLicense");
+                .OwnsOne(s => s.ImageLicense);
 
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
-                .OwnsOne(s => s.ImageMetaData)
-                .ToTable("ImageMetaData");
+                .OwnsOne(s => s.ImageMetaData);
 
             //storing the enums in their own table
             modelBuilder.Entity<SectionEnum>()

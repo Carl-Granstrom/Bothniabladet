@@ -12,6 +12,7 @@ using Bothniabladet.Models.ImageModels;
 using System.Web;
 using System.IO;
 using Bothniabladet.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Bothniabladet.Controllers
 {
@@ -27,9 +28,10 @@ namespace Bothniabladet.Controllers
         }
 
         // GET: Images
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Images.ToListAsync());
+            var models = _service.GetImages();
+            return View(models);
         }
 
         // GET: Images/Details/5
@@ -63,14 +65,15 @@ namespace Bothniabladet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateImageCommand cmd)
         {
+            //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
+                
                 await cmd.ImageData.FormFile.CopyToAsync(memoryStream);
-
-                // Upload the file if less than 102ish MB
-                if (memoryStream.Length < 102097152)
+                // Upload the file if less than 12ish MB
+                if (memoryStream.Length < 12097152)
                 {
-                    cmd.ImageDataByte = memoryStream.ToArray();
+                    cmd.ImageMemoryStream = memoryStream;
                     var id = _service.CreateImage(cmd);
                     return RedirectToAction("");
                     //return RedirectToAction(nameof(View), new { id = id });

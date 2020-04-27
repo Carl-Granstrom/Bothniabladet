@@ -16,7 +16,7 @@ namespace Bothniabladet.Models.ImageModels
         public int BasePrice { get; set; }
         //I have to figure out how to not view the time here. Trying this.
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh:MM tt}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Issue { get; set; }
         public string Section { get; set; } //this field will be populated from the Select Tag Helper in the view
         //this need to be populated from the databse(in the controller?) but using PH for now

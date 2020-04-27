@@ -195,26 +195,20 @@ namespace Bothniabladet.Migrations
 
                     b.OwnsOne("Bothniabladet.Data.ImageLicense", "ImageLicense", b1 =>
                         {
-                            b1.Property<int>("ImageLicenseId")
+                            b1.Property<int>("ImageId")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<int>("ImageId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("ImageType")
+                            b1.Property<int>("LicenceType")
                                 .HasColumnType("int");
 
                             b1.Property<int>("UsesLeft")
                                 .HasColumnType("int");
 
-                            b1.HasKey("ImageLicenseId");
+                            b1.HasKey("ImageId");
 
-                            b1.HasIndex("ImageId")
-                                .IsUnique();
-
-                            b1.ToTable("ImageLicense");
+                            b1.ToTable("Images");
 
                             b1.WithOwner()
                                 .HasForeignKey("ImageId");
@@ -222,23 +216,29 @@ namespace Bothniabladet.Migrations
 
                     b.OwnsOne("Bothniabladet.Data.ImageMetaData", "ImageMetaData", b1 =>
                         {
-                            b1.Property<int>("ImageMetaDataId")
+                            b1.Property<int>("ImageId")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                            b1.Property<int>("ImageId")
+                            b1.Property<DateTime>("DateTaken")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<long>("FileSize")
+                                .HasColumnType("bigint");
+
+                            b1.Property<int>("Height")
                                 .HasColumnType("int");
 
                             b1.Property<Point>("Location")
                                 .HasColumnType("geometry");
 
-                            b1.HasKey("ImageMetaDataId");
+                            b1.Property<int>("Width")
+                                .HasColumnType("int");
 
-                            b1.HasIndex("ImageId")
-                                .IsUnique();
+                            b1.HasKey("ImageId");
 
-                            b1.ToTable("ImageMetaData");
+                            b1.ToTable("Images");
 
                             b1.WithOwner()
                                 .HasForeignKey("ImageId");

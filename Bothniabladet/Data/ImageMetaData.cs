@@ -14,11 +14,10 @@ namespace Bothniabladet.Data
     public class ImageMetaData
     {
         /*VARIABLES*/
-        [Key]
-        public int ImageMetaDataId { get; set; }
-        private int Height { get; set;}     //height in pixels
-        private int Width { get; set; }     //width in pixels
-        private long FileSize { get; set; } //Placeholder, not sure how to handle this
+        public int Height { get; set;}     //height in pixels
+        public int Width { get; set; }     //width in pixels
+        public long FileSize { get; set; } //Placeholder, not sure how to handle this
+        public DateTime DateTaken { get; set; }
 
         [Column(TypeName = "geometry")]
         public Point Location { get; set; }

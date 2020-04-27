@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class AddMigrationmig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,6 +68,13 @@ namespace Bothniabladet.Migrations
                     BasePrice = table.Column<int>(nullable: false),
                     Issue = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    ImageLicense_LicenceType = table.Column<int>(nullable: true),
+                    ImageLicense_UsesLeft = table.Column<int>(nullable: true),
+                    ImageMetaData_Height = table.Column<int>(nullable: true),
+                    ImageMetaData_Width = table.Column<int>(nullable: true),
+                    ImageMetaData_FileSize = table.Column<long>(nullable: true),
+                    ImageMetaData_DateTaken = table.Column<DateTime>(nullable: true),
+                    ImageMetaData_Location = table.Column<Point>(type: "geometry", nullable: true),
                     Section = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
@@ -100,47 +107,6 @@ namespace Bothniabladet.Migrations
                         principalTable: "Images",
                         principalColumn: "ImageId",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ImageLicense",
-                columns: table => new
-                {
-                    ImageLicenseId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageType = table.Column<int>(nullable: false),
-                    UsesLeft = table.Column<int>(nullable: false),
-                    ImageId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImageLicense", x => x.ImageLicenseId);
-                    table.ForeignKey(
-                        name: "FK_ImageLicense_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "ImageId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ImageMetaData",
-                columns: table => new
-                {
-                    ImageMetaDataId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Location = table.Column<Point>(type: "geometry", nullable: true),
-                    ImageId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImageMetaData", x => x.ImageMetaDataId);
-                    table.ForeignKey(
-                        name: "FK_ImageMetaData_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "ImageId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,18 +146,6 @@ namespace Bothniabladet.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageLicense_ImageId",
-                table: "ImageLicense",
-                column: "ImageId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ImageMetaData_ImageId",
-                table: "ImageMetaData",
-                column: "ImageId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Images_Section",
                 table: "Images",
                 column: "Section");
@@ -211,12 +165,6 @@ namespace Bothniabladet.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EditedImage");
-
-            migrationBuilder.DropTable(
-                name: "ImageLicense");
-
-            migrationBuilder.DropTable(
-                name: "ImageMetaData");
 
             migrationBuilder.DropTable(
                 name: "Invoices");
