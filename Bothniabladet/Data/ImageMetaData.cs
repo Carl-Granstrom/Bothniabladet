@@ -17,6 +17,7 @@ namespace Bothniabladet.Data
         public int Height { get; set;}     //height in pixels
         public int Width { get; set; }     //width in pixels
         public long FileSize { get; set; } //Placeholder, not sure how to handle this
+        public string FileFormat { get; set; }
         public DateTime DateTaken { get; set; }
 
         [Column(TypeName = "geometry")]

@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class AddMigrationmig1 : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,6 +73,7 @@ namespace Bothniabladet.Migrations
                     ImageMetaData_Height = table.Column<int>(nullable: true),
                     ImageMetaData_Width = table.Column<int>(nullable: true),
                     ImageMetaData_FileSize = table.Column<long>(nullable: true),
+                    ImageMetaData_FileFormat = table.Column<string>(nullable: true),
                     ImageMetaData_DateTaken = table.Column<DateTime>(nullable: true),
                     ImageMetaData_Location = table.Column<Point>(type: "geometry", nullable: true),
                     Section = table.Column<string>(nullable: false),

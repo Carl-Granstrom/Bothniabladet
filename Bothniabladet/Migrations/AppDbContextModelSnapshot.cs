@@ -224,6 +224,9 @@ namespace Bothniabladet.Migrations
                             b1.Property<DateTime>("DateTaken")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<string>("FileFormat")
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<long>("FileSize")
                                 .HasColumnType("bigint");
 

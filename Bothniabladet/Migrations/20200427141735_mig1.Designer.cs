@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200427120158_Add-Migration mig1")]
-    partial class AddMigrationmig1
+    [Migration("20200427141735_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -225,6 +225,9 @@ namespace Bothniabladet.Migrations
 
                             b1.Property<DateTime>("DateTaken")
                                 .HasColumnType("datetime2");
+
+                            b1.Property<string>("FileFormat")
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<long>("FileSize")
                                 .HasColumnType("bigint");

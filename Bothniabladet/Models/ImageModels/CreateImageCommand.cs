@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using NetTopologySuite.Geometries;
-using ExifLib;
+using XmpCore;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 
 //this class holds the form data from the ImageModels-Create view.
@@ -44,12 +46,12 @@ namespace Bothniabladet.Models.ImageModels
         public MemoryStream ImageMemoryStream { get; set; }
 
         //this method will eventually handle the metadata extraction and the creation of a new image from the command object.
-        public Image ToImage()
+        public Data.Image ToImage()
         {
             //placeholder before I cba to do the string conversion to correct enum.
             NewsSection TmpSection = NewsSection.NEWS;
 
-            return new Image
+            return new Data.Image
             {
                 ImageTitle = ImageTitle,
                 BasePrice = BasePrice,
@@ -68,36 +70,15 @@ namespace Bothniabladet.Models.ImageModels
         private ImageMetaData ExtractMetaData(MemoryStream image)
         {
             ImageMetaData extractedMetaData = new ImageMetaData();
-            var jpgInfo = ExifReader.ReadJpeg(image);
-            if (jpgInfo != null)
-            {
-                var GPSLatitude = jpgInfo.GpsLatitude;
-                var GPSLongitude = jpgInfo.GpsLongitude;
-                DateTime dateTaken = DateTime.MinValue; //if no datetime exif exists then set this value to the minimum, might need to think this though.
-                if (jpgInfo.DateTime != null)
-                {
-                    dateTaken = DateTime.Parse(jpgInfo.DateTime);
-                }
-                int width = jpgInfo.Width;
-                int height = jpgInfo.Height;
-                int fileSize = jpgInfo.FileSize;
-                extractedMetaData.Height = height;
-                extractedMetaData.Width = width;
-                extractedMetaData.FileSize = fileSize;
-                extractedMetaData.DateTaken = dateTaken;
-                //Placeholder until I can figure out the format of the JpegInfo.GpsLatitude, why is it an array of doubles?
-                extractedMetaData.Location = new Point(1, 1); 
-            }
-            else
-            {
-                //This might need thinking through
-                extractedMetaData.Height = -1;
-                extractedMetaData.Width = -1;
-                extractedMetaData.FileSize = -1;
-                extractedMetaData.DateTaken = DateTime.MinValue;
-                extractedMetaData.Location = new Point(-1, -1);
 
-            }
+
+            System.Drawing.Image drawingImage = System.Drawing.Image.FromStream(image);
+            PropertyItem[] propItems = drawingImage.PropertyItems;
+            
+
+            extractedMetaData.Height = drawingImage.Height;
+            extractedMetaData.Width = drawingImage.Width;
+            extractedMetaData.FileFormat = drawingImage.RawFormat.ToString();
 
             return extractedMetaData;
         }
