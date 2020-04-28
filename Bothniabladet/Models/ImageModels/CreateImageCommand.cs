@@ -74,15 +74,45 @@ namespace Bothniabladet.Models.ImageModels
 
             System.Drawing.Image drawingImage = System.Drawing.Image.FromStream(image);
             PropertyItem[] propItems = drawingImage.PropertyItems;
-            
-
+            //The following code extracts the longitude and latitude out from the extremely convoluted PropertyItem-array
+            byte[] latitudeRational = new byte[] { 0, 0 };
+            byte[] longitudeRational = new byte[] { 0, 0 };
+            foreach (PropertyItem property in propItems)
+            {
+                //check for Latitude property (https://docs.microsoft.com/sv-se/windows/win32/gdiplus/-gdiplus-constant-property-item-descriptions#propertytaggpslatitude)
+                if (property.Id == 0x0002)
+                {
+                    latitudeRational = property.Value;
+                }
+                //check for Longitude property (https://docs.microsoft.com/sv-se/windows/win32/gdiplus/-gdiplus-constant-property-item-descriptions#propertytaggpslongitude)
+                if (property.Id == 0x0004)
+                {
+                    longitudeRational = property.Value;
+                }
+            }
+            extractedMetaData.Location = new NetTopologySuite.Geometries.Point(CoordinateToDouble(latitudeRational), CoordinateToDouble(longitudeRational));
             extractedMetaData.Height = drawingImage.Height;
             extractedMetaData.Width = drawingImage.Width;
             extractedMetaData.FileFormat = drawingImage.RawFormat.ToString();
 
             return extractedMetaData;
         }
+
+        //This methods extracts degrees, minutes and seconds but only returns the degrees. We could get a lot more fancy with our coordinates.
+        private double CoordinateToDouble(byte[] rational)
+        {
+            uint degreesNumerator = BitConverter.ToUInt32(rational, 0);
+            uint degreesDenominator = BitConverter.ToUInt32(rational, 4);
+            uint minutesNumerator = BitConverter.ToUInt32(rational, 8);
+            uint minutesDenominator = BitConverter.ToUInt32(rational, 12);
+            uint secondsNumerator = BitConverter.ToUInt32(rational, 16);
+            uint secondsDenominator = BitConverter.ToUInt32(rational, 20);
+            if (degreesDenominator == 0) { return 0; }     //could also make this harder for myself by returning NaN and handling it further up.
+            return degreesNumerator / degreesDenominator;
+        }
     }
+
+
 
     //strange name bc copied from documentation, might refactor later
     public class ImageData

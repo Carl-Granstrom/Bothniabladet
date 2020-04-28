@@ -24,6 +24,7 @@ namespace Bothniabladet.Services
         //This collection can be used when loading many images for a search query, optimally we'd have some kind of thumbnail here as well.
         public ICollection<ImageSummaryViewModel> GetImages()
         {
+            //Placeholder, not storing keywords yet.
             List<string> placeholderKeywords = new List<string>()
                     {
                         "Kungen",
@@ -38,6 +39,7 @@ namespace Bothniabladet.Services
                 .Where(image => !image.IsDeleted)                
                 .Select(image => new ImageSummaryViewModel
                 {
+                    Id = image.ImageId,
                     Name = image.ImageTitle,
                     Section = image.Section.ToString(),
                     //statiska nyckelord för test, ändra när keywords är implementerat 
@@ -49,18 +51,38 @@ namespace Bothniabladet.Services
 
         //Need more logic here to actually display the image, but not sure how to do that yet. Will need to fetch the data from the db and 
         //convert it back into an image, as well as grabbing the data from the License and the MetaData.
-        public ImageDetailViewModel GetImageDetail(int id)
+        public ImageDetailViewModel GetImageDetail(int? id)
         {
-            return _context.Images
-                .Where(x => x.ImageId == id)        //This generates a SELECT clause by id, so will find only one result
-                .Where(x => !x.IsDeleted)           //Check for soft delete
-                .Select(x => new ImageDetailViewModel
+            //Placeholder, not storing keywords yet.
+            List<string> placeholderKeywords = new List<string>()
+                    {
+                        "Kungen",
+                        "Stockholm",
+                        "Skandal",
+                        "Ferrari",
+                        "Fortkörning"
+                    };
+
+            ImageDetailViewModel image = _context.Images
+                .Where(image => image.ImageId == id)        //This generates a SELECT clause by id, so will find only one result
+                .Where(image => !image.IsDeleted)           //Check for soft delete
+                .Select(image => new ImageDetailViewModel
                 {
-                    Id = x.ImageId,
-                    Name = x.ImageTitle,
-                    Section = x.Section.ToString()
+                    Id = image.ImageId,
+                    Name = image.ImageTitle,
+                    ImageDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
+                    Section = image.Section.ToString(),
+                    //statiska nyckelord för test, ändra när keywords är implementerat 
+                    Keywords = placeholderKeywords,
+                    Date = image.Issue,
+                    Height = image.ImageMetaData.Height,
+                    Width = image.ImageMetaData.Width,
+                    FileFormat = image.ImageMetaData.FileFormat,
+                    GPS = image.ImageMetaData.Location.ToString()
                 })
                 .SingleOrDefault();
+
+            return image;
 
         }
 

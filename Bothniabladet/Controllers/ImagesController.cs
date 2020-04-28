@@ -37,17 +37,20 @@ namespace Bothniabladet.Controllers
         // GET: Images/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var image = await _context.Images
-                .FirstOrDefaultAsync(m => m.ImageId == id);
+            var image = _service.GetImageDetail(id);
+            
             if (image == null)
             {
                 return NotFound();
             }
+            //add image to viewbag
+            ViewBag.ImageDataUrl = image.ImageDataString;
 
             return View(image);
         }

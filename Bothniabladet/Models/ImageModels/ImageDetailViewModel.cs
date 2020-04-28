@@ -15,20 +15,16 @@ namespace Bothniabladet.Models.ImageModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string ImageDataString { get; set; }
         public string Section { get; set; }
-        private List<string> keywords;
-        public string KeywordsString
-        {
-            get
-            {
-                string concatString = String.Join(", ", keywords);
-
-                return concatString;
-            }
-
-        }
         public List<string> Keywords { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public string FileFormat { get; set; }
+        public string GPS { get; set; }
 
         public static ImageDetailViewModel FromImage(Image image)
         {
@@ -42,9 +38,14 @@ namespace Bothniabladet.Models.ImageModels
             {
                 Id = image.ImageId,
                 Name = image.ImageTitle,
+                ImageDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
                 Section = image.Section.ToString(),
                 Keywords = Keywords,
-                Date = image.Issue
+                Date = image.Issue,
+                Height = image.ImageMetaData.Height,
+                Width = image.ImageMetaData.Width,
+                FileFormat = image.ImageMetaData.FileFormat,
+                GPS = image.ImageMetaData.Location.ToString()
             };
         }
     }
