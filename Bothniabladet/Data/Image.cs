@@ -23,7 +23,6 @@ namespace Bothniabladet.Data
         public ImageLicense ImageLicense { get; set; }     //1-1 unidirectional(?) to the image license object
         public ImageMetaData ImageMetaData { get; set; }    //1-1 unidirectional(?) to the metadata object
         public NewsSection Section { get; set; }        //using the enum
-        public SectionEnum SectionRelation { get; set; }
         public HashSet<Keyword> Keywords { get; set; }      //Using a Hashset, doesn't help tho because all Keywords are unique anyway. This needs more work.
 
         /*METHODS*/

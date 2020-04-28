@@ -19,6 +19,7 @@ namespace Bothniabladet.Data
         //So, navigation has to work both ways.
         public DbSet<Client> Clients { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<SectionEnum> Enums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,10 +28,10 @@ namespace Bothniabladet.Data
                 .Property(c => c.Section)
                 .HasConversion<string>();
 
-            modelBuilder.Entity<Image>()
-                .HasOne(c => c.SectionRelation)
-                .WithMany()
-                .HasForeignKey(c => c.Section);
+            //modelBuilder.Entity<Image>()
+            //    .HasOne(c => c.SectionRelation)
+            //    .WithMany()
+            //    .HasForeignKey(c => c.Section);
 
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
@@ -42,14 +43,12 @@ namespace Bothniabladet.Data
 
             //storing the enums in their own table
             modelBuilder.Entity<SectionEnum>()
-                .ToTable("Enums");
+                .ToTable("Enums")
+                .HasKey(c => c.SectionEnumId);
 
             modelBuilder.Entity<SectionEnum>()
                 .Property(s => s.Name)
                 .HasConversion<string>();
-
-            modelBuilder.Entity<SectionEnum>()
-                .HasKey(s => s.Name);
 
             base.OnModelCreating(modelBuilder);
 
@@ -57,18 +56,27 @@ namespace Bothniabladet.Data
             modelBuilder.Entity<SectionEnum>().HasData(
                 new SectionEnum
                 {
+                    SectionEnumId = 1,
                     Name = NewsSection.CULTURE
                 },
                 new SectionEnum
                 {
+                    SectionEnumId = 2,
                     Name = NewsSection.ECONOMY
                 },
                 new SectionEnum
                 {
+                    SectionEnumId = 3,
                     Name = NewsSection.NEWS
+                }, 
+                new SectionEnum
+                {
+                    SectionEnumId = 4,
+                    Name = NewsSection.INTERNATIONAL
                 },
                 new SectionEnum
                 {
+                    SectionEnumId = 5,
                     Name = NewsSection.SPORTS
                 }
                 );

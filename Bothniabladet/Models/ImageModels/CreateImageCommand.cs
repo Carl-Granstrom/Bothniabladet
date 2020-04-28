@@ -34,28 +34,19 @@ namespace Bothniabladet.Models.ImageModels
         public NewsSection Section { get; set; } //this field will be populated from the Select Tag Helper in the view
         //this need to be populated from the databse(in the controller?) but using PH for now
         //this uses SelectListItems and they need to be converted to the enums again
-        public IEnumerable<SelectListItem> Sections { get; } = new List<SelectListItem>
-        {
-            new SelectListItem() { Value = "CULTURE", Text = "CULTURE" },
-            new SelectListItem() { Value = "NEWS", Text = "NEWS" },
-            new SelectListItem() { Value = "ECONOMY", Text = "ECONOMY" },
-            new SelectListItem() { Value = "SPORTS", Text = "SPORTS" }
-        };
+        public ICollection<SelectListItem> Sections { get; set; }
 
         //still need to add information needed by ImageLicense and ImageMetaData
 
-
+        [Required]
         [BindProperty]
         public ImageData ImageData { get; set; }
-
+        //not sure that this is a good way to use a stream.
         public MemoryStream ImageMemoryStream { get; set; }
 
         //this method will eventually handle the metadata extraction and the creation of a new image from the command object.
         public Data.Image ToImage()
         {
-            //placeholder before I cba to do the string conversion to correct enum.
-            NewsSection TmpSection = NewsSection.NEWS;
-
             return new Data.Image
             {
                 ImageTitle = ImageTitle,

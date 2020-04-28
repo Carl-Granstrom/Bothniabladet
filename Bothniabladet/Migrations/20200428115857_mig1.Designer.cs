@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200427141735_mig1")]
+    [Migration("20200428115857_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,11 +93,9 @@ namespace Bothniabladet.Migrations
 
                     b.Property<string>("Section")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ImageId");
-
-                    b.HasIndex("Section");
 
                     b.ToTable("Images");
                 });
@@ -154,28 +152,43 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.SectionEnum", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("SectionEnumId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SectionEnumId");
 
                     b.ToTable("Enums");
 
                     b.HasData(
                         new
                         {
+                            SectionEnumId = 1,
                             Name = "CULTURE"
                         },
                         new
                         {
+                            SectionEnumId = 2,
                             Name = "ECONOMY"
                         },
                         new
                         {
+                            SectionEnumId = 3,
                             Name = "NEWS"
                         },
                         new
                         {
+                            SectionEnumId = 4,
+                            Name = "INTERNATIONAL"
+                        },
+                        new
+                        {
+                            SectionEnumId = 5,
                             Name = "SPORTS"
                         });
                 });
@@ -189,12 +202,6 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
-                    b.HasOne("Bothniabladet.Data.SectionEnum", "SectionRelation")
-                        .WithMany()
-                        .HasForeignKey("Section")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("Bothniabladet.Data.ImageLicense", "ImageLicense", b1 =>
                         {
                             b1.Property<int>("ImageId")

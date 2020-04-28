@@ -27,7 +27,6 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
-        // GET: Images
         public IActionResult Index()
         {
             var models = _service.GetImages();
@@ -58,7 +57,7 @@ namespace Bothniabladet.Controllers
         // GET: Images/Create
         public IActionResult Create()
         {
-            return View(new CreateImageCommand());
+            return View(new CreateImageCommand() { Sections = _service.GetSectionChoices() });  //retrive the Section choices from the database
         }
 
         // POST: Images/Create
@@ -72,13 +71,13 @@ namespace Bothniabladet.Controllers
             using (var memoryStream = new MemoryStream())
             {
                 
-                await cmd.ImageData.FormFile.CopyToAsync(memoryStream);
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile
                 // Upload the file if less than 12ish MB
                 if (memoryStream.Length < 12097152)
                 {
-                    cmd.ImageMemoryStream = memoryStream;
+                    cmd.ImageMemoryStream = memoryStream;   //add the image data to the command object
                     var id = _service.CreateImage(cmd);
-                    return RedirectToAction("");
+                    return RedirectToAction("");    //make this redirect to the added image's Details page.
                     //return RedirectToAction(nameof(View), new { id = id });
                 }
                 else

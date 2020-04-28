@@ -18,8 +18,9 @@ namespace Bothniabladet.Models.ImageModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Issue { get; set; }
-        public string Section { get; set; } //this field will be populated from the Select Tag Helper in the view
-        //this need to be populated from the databse(in the controller?) but using PH for now
+        public string Section { get; set; } //this field is populated from the Select Tag Helper in the view
+
+        //this need to be populated from the database(in the controller?) but using PH for now
         //this uses SelectListItems and they need to be converted to the enums again
         public List<SelectListItem> Sections { get; } = new List<SelectListItem>
         {

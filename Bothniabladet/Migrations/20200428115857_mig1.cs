@@ -27,34 +27,13 @@ namespace Bothniabladet.Migrations
                 name: "Enums",
                 columns: table => new
                 {
+                    SectionEnumId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enums", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Invoices",
-                columns: table => new
-                {
-                    InvoiceId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DollarAmount = table.Column<float>(nullable: false),
-                    Paid = table.Column<bool>(nullable: false),
-                    DueAt = table.Column<DateTime>(nullable: false),
-                    ClientId = table.Column<int>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
-                    table.ForeignKey(
-                        name: "FK_Invoices_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Enums", x => x.SectionEnumId);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,12 +61,29 @@ namespace Bothniabladet.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.ImageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    InvoiceId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DollarAmount = table.Column<float>(nullable: false),
+                    Paid = table.Column<bool>(nullable: false),
+                    DueAt = table.Column<DateTime>(nullable: false),
+                    ClientId = table.Column<int>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
                     table.ForeignKey(
-                        name: "FK_Images_Enums_Section",
-                        column: x => x.Section,
-                        principalTable: "Enums",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Invoices_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,24 +128,20 @@ namespace Bothniabladet.Migrations
 
             migrationBuilder.InsertData(
                 table: "Enums",
-                column: "Name",
-                values: new object[]
+                columns: new[] { "SectionEnumId", "Name" },
+                values: new object[,]
                 {
-                    "CULTURE",
-                    "ECONOMY",
-                    "NEWS",
-                    "SPORTS"
+                    { 1, "CULTURE" },
+                    { 2, "ECONOMY" },
+                    { 3, "NEWS" },
+                    { 4, "INTERNATIONAL" },
+                    { 5, "SPORTS" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_EditedImage_ImageId",
                 table: "EditedImage",
                 column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_Section",
-                table: "Images",
-                column: "Section");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_ClientId",
@@ -168,6 +160,9 @@ namespace Bothniabladet.Migrations
                 name: "EditedImage");
 
             migrationBuilder.DropTable(
+                name: "Enums");
+
+            migrationBuilder.DropTable(
                 name: "Invoices");
 
             migrationBuilder.DropTable(
@@ -178,9 +173,6 @@ namespace Bothniabladet.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
-
-            migrationBuilder.DropTable(
-                name: "Enums");
         }
     }
 }

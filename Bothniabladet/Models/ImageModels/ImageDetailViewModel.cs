@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace Bothniabladet.Models.ImageModels
 {
-    //this class is supposed to actually view the image and all the data, for now it's jus ta copy of the summary class
     public class ImageDetailViewModel
     {
         public int Id { get; set; }
@@ -25,7 +24,7 @@ namespace Bothniabladet.Models.ImageModels
         public int Width { get; set; }
         public string FileFormat { get; set; }
         public string GPS { get; set; }
-        public string noGPS = "No GPS coordinates for this image";
+        public string noGPS = "No GPS coordinates for this image";      //TODO: Replace this with logic in the View instead
 
         public static ImageDetailViewModel FromImage(Image image)
         {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bothniabladet.Data;
 using Bothniabladet.Models.ImageModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 
 namespace Bothniabladet.Services
@@ -49,8 +50,6 @@ namespace Bothniabladet.Services
                 .ToList();
         }
 
-        //Need more logic here to actually display the image, but not sure how to do that yet. Will need to fetch the data from the db and 
-        //convert it back into an image, as well as grabbing the data from the License and the MetaData.
         public ImageDetailViewModel GetImageDetail(int? id)
         {
             //Placeholder, not storing keywords yet.
@@ -83,6 +82,18 @@ namespace Bothniabladet.Services
                 .SingleOrDefault();
 
             return image;
+
+        }
+
+        public ICollection<SelectListItem> GetSectionChoices()
+        {
+            //returns the enums as SelectListItems with the enum name as Text and Value
+            return _context.Enums.Select(item => new SelectListItem
+            {
+                Text = item.Name.ToString(),
+                Value = item.Name.ToString()
+            }
+            ).ToList();
 
         }
 
