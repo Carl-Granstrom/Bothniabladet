@@ -20,16 +20,21 @@ namespace Bothniabladet.Models.ImageModels
 {
     public class CreateImageCommand
     {
+        [Required]
         public string ImageTitle { get; set; }
+        [Required]
         public int BasePrice { get; set; }
         //I have to figure out how to not view the time here. Trying this.
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Issue { get; set; }
-        public string Section { get; set; } //this field will be populated from the Select Tag Helper in the view
+
+        [Required]
+        public NewsSection Section { get; set; } //this field will be populated from the Select Tag Helper in the view
         //this need to be populated from the databse(in the controller?) but using PH for now
         //this uses SelectListItems and they need to be converted to the enums again
-        public List<SelectListItem> Sections { get; } = new List<SelectListItem>
+        public IEnumerable<SelectListItem> Sections { get; } = new List<SelectListItem>
         {
             new SelectListItem() { Value = "CULTURE", Text = "CULTURE" },
             new SelectListItem() { Value = "NEWS", Text = "NEWS" },
@@ -56,7 +61,7 @@ namespace Bothniabladet.Models.ImageModels
                 ImageTitle = ImageTitle,
                 BasePrice = BasePrice,
                 Issue = Issue,
-                Section = TmpSection,
+                Section = Section,
                 ImageData = ImageMemoryStream.ToArray(),
                 //placeholders ImageLicense
                 ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3},
@@ -101,6 +106,8 @@ namespace Bothniabladet.Models.ImageModels
         //This methods extracts degrees, minutes and seconds but only returns the degrees. We could get a lot more fancy with our coordinates.
         private double CoordinateToDouble(byte[] rational)
         {
+            //check that the length of the rational is correct, if not, return 0
+            if (rational.Length != 24){ return 0; }
             uint degreesNumerator = BitConverter.ToUInt32(rational, 0);
             uint degreesDenominator = BitConverter.ToUInt32(rational, 4);
             uint minutesNumerator = BitConverter.ToUInt32(rational, 8);

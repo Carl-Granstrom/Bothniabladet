@@ -25,6 +25,7 @@ namespace Bothniabladet.Models.ImageModels
         public int Width { get; set; }
         public string FileFormat { get; set; }
         public string GPS { get; set; }
+        public string noGPS = "No GPS coordinates for this image";
 
         public static ImageDetailViewModel FromImage(Image image)
         {

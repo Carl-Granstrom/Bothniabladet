@@ -51,7 +51,11 @@
             @Html.DisplayNameFor(model => model.GPS)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GPS)
+            @if (Model.GPS == "POINT (0 0)")
+            {@Html.DisplayFor(model => model.noGPS)}
+            @if (Model.GPS != "POINT (0 0)")
+            {@Html.DisplayFor(model => model.GPS)}
+
         </dd>
     </dl>
 </div>
