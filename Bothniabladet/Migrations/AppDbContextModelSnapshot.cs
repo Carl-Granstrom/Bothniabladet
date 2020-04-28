@@ -93,6 +93,9 @@ namespace Bothniabladet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("ImageId");
 
                     b.ToTable("Images");

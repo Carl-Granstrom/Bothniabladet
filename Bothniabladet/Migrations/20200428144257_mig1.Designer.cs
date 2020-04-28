@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200428115857_mig1")]
+    [Migration("20200428144257_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,9 @@ namespace Bothniabladet.Migrations
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ImageId");
 

@@ -47,6 +47,7 @@ namespace Bothniabladet.Migrations
                     BasePrice = table.Column<int>(nullable: false),
                     Issue = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    Thumbnail = table.Column<byte[]>(nullable: true),
                     ImageLicense_LicenceType = table.Column<int>(nullable: true),
                     ImageLicense_UsesLeft = table.Column<int>(nullable: true),
                     ImageMetaData_Height = table.Column<int>(nullable: true),

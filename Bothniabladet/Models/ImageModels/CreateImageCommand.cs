@@ -36,29 +36,37 @@ namespace Bothniabladet.Models.ImageModels
         //this uses SelectListItems and they need to be converted to the enums again
         public ICollection<SelectListItem> Sections { get; set; }
 
-        //still need to add information needed by ImageLicense and ImageMetaData
-
         [Required]
         [BindProperty]
         public ImageData ImageData { get; set; }
         //not sure that this is a good way to use a stream.
         public MemoryStream ImageMemoryStream { get; set; }
 
+        /*METHODS*/
+
         //this method will eventually handle the metadata extraction and the creation of a new image from the command object.
         public Data.Image ToImage()
         {
-            return new Data.Image
+            Data.Image image = new Data.Image
             {
                 ImageTitle = ImageTitle,
                 BasePrice = BasePrice,
                 Issue = Issue,
                 Section = Section,
+                Thumbnail = null,
                 ImageData = ImageMemoryStream.ToArray(),
                 //placeholders ImageLicense
-                ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3},
+                ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3 },
                 //Metadata extraction hopefully works now
                 ImageMetaData = ExtractMetaData(ImageMemoryStream)
             };
+            //This is all a bit convoluted, I'm sure it could be refactored to be a lot neater and clearer
+            //Get a thumbnail and put it in image.Thumbnail
+            System.Drawing.Image tmpThumb = System.Drawing.Image.FromStream(new MemoryStream(image.ImageData)).GetThumbnailImage(50, 50, null, IntPtr.Zero);
+            ImageConverter _converter = new ImageConverter();
+            image.Thumbnail = (byte[])_converter.ConvertTo(tmpThumb, typeof(byte[]));
+
+            return image;
         }
 
         //Extract image metadata to ImageMetaData objects using ExifLib
