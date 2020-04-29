@@ -53,8 +53,17 @@ namespace Bothniabladet.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Thumbnail")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("EditedImageId");
 
@@ -196,7 +205,7 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.EditedImage", b =>
                 {
-                    b.HasOne("Bothniabladet.Data.Image", null)
+                    b.HasOne("Bothniabladet.Data.Image", "Image")
                         .WithMany("EditedImages")
                         .HasForeignKey("ImageId");
                 });

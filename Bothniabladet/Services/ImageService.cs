@@ -63,7 +63,7 @@ namespace Bothniabladet.Services
                         "Fortkörning"
                     };
 
-            ImageDetailViewModel image = _context.Images
+            ImageDetailViewModel imageViewModel = _context.Images
                 .Where(image => image.ImageId == id)        //This generates a SELECT clause by id, so will find only one result
                 .Where(image => !image.IsDeleted)           //Check for soft delete
                 .Select(image => new ImageDetailViewModel
@@ -78,11 +78,13 @@ namespace Bothniabladet.Services
                     Height = image.ImageMetaData.Height,
                     Width = image.ImageMetaData.Width,
                     FileFormat = image.ImageMetaData.FileFormat,
-                    GPS = image.ImageMetaData.Location.ToString()
+                    GPS = image.ImageMetaData.Location.ToString(),
+                    EditedImages = image.EditedImages   //would prefer not to query for the whole image, only the thumbnail.
                 })
                 .SingleOrDefault();
+            if (imageViewModel.EditedImages == null) { imageViewModel.EditedImages = new List<EditedImage>(); }
 
-            return image;
+            return imageViewModel;
 
         }
 
@@ -101,7 +103,7 @@ namespace Bothniabladet.Services
         //Add UPDATE here
 
 
-        //Create a new recipe
+        //Create a new Image
         public int CreateImage(CreateImageCommand cmd)
         {
             Image image = cmd.ToImage();
@@ -109,6 +111,22 @@ namespace Bothniabladet.Services
             _context.Add(image);
             _context.SaveChanges();
             return image.ImageId;
+        }
+
+        //Create a new EditedImage
+        public int CreateEditedImage(AddEditedCommand cmd)
+        {
+            Image originalImage = _context.Images.Find(cmd.OriginalId);
+            if (originalImage == null) { throw new Exception("Unable to find the image"); }
+            if (originalImage.IsDeleted) { throw new Exception("Unable to add an edited image to a deleted image"); }
+            EditedImage editedImage = cmd.ToEditedImage();
+            if (originalImage.EditedImages == null)
+            {
+                originalImage.EditedImages = new List<EditedImage>();
+            }
+            originalImage.EditedImages.Add(editedImage);
+            _context.SaveChanges();
+            return originalImage.ImageId;
         }
     }
 }

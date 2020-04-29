@@ -44,13 +44,16 @@ namespace Bothniabladet.Models.ImageModels
 
         /*METHODS*/
 
-        //this method will eventually handle the metadata extraction and the creation of a new image from the command object.
+        //this method handles the metadata extraction and the creation of a new image from the command object.
+        //change it so it matches EditedImage method instead, which is cleaner and siposes of streams properly since this implementation might cause a memory leak.
         public Data.Image ToImage()
         {
+            //ICollection<EditedImage> editedImages = new List<EditedImage>();
             Data.Image image = new Data.Image
             {
                 ImageTitle = ImageTitle,
                 BasePrice = BasePrice,
+                EditedImages = new List<EditedImage>(),
                 Issue = Issue,
                 Section = Section,
                 Thumbnail = null,
@@ -62,6 +65,7 @@ namespace Bothniabladet.Models.ImageModels
             };
             //This is all a bit convoluted, I'm sure it could be refactored to be a lot neater and clearer
             //Get a thumbnail and put it in image.Thumbnail
+            //the new memorystream might potentially cause a mem leak, I'm not sure about streams. Should work a "using" in there.
             System.Drawing.Image tmpThumb = System.Drawing.Image.FromStream(new MemoryStream(image.ImageData)).GetThumbnailImage(50, 50, null, IntPtr.Zero);
             ImageConverter _converter = new ImageConverter();
             image.Thumbnail = (byte[])_converter.ConvertTo(tmpThumb, typeof(byte[]));

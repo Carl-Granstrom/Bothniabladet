@@ -10,9 +10,15 @@ namespace Bothniabladet.Data
     {
         /*VARIABLES*/
         public int EditedImageId { get; set; }
+        public string ImageTitle { get; set; }
+        public byte[] ImageData { get; set; }
+        public byte[] Thumbnail { get; set; }
+
+        /*LINKS*/
+        public Image Image { get; set; }
 
         //Convenience variables
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]   //not working, doing it manually atm
         public DateTime CreatedAt { get; set; }
     }
 }

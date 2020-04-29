@@ -42,22 +42,59 @@ namespace Bothniabladet.Controllers
                 return NotFound();
             }
 
-            var image = _service.GetImageDetail(id);
+            var imageViewModel = _service.GetImageDetail(id);
             
-            if (image == null)
+            if (imageViewModel == null)
             {
                 return NotFound();
             }
+            ICollection<string> thumbnailDataStrings = new List<string>();
+            foreach (EditedImage editedImage in imageViewModel.EditedImages) 
+            {
+                thumbnailDataStrings.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)));
+            }
+            //add thumbnail datastrings to the viewmodel, this whole process is ugly and the logic is in the wrong place. Refactor.
+            imageViewModel.ThumbNailDataStrings = thumbnailDataStrings;
             //add image to viewbag
-            ViewBag.ImageDataUrl = image.ImageDataString;
+            ViewBag.ImageDataUrl = imageViewModel.ImageDataString;
 
-            return View(image);
+            return View(imageViewModel);
         }
 
         // GET: Images/Create
         public IActionResult Create()
         {
             return View(new CreateImageCommand() { Sections = _service.GetSectionChoices() });  //retrive the Section choices from the database
+        }
+
+        // POST: Images/AddEdited
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEdited(ImageDetailViewModel viewModel)
+        {
+            //Refactor: I'm really not fond of how I'm doing this here, but don't really know how to pass only the command from the view
+            AddEditedCommand cmd = viewModel.CreateEditedImage;
+            //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
+            using (var memoryStream = new MemoryStream())
+            {
+
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile as a stream
+                // Upload the file if less than 12ish MB
+                if (memoryStream.Length < 12097152)
+                {
+                    var id = _service.CreateEditedImage(cmd);
+                    return RedirectToAction("");    //make this redirect to the added EditedImage's Details page.
+                    //return RedirectToAction(nameof(View), new { id = id });
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
+                }
+            }
+
+            //If we got to here, something went wrong
+            return View(cmd);
+            
         }
 
         // POST: Images/Create

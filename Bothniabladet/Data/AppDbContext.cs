@@ -28,11 +28,6 @@ namespace Bothniabladet.Data
                 .Property(c => c.Section)
                 .HasConversion<string>();
 
-            //modelBuilder.Entity<Image>()
-            //    .HasOne(c => c.SectionRelation)
-            //    .WithMany()
-            //    .HasForeignKey(c => c.Section);
-
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
                 .OwnsOne(s => s.ImageLicense);
@@ -40,6 +35,11 @@ namespace Bothniabladet.Data
             //configuring Ownedproperty
             modelBuilder.Entity<Image>()
                 .OwnsOne(s => s.ImageMetaData);
+
+            //configuring EditedImages, one way relationship
+            modelBuilder.Entity<Image>()
+                .HasMany(c => c.EditedImages)
+                .WithOne(s => s.Image);
 
             //storing the enums in their own table
             modelBuilder.Entity<SectionEnum>()

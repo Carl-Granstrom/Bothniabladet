@@ -93,8 +93,11 @@ namespace Bothniabladet.Migrations
                 {
                     EditedImageId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ImageId = table.Column<int>(nullable: true)
+                    ImageTitle = table.Column<string>(nullable: true),
+                    ImageData = table.Column<byte[]>(nullable: true),
+                    Thumbnail = table.Column<byte[]>(nullable: true),
+                    ImageId = table.Column<int>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
