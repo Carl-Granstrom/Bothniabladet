@@ -53,11 +53,12 @@ namespace Bothniabladet
 
             app.UseAuthorization();
 
+            //The body of the startpage is supposed to be the image list (index)
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Images}/{action=Index}/{id?}");
             });
         }
     }

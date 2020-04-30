@@ -1,26 +1,28 @@
 ﻿
+@model LoginModel
+
 @{
-  @model LoginModel
+    ViewData["Title"] = "Login Page";
 }
 
-  <h2>Inloggning för Bothniabladet</h2>
+<h2>Inloggning för Bothniabladet</h2>
 
 <form asp-controller="Account" asp-action="Login" method="post">
-  <p>
-    <label asp-for="UserName"></label>
-    <input asp-for="UserName" />
-    <span asp-validation-for="UserName"></span>
-  </p>
-  <p>
-    <label asp-for="Password"></label>
-    <input asp-for="Password" />
-    <span asp-validation-for="Password"></span>
-  </p>
-  <p>
-    <input type="hidden" asp-for="ReturnUrl" />
-  </p>
-  <p>
-    <div asp-validation-summary="All"></div>
-    <input type="submit" value="Logga in" />
-  </p>
+    <p>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </p>
+    <p>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </p>
+    <p>
+        <input type="hidden" asp-for="ReturnUrl" />
+    </p>
+    <p>
+        <div asp-validation-summary="All"></div>
+        <input type="submit" value="Logga in" />
+    </p>
 </form>
