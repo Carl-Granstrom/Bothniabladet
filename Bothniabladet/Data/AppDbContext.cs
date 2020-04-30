@@ -20,6 +20,8 @@ namespace Bothniabladet.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<SectionEnum> Enums { get; set; }
+        public DbSet<ImageKeyword> ImageKeywords { get; set; }
+        public DbSet<Keyword> Keywords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +42,16 @@ namespace Bothniabladet.Data
             modelBuilder.Entity<Image>()
                 .HasMany(c => c.EditedImages)
                 .WithOne(s => s.Image);
+
+            //configure compound primary key for ImageKeyword
+            modelBuilder.Entity<ImageKeyword>()
+                .HasKey(x => new { x.ImageId, x.KeywordId } );
+
+            //create a unique contraint on Keyword.Word
+            //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
+            //modelBuilder.Entity<Keyword>()
+            //    .HasIndex(k => k.Word)
+            //    .IsUnique();
 
             //storing the enums in their own table
             modelBuilder.Entity<SectionEnum>()

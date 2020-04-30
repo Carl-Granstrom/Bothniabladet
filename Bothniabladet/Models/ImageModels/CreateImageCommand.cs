@@ -39,8 +39,10 @@ namespace Bothniabladet.Models.ImageModels
         [Required]
         [BindProperty]
         public ImageData ImageData { get; set; }
-        //not sure that this is a good way to use a stream.
+        //not sure that this is a good way to use a stream. Refactor.
         public MemoryStream ImageMemoryStream { get; set; }
+
+        public ICollection<Keyword> Keywords { get; set; }
 
         /*METHODS*/
 
@@ -60,9 +62,27 @@ namespace Bothniabladet.Models.ImageModels
                 ImageData = ImageMemoryStream.ToArray(),
                 //placeholders ImageLicense
                 ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3 },
-                //Metadata extraction hopefully works now
-                ImageMetaData = ExtractMetaData(ImageMemoryStream)
+                //Metadata extraction
+                ImageMetaData = ExtractMetaData(ImageMemoryStream),
             };
+            //Placeholder keywords
+            Keyword key1 = new Keyword() { Word = "Kungen" };
+            Keyword key2 = new Keyword() { Word = "Rally" };
+            Keywords = new List<Keyword>();
+            Keywords.Add(key1);
+            Keywords.Add(key2);
+
+            //Add the many-many link image<-->keyword
+            image.KeywordLink = new List<ImageKeyword>();
+            foreach (Keyword keyword in Keywords)
+            {
+                image.KeywordLink.Add(new ImageKeyword
+                { 
+                    Image = image,
+                    Keyword = keyword
+                });
+            }
+
             //This is all a bit convoluted, I'm sure it could be refactored to be a lot neater and clearer
             //Get a thumbnail and put it in image.Thumbnail
             //the new memorystream might potentially cause a mem leak, I'm not sure about streams. Should work a "using" in there.

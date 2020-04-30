@@ -17,7 +17,7 @@ namespace Bothniabladet.Models.ImageModels
         //used to display the image
         public string ImageDataString { get; set; }
         public string Section { get; set; }
-        public List<string> Keywords { get; set; }
+        public ICollection<Keyword> Keywords { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
@@ -35,11 +35,11 @@ namespace Bothniabladet.Models.ImageModels
         public static ImageDetailViewModel FromImage(Image image)
         {
             //Create keyword list
-            List<string> Keywords = new List<string>();
+            List<Keyword> Keywords = new List<Keyword>();
             //add null check if needed
-            foreach (Keyword word in image.Keywords)
+            foreach (ImageKeyword imageKeyword in image.KeywordLink)
             {
-                Keywords.Add(word.Word);
+                Keywords.Add(imageKeyword.Keyword);
             }
 
             ImageDetailViewModel viewModel = new ImageDetailViewModel
@@ -48,7 +48,6 @@ namespace Bothniabladet.Models.ImageModels
                 Name = image.ImageTitle,
                 ImageDataString = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
                 Section = image.Section.ToString(),
-                Keywords = Keywords,
                 Date = image.Issue,
                 Height = image.ImageMetaData.Height,
                 Width = image.ImageMetaData.Width,
@@ -58,17 +57,14 @@ namespace Bothniabladet.Models.ImageModels
             //Create EditedImage list and convert the byte[] to List<string>
             if (image.EditedImages == null)
             {
-                ICollection<String> editedImages = new List<String>();
-                foreach (EditedImage editedImage in image.EditedImages)
-                {
-                    editedImages.Add(String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail)));
-                }
-                viewModel.ThumbNailDataStrings = editedImages;
+                viewModel.EditedImages = new List<EditedImage>();
             }
-            else
+            ICollection<String> editedImagesDataStrings = new List<String>();
+            foreach (EditedImage editedImage in image.EditedImages)
             {
-                viewModel.EditedImages = image.EditedImages;
+                editedImagesDataStrings.Add(String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail)));
             }
+            viewModel.ThumbNailDataStrings = editedImagesDataStrings;
 
             return viewModel;
         }

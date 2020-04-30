@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Bothniabladet.Data;
 using Bothniabladet.Models.ImageModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Bothniabladet.Services
@@ -22,47 +23,78 @@ namespace Bothniabladet.Services
 
         }
 
-        //This collection can be used when loading many images for a search query, optimally we'd have some kind of thumbnail here as well.
+        //This collection can be used when loading many images for a search query.
         public ICollection<ImageSummaryViewModel> GetImages()
         {
+            ////Placeholder, not storing keywords yet.
+            //List<Keyword> placeholderKeywords = new List<Keyword>()
+            //        {
+            //            new Keyword { Word = "Kungen" },
+            //            new Keyword { Word = "Stockholm" },
+            //            new Keyword { Word = "Skandal" },
+            //            new Keyword { Word = "Ferrari" }
+            //        };
+
+            ////this is translated into a database SELECT query
+            //ICollection<ImageSummaryViewModel> imagesViewModel = _context.Images
+            //    //This Where-method implements a "soft delete" which hides the data from the application, but does not actually delete it from the Database
+            //    .Where(image => !image.IsDeleted)
+            //    .Select(image => new ImageSummaryViewModel
+            //    {
+            //        Id = image.ImageId,
+            //        Name = image.ImageTitle,
+            //        ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
+            //        Section = image.Section.ToString(),
+            //        //statiska nyckelord för test, ändra när keywords är implementerat
+            //        Keywords = placeholderKeywords,
+            //        Date = image.Issue
+            //    })
+            //    .ToList();
+
             //Placeholder, not storing keywords yet.
             List<string> placeholderKeywords = new List<string>()
                     {
                         "Kungen",
-                        "Stockholm",
-                        "Skandal",
-                        "Ferrari",
-                        "Fortkörning"
+                        "Stockholm"
                     };
-            //this is translated into a database SELECT query
-            return _context.Images
-                //This Where-method implements a "soft delete" which hides the data from the application, but does not actually delete it from the Database
-                .Where(image => !image.IsDeleted)                
-                .Select(image => new ImageSummaryViewModel
+
+            List<Image> images = _context.Images
+              .Include(image => image.KeywordLink)
+              .ThenInclude(imageKeywords => imageKeywords.Keyword)
+              .ToList();
+
+            foreach (Image image in images)
+            {
+                if (image.KeywordLink == null) { throw new Exception("WTF!"); }
+            }
+
+
+            ICollection<ImageSummaryViewModel> imageSummaryViewModels = new List<ImageSummaryViewModel>();
+            foreach (Image image in images)
+            {
+                List<string> keywordStrings = new List<string>();
+                foreach (ImageKeyword imageKeyword in image.KeywordLink)
+                {
+                    keywordStrings.Add(imageKeyword.Keyword.Word);
+                }
+                imageSummaryViewModels.Add(new ImageSummaryViewModel
                 {
                     Id = image.ImageId,
                     Name = image.ImageTitle,
                     ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
                     Section = image.Section.ToString(),
-                    //statiska nyckelord för test, ändra när keywords är implementerat 
-                    Keywords = placeholderKeywords,
+                    //statiska nyckelord för test, ändra när keywords är implementerat
+                    Keywords = keywordStrings,
                     Date = image.Issue
-                })
-                .ToList();
+                });
+            }
+
+
+            return imageSummaryViewModels;
         }
 
         public ImageDetailViewModel GetImageDetail(int? id)
         {
-            //Placeholder, not storing keywords yet.
-            List<string> placeholderKeywords = new List<string>()
-                    {
-                        "Kungen",
-                        "Stockholm",
-                        "Skandal",
-                        "Ferrari",
-                        "Fortkörning"
-                    };
-
             ImageDetailViewModel imageViewModel = _context.Images
                 .Where(image => image.ImageId == id)        //This generates a SELECT clause by id, so will find only one result
                 .Where(image => !image.IsDeleted)           //Check for soft delete
@@ -72,8 +104,6 @@ namespace Bothniabladet.Services
                     Name = image.ImageTitle,
                     ImageDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
                     Section = image.Section.ToString(),
-                    //statiska nyckelord för test, ändra när keywords är implementerat 
-                    Keywords = placeholderKeywords,
                     Date = image.Issue,
                     Height = image.ImageMetaData.Height,
                     Width = image.ImageMetaData.Width,
@@ -85,7 +115,6 @@ namespace Bothniabladet.Services
             if (imageViewModel.EditedImages == null) { imageViewModel.EditedImages = new List<EditedImage>(); }
 
             return imageViewModel;
-
         }
 
         public ICollection<SelectListItem> GetSectionChoices()

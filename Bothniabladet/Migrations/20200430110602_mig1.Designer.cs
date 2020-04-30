@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200429204842_mig1")]
+    [Migration("20200430110602_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,7 +92,8 @@ namespace Bothniabladet.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ImageTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -110,6 +111,21 @@ namespace Bothniabladet.Migrations
                     b.HasKey("ImageId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.ImageKeyword", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KeywordId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageId", "KeywordId");
+
+                    b.HasIndex("KeywordId");
+
+                    b.ToTable("ImageKeywords");
                 });
 
             modelBuilder.Entity("Bothniabladet.Data.Invoice", b =>
@@ -149,17 +165,12 @@ namespace Bothniabladet.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Word")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KeywordId");
 
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Keyword");
+                    b.ToTable("Keywords");
                 });
 
             modelBuilder.Entity("Bothniabladet.Data.SectionEnum", b =>
@@ -269,18 +280,26 @@ namespace Bothniabladet.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Bothniabladet.Data.ImageKeyword", b =>
+                {
+                    b.HasOne("Bothniabladet.Data.Image", "Image")
+                        .WithMany("KeywordLink")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bothniabladet.Data.Keyword", "Keyword")
+                        .WithMany("KeywordLink")
+                        .HasForeignKey("KeywordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Bothniabladet.Data.Invoice", b =>
                 {
                     b.HasOne("Bothniabladet.Data.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId");
-                });
-
-            modelBuilder.Entity("Bothniabladet.Data.Keyword", b =>
-                {
-                    b.HasOne("Bothniabladet.Data.Image", null)
-                        .WithMany("Keywords")
-                        .HasForeignKey("ImageId");
                 });
 #pragma warning restore 612, 618
         }

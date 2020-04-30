@@ -49,6 +49,7 @@ namespace Bothniabladet.Controllers
                 return NotFound();
             }
             ICollection<string> thumbnailDataStrings = new List<string>();
+
             foreach (EditedImage editedImage in imageViewModel.EditedImages) 
             {
                 thumbnailDataStrings.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)));

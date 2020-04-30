@@ -13,6 +13,7 @@ namespace Bothniabladet.Models.ImageModels
         public string ThumbnailDataString { get; set; }
         public string Section { get; set; }
         public List<string> Keywords { get; set; }
+        public ICollection<ImageKeyword> KeywordLink { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
@@ -21,9 +22,9 @@ namespace Bothniabladet.Models.ImageModels
         {
             List<string> Keywords = new List<string>();
             //add null check if needed
-            foreach (Keyword word in image.Keywords)
+            foreach (ImageKeyword imageKeyword in image.KeywordLink)
             {
-                Keywords.Add(word.Word);
+                Keywords.Add(imageKeyword.Keyword.Word);
             }
             return new ImageSummaryViewModel
             {

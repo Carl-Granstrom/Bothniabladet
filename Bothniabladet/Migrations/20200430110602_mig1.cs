@@ -42,7 +42,7 @@ namespace Bothniabladet.Migrations
                 {
                     ImageId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageTitle = table.Column<string>(nullable: true),
+                    ImageTitle = table.Column<string>(maxLength: 40, nullable: true),
                     ImageData = table.Column<byte[]>(nullable: true),
                     BasePrice = table.Column<int>(nullable: false),
                     Issue = table.Column<DateTime>(nullable: false),
@@ -62,6 +62,19 @@ namespace Bothniabladet.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.ImageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Keywords",
+                columns: table => new
+                {
+                    KeywordId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Word = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Keywords", x => x.KeywordId);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,23 +124,27 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Keyword",
+                name: "ImageKeywords",
                 columns: table => new
                 {
+                    ImageId = table.Column<int>(nullable: false),
                     KeywordId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Word = table.Column<string>(nullable: true),
-                    ImageId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Keyword", x => x.KeywordId);
+                    table.PrimaryKey("PK_ImageKeywords", x => new { x.ImageId, x.KeywordId });
                     table.ForeignKey(
-                        name: "FK_Keyword_Images_ImageId",
+                        name: "FK_ImageKeywords_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "ImageId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ImageKeywords_Keywords_KeywordId",
+                        column: x => x.KeywordId,
+                        principalTable: "Keywords",
+                        principalColumn: "KeywordId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -148,14 +165,14 @@ namespace Bothniabladet.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImageKeywords_KeywordId",
+                table: "ImageKeywords",
+                column: "KeywordId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Invoices_ClientId",
                 table: "Invoices",
                 column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Keyword_ImageId",
-                table: "Keyword",
-                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -167,16 +184,19 @@ namespace Bothniabladet.Migrations
                 name: "Enums");
 
             migrationBuilder.DropTable(
+                name: "ImageKeywords");
+
+            migrationBuilder.DropTable(
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Keyword");
+                name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Keywords");
 
             migrationBuilder.DropTable(
                 name: "Clients");
-
-            migrationBuilder.DropTable(
-                name: "Images");
         }
     }
 }

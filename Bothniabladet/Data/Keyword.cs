@@ -12,6 +12,7 @@ namespace Bothniabladet.Data
         public string Word { get; set; }
 
         /*LINKS*/
+        public ICollection<ImageKeyword> KeywordLink { get; set; }
 
         /*METHODS*/
 
