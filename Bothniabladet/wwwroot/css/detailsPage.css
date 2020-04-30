@@ -4,22 +4,20 @@
 }
 
 .edit-image-container {
-    margin-top: 5%;
-    margin-right: 2%;
     float: left;
     width: 10%;
     height: auto;
 }
 
 .image-container {
-    margin-right: 2%;
+    margin-left: 2%;
     float: left;
     width: 41%;
     height: auto;
 }
 
 .information-column {
-    margin-top: 5%;
+    margin-left: 2%;
     float: left;
     width: 45%;
     height: auto;
