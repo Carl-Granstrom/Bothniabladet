@@ -21,7 +21,8 @@ namespace Bothniabladet.Models.ImageModels
     public class CreateImageCommand
     {
         [Required]
-        [StringLength(40)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$", ErrorMessage = "Title must start with a capital letter")]
+        [StringLength(40, ErrorMessage = "Title can be no more than 40 characters long")]
         [Display(Name = "Image Title")]
         public string ImageTitle { get; set; }
         [Required]
