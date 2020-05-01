@@ -12,8 +12,6 @@ namespace Bothniabladet.Data
 
         /*VARIABLES*/
         public int ImageId { get; set; }
-        [StringLength(40)]
-        [Display(Name = "Image Title")]
         public string ImageTitle { get; set; }
         public byte[] ImageData { get; set; }
         public int BasePrice { get; set; }

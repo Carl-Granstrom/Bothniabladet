@@ -21,6 +21,8 @@ namespace Bothniabladet.Models.ImageModels
     public class CreateImageCommand
     {
         [Required]
+        [StringLength(40)]
+        [Display(Name = "Image Title")]
         public string ImageTitle { get; set; }
         [Required]
         public int BasePrice { get; set; }
@@ -42,7 +44,7 @@ namespace Bothniabladet.Models.ImageModels
         //not sure that this is a good way to use a stream. Refactor.
         public MemoryStream ImageMemoryStream { get; set; }
 
-        public ICollection<Keyword> Keywords { get; set; }
+        public ICollection<string> Keywords { get; set; }
 
         /*METHODS*/
 
@@ -65,16 +67,16 @@ namespace Bothniabladet.Models.ImageModels
                 //Metadata extraction
                 ImageMetaData = ExtractMetaData(ImageMemoryStream),
             };
-            //Placeholder keywords
-            Keyword key1 = new Keyword() { Word = "Kungen" };
-            Keyword key2 = new Keyword() { Word = "Rally" };
-            Keywords = new List<Keyword>();
-            Keywords.Add(key1);
-            Keywords.Add(key2);
+            //Create keywords from keywordstrings
+            ICollection<Keyword> tmpKeywords = new List<Keyword>();
+            foreach (string keywordString in Keywords)
+            {
+                tmpKeywords.Add(new Keyword { Word = keywordString});
+            }
 
             //Add the many-many link image<-->keyword
             image.KeywordLink = new List<ImageKeyword>();
-            foreach (Keyword keyword in Keywords)
+            foreach (Keyword keyword in tmpKeywords)
             {
                 image.KeywordLink.Add(new ImageKeyword
                 { 
