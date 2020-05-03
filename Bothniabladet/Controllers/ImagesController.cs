@@ -27,10 +27,18 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var models = _service.GetImages();
-            return View(models);
+            //List all images if there is no search string specified
+            if (String.IsNullOrEmpty(searchString))
+            {
+                var allModels = _service.GetImages();
+                return View(allModels);
+            }
+
+            var searchedModels = _service.GetSearchedImages(searchString);
+
+            return View(searchedModels);
         }
 
         // GET: Images/Details/5

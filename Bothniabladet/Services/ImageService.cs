@@ -23,26 +23,13 @@ namespace Bothniabladet.Services
 
         }
 
-        //This collection can be used when loading many images for a search query.
+        //Loads all the images
         public ICollection<ImageSummaryViewModel> GetImages()
         {
-            //Placeholder, not storing keywords yet.
-            List<string> placeholderKeywords = new List<string>()
-                    {
-                        "Kungen",
-                        "Stockholm"
-                    };
-
             List<Image> images = _context.Images
               .Include(image => image.KeywordLink)
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
-
-            foreach (Image image in images)
-            {
-                if (image.KeywordLink == null) { throw new Exception("WTF!"); }
-            }
-
 
             ICollection<ImageSummaryViewModel> imageSummaryViewModels = new List<ImageSummaryViewModel>();
             foreach (Image image in images)
@@ -59,6 +46,42 @@ namespace Bothniabladet.Services
                     ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
                     Section = image.Section.ToString(),
                     //statiska nyckelord för test, ändra när keywords är implementerat
+                    Keywords = keywordStrings,
+                    Date = image.Issue
+                });
+            }
+
+
+            return imageSummaryViewModels;
+        }
+
+        //Loads all the images
+        public ICollection<ImageSummaryViewModel> GetSearchedImages(string searchString)
+        {
+            //Search the titles
+            List<Image> imagesByTitle = _context.Images
+              .Where(image => image.ImageTitle.Contains(searchString))
+              .Include(image => image.KeywordLink)
+              .ThenInclude(imageKeywords => imageKeywords.Keyword)
+              .ToList();
+
+            //Search by keywords
+            //Search by section
+
+            ICollection<ImageSummaryViewModel> imageSummaryViewModels = new List<ImageSummaryViewModel>();
+            foreach (Image image in imagesByTitle)
+            {
+                List<string> keywordStrings = new List<string>();
+                foreach (ImageKeyword imageKeyword in image.KeywordLink)
+                {
+                    keywordStrings.Add(imageKeyword.Keyword.Word);
+                }
+                imageSummaryViewModels.Add(new ImageSummaryViewModel
+                {
+                    Id = image.ImageId,
+                    Name = image.ImageTitle,
+                    ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
+                    Section = image.Section.ToString(),
                     Keywords = keywordStrings,
                     Date = image.Issue
                 });
