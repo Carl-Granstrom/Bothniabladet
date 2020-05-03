@@ -1,7 +1,7 @@
 ﻿@model Bothniabladet.Models.ImageModels.CreateImageCommand
 
 @{
-    ViewData["Title"] = "Ladda upp";
+    ViewData["Title"] = "Create";
 
     @functions{
         public void OnGet()
@@ -12,11 +12,9 @@
 
 }
 
-<h1>Ladda upp en bild</h1>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<h1>Create</h1>
 
+<h4>Image</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,41 +22,23 @@
               asp-controller="Images"
               method="post"
               enctype="multipart/form-data">
-
-
-
-
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputImageAddon01">Ladda upp</span>
-                </div>
-                <div class="custom-file">
-                    <input type="file" asp-for="ImageData.FormFile" class="custom-file-input" id="inputImage1" aria-describedby="inputImageAddon01">
-                    <label class="custom-file-label" for="inputImage1" asp-validation-for="ImageData.FormFile">Välj fil...</label>
-                </div>
-                <div class="invalid-feedback" asp-validation-summary="ModelOnly">
-                    Filen du försökte ladda upp är inte en giltig bildfil.
-                </div>
-            </div>
-
+            <label asp-for="ImageData.FormFile"></label>
+            <input asp-for="ImageData.FormFile" type="file" />
+            <span asp-validation-for="ImageData.FormFile"></span>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ImageTitle" class="control-label">Bildnamn</label>
-                <input type="text" asp-for="ImageTitle" class="form-control" placeholder="Katt.jpg" />
+                <label asp-for="ImageTitle" class="control-label">Please enter the name of the image</label>
+                <input asp-for="ImageTitle" class="form-control" />
                 <span asp-validation-for="ImageTitle" class="text-danger"></span>
             </div>
-
-
-            <label asp-for="BasePrice" class="control-label">Utgångspris</label>
-            <div class="input-group mb-3">
-                <input type="number" value="200" asp-for="BasePrice" class="form-control" />
+            <div class="form-group">
+                <label asp-for="BasePrice" class="control-label"></label>
+                <input asp-for="BasePrice" class="form-control" />
                 <span asp-validation-for="BasePrice" class="text-danger"></span>
-                <div class="input-group-append">
-                    <span class="input-group-text">SEK</span>
-                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Issue" class="control-label">Utgåva</label>
-                <input type="date" asp-for="Issue" value="" class="form-control" max="2030-12-31" min="1979-12-31" />
+                <label asp-for="Issue" class="control-label"></label>
+                <input asp-for="Issue" class="form-control" max="2030-12-31" min="1979-12-31" />
                 <span asp-validation-for="Issue" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -66,24 +46,19 @@
                 <select asp-for="Section" asp-items="Model.Sections" class="form-control"></select>
                 <span asp-validation-for="Section" class="text-danger"></span>
             </div>
-            
-            <input type="text" style="display:none" asp-for="Keywords" class="form-control" id="Keywords" />
-
-            <div class="form-group">
-                <label for="keywords" class="control-label">Keywords</label>
-                <div id="keyword_parent"></div>
-                <span class="badge badge-pill badge-primary"></span>
-                <input type="text" id="keyword_field" value="" />
-            </div>
-
+            <div id="fields"></div>
+            <button id="btnAddField">Add Keyword</button>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+        <div><b>Keywords:</b> @ViewBag.Data</div>
     </div>
 </div>
 
-
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
 <!-- JS includes -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -91,33 +66,12 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        bsCustomFileInput.init()
-        let keywords = [];
-        const keywordField = document.getElementById('keyword_field')
-        const keywordParent = document.getElementById('keyword_parent')
-        const keywordToForm = document.getElementById('Keywords')
-        keywordField.addEventListener('input', (e) => {
-            console.log(keywords)
-            let inputString = keywordField.value
-
-            if (e.data === " ") {
-                createPillBadge(keywordParent, inputString)
-                keywords.push(inputString)
-                keywordToForm.value = keywords.join()
-                inputString = null
-                keywordField.value = null
-            }
-            
-        })
+        var $fields = $('#fields');
+        $('#btnAddField').click(function (e) {
+            e.preventDefault();
+            $('<input type="text" name="dynamicField" minlength="3" data-val="true"  data-val-length-min="3"/><br/>').appendTo($fields);
+        });
     });
-
-    function createPillBadge(keywordParent, word){
-        let span = document.createElement("span")
-        span.className = "badge badge-pill badge-primary";
-        let text = document.createTextNode(word)
-        span.appendChild(text)
-        keywordParent.appendChild(span)
-    };
 
 </script>
 
