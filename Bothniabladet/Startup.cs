@@ -28,7 +28,7 @@ namespace Bothniabladet
         {
             services.AddControllersWithViews();
             var connString = Configuration.GetConnectionString("TestDatabase");    //get the connection string from the configuration file
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
+            services.AddDbContext<AppDbContext>(options => options.EnableSensitiveDataLogging().UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
             services.AddScoped<ImageService>();
         }
 

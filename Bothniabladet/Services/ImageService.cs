@@ -13,7 +13,7 @@ namespace Bothniabladet.Services
 {
     public class ImageService
     {
-        readonly AppDbContext _context;
+        AppDbContext _context;
         readonly ILogger _logger;
         //constructor
         public ImageService(AppDbContext context, ILoggerFactory factory)
@@ -26,31 +26,6 @@ namespace Bothniabladet.Services
         //This collection can be used when loading many images for a search query.
         public ICollection<ImageSummaryViewModel> GetImages()
         {
-            ////Placeholder, not storing keywords yet.
-            //List<Keyword> placeholderKeywords = new List<Keyword>()
-            //        {
-            //            new Keyword { Word = "Kungen" },
-            //            new Keyword { Word = "Stockholm" },
-            //            new Keyword { Word = "Skandal" },
-            //            new Keyword { Word = "Ferrari" }
-            //        };
-
-            ////this is translated into a database SELECT query
-            //ICollection<ImageSummaryViewModel> imagesViewModel = _context.Images
-            //    //This Where-method implements a "soft delete" which hides the data from the application, but does not actually delete it from the Database
-            //    .Where(image => !image.IsDeleted)
-            //    .Select(image => new ImageSummaryViewModel
-            //    {
-            //        Id = image.ImageId,
-            //        Name = image.ImageTitle,
-            //        ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
-            //        Section = image.Section.ToString(),
-            //        //statiska nyckelord för test, ändra när keywords är implementerat
-            //        Keywords = placeholderKeywords,
-            //        Date = image.Issue
-            //    })
-            //    .ToList();
-
             //Placeholder, not storing keywords yet.
             List<string> placeholderKeywords = new List<string>()
                     {
@@ -135,9 +110,43 @@ namespace Bothniabladet.Services
         //Create a new Image
         public int CreateImage(CreateImageCommand cmd)
         {
+            List<Keyword> oldKeywords = _context.Keywords
+                .Include(keyword => keyword.KeywordLink)
+                .ToList();
             Image image = cmd.ToImage();
-            image.CreatedAt = DateTime.Now;
+            image.KeywordLink = new List<ImageKeyword>();           //the many-many link between image and keyword
             _context.Add(image);
+            image.CreatedAt = DateTime.Now;
+            _context.SaveChanges();
+
+
+            ICollection<Keyword> tmpKeywords = new List<Keyword>(); //the new keywords that need to be added
+
+            bool added = false;
+            foreach (string keywordString in cmd.Keywords)
+            {
+                foreach (Keyword oldKeyword in oldKeywords)
+                {
+                    if (oldKeyword.Word == keywordString)
+                    {
+                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword, KeywordId = oldKeyword.KeywordId, Image = image, ImageId = image.ImageId});
+                        added = true;
+                    }
+                }
+                if (!added) 
+                {
+                    tmpKeywords.Add(new Keyword { Word = keywordString });
+                }
+            }
+            //Add the many-many link image<-->keyword
+            foreach (Keyword keyword in tmpKeywords)
+            {
+                image.KeywordLink.Add(new ImageKeyword
+                {
+                    Image = image,
+                    Keyword = keyword
+                });
+            }
             _context.SaveChanges();
             return image.ImageId;
         }
