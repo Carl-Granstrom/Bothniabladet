@@ -67,7 +67,7 @@
                 <span asp-validation-for="Section" class="text-danger"></span>
             </div>
             
-            <input type="text" style="display:none" asp-for="Keywords" class="form-control" id="Keywords" />
+            <input type="text" style="display:none" asp-for="Keywords" class="form-control" name="dynamicField" id="Keywords" />
 
             <div class="form-group">
                 <label for="keywords" class="control-label">Taggar:</label>
@@ -101,6 +101,7 @@
             let inputString = keywordField.value
 
             if (e.data === " ") {
+                inputString = inputString.trim()
                 createPillBadge(keywordParent, inputString)
                 keywords.push(inputString)
                 keywordToForm.value = keywords.join()
