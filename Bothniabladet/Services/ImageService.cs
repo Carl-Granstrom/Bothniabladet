@@ -13,7 +13,7 @@ namespace Bothniabladet.Services
 {
     public class ImageService
     {
-        readonly AppDbContext _context;
+        AppDbContext _context;
         readonly ILogger _logger;
         //constructor
         public ImageService(AppDbContext context, ILoggerFactory factory)
@@ -110,22 +110,26 @@ namespace Bothniabladet.Services
         //Create a new Image
         public int CreateImage(CreateImageCommand cmd)
         {
-            Image image = cmd.ToImage();
-            image.CreatedAt = DateTime.Now;
-            List<ImageKeyword> oldKeywords = _context.ImageKeywords
-                .Include(imageKeyword => imageKeyword.Keyword)
+            List<Keyword> oldKeywords = _context.Keywords
+                .Include(keyword => keyword.KeywordLink)
                 .ToList();
+            Image image = cmd.ToImage();
+            image.KeywordLink = new List<ImageKeyword>();           //the many-many link between image and keyword
+            _context.Add(image);
+            image.CreatedAt = DateTime.Now;
+            _context.SaveChanges();
+
 
             ICollection<Keyword> tmpKeywords = new List<Keyword>(); //the new keywords that need to be added
-            image.KeywordLink = new List<ImageKeyword>();           //the many-many link between image and keyword
+
+            bool added = false;
             foreach (string keywordString in cmd.Keywords)
             {
-                bool added = false;
-                foreach (ImageKeyword oldKeyword in oldKeywords)
+                foreach (Keyword oldKeyword in oldKeywords)
                 {
-                    if (oldKeyword.Keyword.Word == keywordString)
+                    if (oldKeyword.Word == keywordString)
                     {
-                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword.Keyword, KeywordId = oldKeyword.KeywordId});
+                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword, KeywordId = oldKeyword.KeywordId, Image = image, ImageId = image.ImageId});
                         added = true;
                     }
                 }
@@ -133,11 +137,8 @@ namespace Bothniabladet.Services
                 {
                     tmpKeywords.Add(new Keyword { Word = keywordString });
                 }
-
             }
-
             //Add the many-many link image<-->keyword
-
             foreach (Keyword keyword in tmpKeywords)
             {
                 image.KeywordLink.Add(new ImageKeyword
@@ -146,8 +147,6 @@ namespace Bothniabladet.Services
                     Keyword = keyword
                 });
             }
-
-            _context.Add(image);
             _context.SaveChanges();
             return image.ImageId;
         }

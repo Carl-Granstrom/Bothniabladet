@@ -47,7 +47,7 @@
                 <span asp-validation-for="Section" class="text-danger"></span>
             </div>
             <div id="fields"></div>
-            <button id="btnAddField">Add Field</button>
+            <button id="btnAddField">Add Keyword</button>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -69,7 +69,7 @@
         var $fields = $('#fields');
         $('#btnAddField').click(function (e) {
             e.preventDefault();
-            $('<input type="text" name="dynamicField" /><br/>').appendTo($fields);
+            $('<input type="text" name="dynamicField" minlength="3" data-val="true"  data-val-length-min="3"/><br/>').appendTo($fields);
         });
     });
 
