@@ -90,8 +90,7 @@ namespace Bothniabladet.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ImageTitle")
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

@@ -26,31 +26,6 @@ namespace Bothniabladet.Services
         //This collection can be used when loading many images for a search query.
         public ICollection<ImageSummaryViewModel> GetImages()
         {
-            ////Placeholder, not storing keywords yet.
-            //List<Keyword> placeholderKeywords = new List<Keyword>()
-            //        {
-            //            new Keyword { Word = "Kungen" },
-            //            new Keyword { Word = "Stockholm" },
-            //            new Keyword { Word = "Skandal" },
-            //            new Keyword { Word = "Ferrari" }
-            //        };
-
-            ////this is translated into a database SELECT query
-            //ICollection<ImageSummaryViewModel> imagesViewModel = _context.Images
-            //    //This Where-method implements a "soft delete" which hides the data from the application, but does not actually delete it from the Database
-            //    .Where(image => !image.IsDeleted)
-            //    .Select(image => new ImageSummaryViewModel
-            //    {
-            //        Id = image.ImageId,
-            //        Name = image.ImageTitle,
-            //        ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
-            //        Section = image.Section.ToString(),
-            //        //statiska nyckelord för test, ändra när keywords är implementerat
-            //        Keywords = placeholderKeywords,
-            //        Date = image.Issue
-            //    })
-            //    .ToList();
-
             //Placeholder, not storing keywords yet.
             List<string> placeholderKeywords = new List<string>()
                     {
@@ -137,6 +112,41 @@ namespace Bothniabladet.Services
         {
             Image image = cmd.ToImage();
             image.CreatedAt = DateTime.Now;
+            List<ImageKeyword> oldKeywords = _context.ImageKeywords
+                .Include(imageKeyword => imageKeyword.Keyword)
+                .ToList();
+
+            ICollection<Keyword> tmpKeywords = new List<Keyword>(); //the new keywords that need to be added
+            image.KeywordLink = new List<ImageKeyword>();           //the many-many link between image and keyword
+            foreach (string keywordString in cmd.Keywords)
+            {
+                bool added = false;
+                foreach (ImageKeyword oldKeyword in oldKeywords)
+                {
+                    if (oldKeyword.Keyword.Word == keywordString)
+                    {
+                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword.Keyword, KeywordId = oldKeyword.KeywordId});
+                        added = true;
+                    }
+                }
+                if (!added) 
+                {
+                    tmpKeywords.Add(new Keyword { Word = keywordString });
+                }
+
+            }
+
+            //Add the many-many link image<-->keyword
+
+            foreach (Keyword keyword in tmpKeywords)
+            {
+                image.KeywordLink.Add(new ImageKeyword
+                {
+                    Image = image,
+                    Keyword = keyword
+                });
+            }
+
             _context.Add(image);
             _context.SaveChanges();
             return image.ImageId;

@@ -68,36 +68,6 @@ namespace Bothniabladet.Controllers
             return View(new CreateImageCommand() { Sections = _service.GetSectionChoices() });  //retrive the Section choices from the database
         }
 
-        // POST: Images/AddEdited
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddEdited(ImageDetailViewModel viewModel)
-        {
-            //Refactor: I'm really not fond of how I'm doing this here, but don't really know how to pass only the command from the view
-            AddEditedCommand cmd = viewModel.CreateEditedImage;
-            //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
-            using (var memoryStream = new MemoryStream())
-            {
-
-                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile as a stream
-                // Upload the file if less than 12ish MB
-                if (memoryStream.Length < 12097152)
-                {
-                    var id = _service.CreateEditedImage(cmd);
-                    return RedirectToAction("");    //make this redirect to the added EditedImage's Details page.
-                    //return RedirectToAction(nameof(View), new { id = id });
-                }
-                else
-                {
-                    ModelState.AddModelError("File", "The file is too large.");
-                }
-            }
-
-            //If we got to here, something went wrong
-            return View(cmd);
-            
-        }
-
         // POST: Images/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -178,6 +148,36 @@ namespace Bothniabladet.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(image);
+        }
+
+        // POST: Images/AddEdited
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEdited(ImageDetailViewModel viewModel)
+        {
+            //Refactor: I'm really not fond of how I'm doing this here, but don't really know how to pass only the command from the view
+            AddEditedCommand cmd = viewModel.CreateEditedImage;
+            //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
+            using (var memoryStream = new MemoryStream())
+            {
+
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile as a stream
+                // Upload the file if less than 12ish MB
+                if (memoryStream.Length < 12097152)
+                {
+                    var id = _service.CreateEditedImage(cmd);
+                    return RedirectToAction("");    //make this redirect to the added EditedImage's Details page.
+                    //return RedirectToAction(nameof(View), new { id = id });
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
+                }
+            }
+
+            //If we got to here, something went wrong
+            return View(cmd);
+
         }
 
         // GET: Images/Delete/5

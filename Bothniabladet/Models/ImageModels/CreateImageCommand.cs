@@ -68,23 +68,7 @@ namespace Bothniabladet.Models.ImageModels
                 //Metadata extraction
                 ImageMetaData = ExtractMetaData(ImageMemoryStream),
             };
-            //Create keywords from keywordstrings
-            ICollection<Keyword> tmpKeywords = new List<Keyword>();
-            foreach (string keywordString in Keywords)
-            {
-                tmpKeywords.Add(new Keyword { Word = keywordString});
-            }
 
-            //Add the many-many link image<-->keyword
-            image.KeywordLink = new List<ImageKeyword>();
-            foreach (Keyword keyword in tmpKeywords)
-            {
-                image.KeywordLink.Add(new ImageKeyword
-                { 
-                    Image = image,
-                    Keyword = keyword
-                });
-            }
 
             //This is all a bit convoluted, I'm sure it could be refactored to be a lot neater and clearer
             //Get a thumbnail and put it in image.Thumbnail
