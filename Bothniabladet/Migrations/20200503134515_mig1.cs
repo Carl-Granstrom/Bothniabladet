@@ -42,7 +42,7 @@ namespace Bothniabladet.Migrations
                 {
                     ImageId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageTitle = table.Column<string>(maxLength: 40, nullable: true),
+                    ImageTitle = table.Column<string>(nullable: true),
                     ImageData = table.Column<byte[]>(nullable: true),
                     BasePrice = table.Column<int>(nullable: false),
                     Issue = table.Column<DateTime>(nullable: false),
