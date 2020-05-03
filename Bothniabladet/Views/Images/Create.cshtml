@@ -46,14 +46,8 @@
                 <select asp-for="Section" asp-items="Model.Sections" class="form-control"></select>
                 <span asp-validation-for="Section" class="text-danger"></span>
             </div>
-            <input type="text" style="display:none" asp-for="Keywords" class="form-control" name="dynamicField" id="Keywords" />
-
-            <div class="form-group">
-                <label for="keywords" class="control-label">Taggar:</label>
-                <div id="keyword_parent"></div>
-                <span class="badge badge-pill badge-primary"></span>
-                <input type="text" id="keyword_field" value="" />
-            </div>
+            <div id="fields"></div>
+            <button id="btnAddField">Add Keyword</button>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -72,26 +66,11 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
-        bsCustomFileInput.init()
-        let keywords = [];
-        const keywordField = document.getElementById('keyword_field')
-        const keywordParent = document.getElementById('keyword_parent')
-        const keywordToForm = document.getElementById('Keywords')
-        keywordField.addEventListener('input', (e) => {
-            console.log(keywords)
-            let inputString = keywordField.value
-
-            if (e.data === " ") {
-                inputString = inputString.trim()
-                createPillBadge(keywordParent, inputString)
-                keywords.push(inputString)
-                keywordToForm.value = keywords.join()
-                inputString = null
-                keywordField.value = null
-            }
-            
-        })
+        var $fields = $('#fields');
+        $('#btnAddField').click(function (e) {
+            e.preventDefault();
+            $('<input type="text" name="dynamicField" minlength="3" data-val="true"  data-val-length-min="3"/><br/>').appendTo($fields);
+        });
     });
 
 </script>
