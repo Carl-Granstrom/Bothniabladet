@@ -68,7 +68,8 @@
         var $fields = $('#fields');
         $('#btnAddField').click(function (e) {
             e.preventDefault();
-            $('<input type="text" name="dynamicField"/><br/>').appendTo($fields);
+            $('<input type="text" name="dynamicField" minlength="3" data-val="true"  data-val-length-min="3"/><br/>').appendTo($fields);
+
         });
     });
 </script>
