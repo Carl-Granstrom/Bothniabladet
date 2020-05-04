@@ -65,8 +65,24 @@ namespace Bothniabladet.Services
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
 
-            //Search by keywords
-            //Search by section
+            List<Keyword> foundKeywords = _context.Keywords
+                .Where(keyword => keyword.Word.Contains(searchString))
+                .Include(imgKey => imgKey.KeywordLink)
+                .ThenInclude(image => image.Image)
+                .ToList();
+
+            List<Image> imagesByKeyword = new List<Image>();
+            foreach (Keyword keyword in foundKeywords) 
+            {
+                foreach (ImageKeyword imgKey in keyword.KeywordLink)
+                {
+                    imagesByKeyword.Add(imgKey.Image);
+                }
+            }
+
+            imagesByTitle = imagesByTitle.Union(imagesByKeyword).ToList();  //Create a Union(no duplicates) of the two lists created by the search.
+
+            //Add search by section
 
             ICollection<ImageSummaryViewModel> imageSummaryViewModels = new List<ImageSummaryViewModel>();
             foreach (Image image in imagesByTitle)
