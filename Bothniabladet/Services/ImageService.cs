@@ -148,6 +148,7 @@ namespace Bothniabladet.Services
             bool added = false;
             foreach (string keywordString in cmd.Keywords)
             {
+                added = false;
                 foreach (Keyword oldKeyword in oldKeywords)
                 {
                     if (oldKeyword.Word == keywordString)
