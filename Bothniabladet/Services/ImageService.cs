@@ -27,6 +27,7 @@ namespace Bothniabladet.Services
         public ICollection<ImageSummaryViewModel> GetImages()
         {
             List<Image> images = _context.Images
+              .Where(image => image.IsDeleted == false)
               .Include(image => image.KeywordLink)
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
@@ -60,7 +61,7 @@ namespace Bothniabladet.Services
         {
             //Search the titles
             List<Image> imagesByTitle = _context.Images
-              .Where(image => image.ImageTitle.Contains(searchString))
+              .Where(image => (image.IsDeleted == false) && (image.ImageTitle.Contains(searchString)))
               .Include(image => image.KeywordLink)
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
@@ -80,7 +81,8 @@ namespace Bothniabladet.Services
                 }
             }
 
-            imagesByTitle = imagesByTitle.Union(imagesByKeyword).ToList();  //Create a Union(no duplicates) of the two lists created by the search.
+            //The unions prevent the same image from appearing twice.
+            imagesByTitle = imagesByTitle.Union(imagesByKeyword).ToList();  //Create a Union(no duplicates) of the keyword and title search lists
 
             //Add search by section
 
@@ -144,6 +146,14 @@ namespace Bothniabladet.Services
         }
 
         //Add UPDATE here
+        //Soft Delete
+        public void SoftDeleteImage(int id)
+        {
+            Image image = _context.Images.Find(id);
+            //Here we could possibly throw an error if the image is already deleted.
+            image.IsDeleted = true;
+            _context.SaveChanges();
+        }
 
 
         //Create a new Image

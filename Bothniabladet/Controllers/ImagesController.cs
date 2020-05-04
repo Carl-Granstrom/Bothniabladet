@@ -35,7 +35,7 @@ namespace Bothniabladet.Controllers
                 var allModels = _service.GetImages();
                 return View(allModels);
             }
-
+            //call the service to retrieve the image view models
             var searchedModels = _service.GetSearchedImages(searchString);
 
             return View(searchedModels);
@@ -211,9 +211,7 @@ namespace Bothniabladet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var image = await _context.Images.FindAsync(id);
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
+            _service.SoftDeleteImage(id);
             return RedirectToAction(nameof(Index));
         }
 
