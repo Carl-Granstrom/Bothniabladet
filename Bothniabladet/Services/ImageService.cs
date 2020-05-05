@@ -125,7 +125,8 @@ namespace Bothniabladet.Services
                     Width = image.ImageMetaData.Width,
                     FileFormat = image.ImageMetaData.FileFormat,
                     GPS = image.ImageMetaData.Location.ToString(),
-                    EditedImages = image.EditedImages   //would prefer not to query for the whole image, only the thumbnail.
+                    EditedImages = image.EditedImages,   //would prefer not to query for the whole image, only the thumbnail.
+                    LicenseUsesLeft = image.ImageLicense.UsesLeft
                 })
                 .SingleOrDefault();
             if (imageViewModel.EditedImages == null) { imageViewModel.EditedImages = new List<EditedImage>(); }
