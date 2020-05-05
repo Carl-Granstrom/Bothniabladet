@@ -27,6 +27,7 @@ namespace Bothniabladet.Services
         public ICollection<ImageSummaryViewModel> GetImages()
         {
             List<Image> images = _context.Images
+              .Where(image => image.IsDeleted == false)
               .Include(image => image.KeywordLink)
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
@@ -60,13 +61,30 @@ namespace Bothniabladet.Services
         {
             //Search the titles
             List<Image> imagesByTitle = _context.Images
-              .Where(image => image.ImageTitle.Contains(searchString))
+              .Where(image => (image.IsDeleted == false) && (image.ImageTitle.Contains(searchString)))
               .Include(image => image.KeywordLink)
               .ThenInclude(imageKeywords => imageKeywords.Keyword)
               .ToList();
 
-            //Search by keywords
-            //Search by section
+            List<Keyword> foundKeywords = _context.Keywords
+                .Where(keyword => keyword.Word.Contains(searchString))
+                .Include(imgKey => imgKey.KeywordLink)
+                .ThenInclude(image => image.Image)
+                .ToList();
+
+            List<Image> imagesByKeyword = new List<Image>();
+            foreach (Keyword keyword in foundKeywords) 
+            {
+                foreach (ImageKeyword imgKey in keyword.KeywordLink)
+                {
+                    imagesByKeyword.Add(imgKey.Image);
+                }
+            }
+
+            //The unions prevent the same image from appearing twice.
+            imagesByTitle = imagesByTitle.Union(imagesByKeyword).ToList();  //Create a Union(no duplicates) of the keyword and title search lists
+
+            //Add search by section
 
             ICollection<ImageSummaryViewModel> imageSummaryViewModels = new List<ImageSummaryViewModel>();
             foreach (Image image in imagesByTitle)
@@ -128,6 +146,14 @@ namespace Bothniabladet.Services
         }
 
         //Add UPDATE here
+        //Soft Delete
+        public void SoftDeleteImage(int id)
+        {
+            Image image = _context.Images.Find(id);
+            //Here we could possibly throw an error if the image is already deleted.
+            image.IsDeleted = true;
+            _context.SaveChanges();
+        }
 
 
         //Create a new Image
@@ -148,6 +174,7 @@ namespace Bothniabladet.Services
             bool added = false;
             foreach (string keywordString in cmd.Keywords)
             {
+                added = false;
                 foreach (Keyword oldKeyword in oldKeywords)
                 {
                     if (oldKeyword.Word == keywordString)

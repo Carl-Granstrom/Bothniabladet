@@ -64,15 +64,14 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 <script type="text/javascript">
-
     $(document).ready(function () {
         var $fields = $('#fields');
         $('#btnAddField').click(function (e) {
             e.preventDefault();
             $('<input type="text" name="dynamicField" minlength="3" data-val="true"  data-val-length-min="3"/><br/>').appendTo($fields);
+
         });
     });
-
 </script>
 
 @section Scripts {
