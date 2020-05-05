@@ -1,0 +1,34 @@
+﻿
+@{
+  @model NewUser
+}
+
+<h2>Registrera ett konto</h2>
+
+<form asp-controller="Account" asp-action="Register" method="post">
+  <div asp-validation-summary="ModelOnly"></div>
+  <p>
+    <label asp-for="UserName"></label>
+    <input asp-for="UserName" />
+    <span asp-validation-for="UserName"></span>
+  </p>
+  <p>
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+  </p>
+  <p>
+    <label asp-for="Password"></label>
+    <input asp-for="Password" />
+    <span asp-validation-for="Password"></span>
+  </p>
+  <p>
+    <label asp-for="ConfirmPassword"></label>
+    <input asp-for="ConfirmPassword" />
+    <span asp-validation-for="ConfirmPassword"></span>
+  </p>
+  <p>
+    <input type="submit" value="Registrera" />
+  </p>
+  <h5>@ViewBag.Massage</h5>
+</form>

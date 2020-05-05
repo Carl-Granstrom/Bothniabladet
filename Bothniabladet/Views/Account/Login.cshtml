@@ -7,9 +7,9 @@
 
 <form asp-controller="Account" asp-action="Login" method="post">
   <p>
-    <label asp-for="UserName"></label>
-    <input asp-for="UserName" />
-    <span asp-validation-for="UserName"></span>
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
   </p>
   <p>
     <label asp-for="Password"></label>
@@ -20,7 +20,6 @@
     <input type="hidden" asp-for="ReturnUrl" />
   </p>
   <p>
-    <div asp-validation-summary="All"></div>
     <input type="submit" value="Logga in" />
   </p>
 </form>
