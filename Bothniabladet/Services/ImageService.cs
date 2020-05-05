@@ -227,7 +227,7 @@ namespace Bothniabladet.Services
         //Use Licenced Image - This only updates the number of uses and throws an error if there are no uses left
         //Make sure to have the view lock the button and display a warning if there are no uses left
         //returns the number of Licensed uses left.
-        public int UseLicence(int id)
+        public int UseLicense(int id)
         {
             Image image = _context.Images.Find(id);
             if (image.ImageLicense.LicenceType == ImageLicense.LicenseType.LICENSED)
