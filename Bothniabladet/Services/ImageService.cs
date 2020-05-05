@@ -133,6 +133,13 @@ namespace Bothniabladet.Services
             return imageViewModel;
         }
 
+        //Return a Bitmap of a single image by ID, this is used for file download
+        public Data.Image GetImage(int? id)
+        {
+            Data.Image image = _context.Images.Find(id);
+            return image;
+        }
+
         public ICollection<SelectListItem> GetSectionChoices()
         {
             //returns the enums as SelectListItems with the enum name as Text and Value
@@ -145,7 +152,8 @@ namespace Bothniabladet.Services
 
         }
 
-        //Add UPDATE here
+        //Add UPDATE here, low prio
+
         //Soft Delete
         public void SoftDeleteImage(int id)
         {
@@ -154,7 +162,6 @@ namespace Bothniabladet.Services
             image.IsDeleted = true;
             _context.SaveChanges();
         }
-
 
         //Create a new Image
         public int CreateImage(CreateImageCommand cmd)
@@ -215,6 +222,32 @@ namespace Bothniabladet.Services
             originalImage.EditedImages.Add(editedImage);
             _context.SaveChanges();
             return originalImage.ImageId;
+        }
+
+        //Use Licenced Image - This only updates the number of uses and throws an error if there are no uses left
+        //Make sure to have the view lock the button and display a warning if there are no uses left
+        //returns the number of Licensed uses left.
+        public int UseLicence(int id)
+        {
+            Image image = _context.Images.Find(id);
+            if (image.ImageLicense.LicenceType == ImageLicense.LicenseType.LICENSED)
+            {
+                if (image.ImageLicense.UsesLeft > 0)
+                {
+                    image.ImageLicense.UsesLeft--;
+                }
+                else
+                {
+                    throw new Exception("The Licence of this image permits no further use.");
+                }
+            }
+            else
+            {
+                throw new Exception("This image is not licensed and therefore has unlimited uses");
+            }
+
+            _context.SaveChanges();
+            return image.ImageLicense.UsesLeft;
         }
     }
 }

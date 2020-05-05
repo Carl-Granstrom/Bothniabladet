@@ -17,7 +17,7 @@ namespace Bothniabladet.Data
 
         /*VARIABLES*/
         public LicenseType LicenceType { get; set; }
-        public int UsesLeft { get; set; }  //this should probably not be get/set via these methods, but need to think about it. Also, use -1 as gatekeeper for OWNED and BOUGHT types and specify in constructor?
+        public int UsesLeft { get; set; }
 
         /*METHODS*/
     }
