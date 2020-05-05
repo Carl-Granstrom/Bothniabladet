@@ -9,9 +9,8 @@
 @*<h4>@Html.DisplayFor(model => model.Name)</h4>*@
 <hr />
 <div class="details-body-columns">
-
     <div class="edit-image-container">
-        @*<h4>Det finns redigerade versioner av denna bild</h4>*@
+
         <table class="table">
             <thead>
                 <tr>
@@ -23,7 +22,7 @@
                 {
                     <tr>
                         <td>
-                            <img src="@item"/>
+                            <img src="@item" />
                         </td>
                     </tr>
                 }
@@ -36,7 +35,30 @@
     </div>
 
     <div class="image-container">
-        <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayNameFor(model => model.Name)" />
+        <div class="container">
+            <a data-toggle="modal" data-target="#EnlargeImageModal">
+                <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+            </a>
+        </div>
+        <div class="container">
+            <div class="modal fade" tabindex="-1" id="EnlargeImageModal"
+                 data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+                            <button type="button" class="close" data-dismiss="modal">
+                                ×
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="information-column">
         <dl class="row">
