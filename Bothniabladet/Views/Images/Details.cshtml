@@ -28,25 +28,26 @@
                 }
             </tbody>
         </table>
+        <a asp-action="EditLinkedImages" asp-route-id="@Model.Id">Lägg till</a>
         @*<h4>Lägg till en ny redigerad version av denna bild</h4>
-            <form asp-action="AddEdited"
-                  asp-controller="Images"
-                  method="post"
-                  enctype="multipart/form-data">
-                <input asp-for="CreateEditedImage.OriginalId" type="hidden" value="@Model.Id" />
-                <label asp-for="CreateEditedImage.ImageData.FormFile"></label>
-                <input asp-for="CreateEditedImage.ImageData.FormFile" type="file" />
-                <span asp-validation-for="CreateEditedImage.ImageData.FormFile"></span>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="CreateEditedImage.ImageTitle" class="control-label">Please enter the name of the image</label>
-                    <input asp-for="CreateEditedImage.ImageTitle" class="form-control" />
-                    <span asp-validation-for="CreateEditedImage.ImageTitle" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="AddEdited" class="btn btn-primary" />
-                </div>
-            </form>*@
+        <form asp-action="AddEdited"
+              asp-controller="Images"
+              method="post"
+              enctype="multipart/form-data">
+            <input asp-for="CreateEditedImage.OriginalId" type="hidden" value="@Model.Id" />
+            <label asp-for="CreateEditedImage.ImageData.FormFile"></label>
+            <input asp-for="CreateEditedImage.ImageData.FormFile" type="file" />
+            <span asp-validation-for="CreateEditedImage.ImageData.FormFile"></span>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CreateEditedImage.ImageTitle" class="control-label">Please enter the name of the image</label>
+                <input asp-for="CreateEditedImage.ImageTitle" class="form-control" />
+                <span asp-validation-for="CreateEditedImage.ImageTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="AddEdited" class="btn btn-primary" />
+            </div>
+        </form>*@
     </div>
     <div class="image-container">
         <img src="@ViewBag.ImageDataUrl"/>
