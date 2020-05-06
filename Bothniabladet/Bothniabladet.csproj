@@ -7,8 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="appsettings.Development.json" />
     <Content Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20200506093741_Bothnia.cs" />
+    <Compile Include="Migrations\20200506093741_Bothnia.Designer.cs" />
+    <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
+    <Compile Include="Migrations\AppIdentityDb\20200506093809_Identity.cs" />
+    <Compile Include="Migrations\AppIdentityDb\20200506093809_Identity.Designer.cs" />
+    <Compile Include="Migrations\AppIdentityDb\AppIdentityDbContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>

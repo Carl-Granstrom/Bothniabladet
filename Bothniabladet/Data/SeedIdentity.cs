@@ -28,9 +28,14 @@ namespace Bothniabladet.Data
 
     public static async Task CreateUsers(UserManager<IdentityUser> uManager)
     {
-      IdentityUser Admin01 = new IdentityUser("Admin01");
-      await uManager.CreateAsync(Admin01, "Pass01?");
-      await uManager.AddToRoleAsync(Admin01, "Admin");
+      IdentityUser Admin = new IdentityUser
+      {
+        UserName = "Admin",
+        Email = "Admin@admin.com"
+      };
+    
+      await uManager.CreateAsync(Admin, "Admin01?");
+      await uManager.AddToRoleAsync(Admin, "Admin");
     }
   }
 }

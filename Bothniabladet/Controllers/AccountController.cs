@@ -48,7 +48,7 @@ namespace Bothniabladet.Controllers
           await signInManager.SignOutAsync();
           if((await signInManager.PasswordSignInAsync(user, login.Password, false, false)).Succeeded)
           {
-            return Redirect(login?.ReturnUrl ?? "/Home/Index");
+            return Redirect(login?.ReturnUrl ?? "/Images/Index");
           }
         }
       }

@@ -64,7 +64,7 @@ namespace Bothniabladet
       {
         endpoints.MapControllerRoute(
                   name: "default",
-                  pattern: "{controller=Home}/{action=Index}/{id?}");
+                  pattern: "{controller=Images}/{action=Index}/{id?}");
       });
     }
   }
