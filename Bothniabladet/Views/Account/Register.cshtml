@@ -3,32 +3,34 @@
   @model NewUser
 }
 
-<h2>Registrera ett konto</h2>
+<div class="form-box">
+  <h2 class="logReg-header">Registrera ett konto</h2>
+  <div class="form">
+    <form asp-controller="Account" asp-action="Register" method="post">
+      <div asp-validation-summary="ModelOnly"></div>
+      <p>
 
-<form asp-controller="Account" asp-action="Register" method="post">
-  <div asp-validation-summary="ModelOnly"></div>
-  <p>
-    <label asp-for="UserName"></label>
-    <input asp-for="UserName" />
-    <span asp-validation-for="UserName"></span>
-  </p>
-  <p>
-    <label asp-for="Email"></label>
-    <input asp-for="Email" />
-    <span asp-validation-for="Email"></span>
-  </p>
-  <p>
-    <label asp-for="Password"></label>
-    <input asp-for="Password" />
-    <span asp-validation-for="Password"></span>
-  </p>
-  <p>
-    <label asp-for="ConfirmPassword"></label>
-    <input asp-for="ConfirmPassword" />
-    <span asp-validation-for="ConfirmPassword"></span>
-  </p>
-  <p>
-    <input type="submit" value="Registrera" />
-  </p>
-  <h5>@ViewBag.Massage</h5>
-</form>
+        <input asp-for="UserName" placeholder="Användarnamn" />
+        <span asp-validation-for="UserName" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="Email" placeholder="E-mail" />
+        <span asp-validation-for="Email" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="Password" placeholder="Lösenord" />
+        <span asp-validation-for="Password" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="ConfirmPassword" placeholder="Upprepa lösenord" />
+        <span asp-validation-for="ConfirmPassword"></span>
+      </p>
+      <p>
+        <button>Registrera</button>
+      </p>
+      <h5>@ViewBag.Massage</h5>
+    </form>
+  </div>
+</div>
+
+
