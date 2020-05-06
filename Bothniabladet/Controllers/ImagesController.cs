@@ -13,6 +13,7 @@ using System.Web;
 using System.IO;
 using Bothniabladet.Services;
 using Microsoft.AspNetCore.Http;
+using System.Drawing.Imaging;
 
 namespace Bothniabladet.Controllers
 {
@@ -27,11 +28,18 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
-        // GET: Images
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var models = _service.GetImages();
-            return View(models);
+            //List all images if there is no search string specified
+            if (String.IsNullOrEmpty(searchString))
+            {
+                var allModels = _service.GetImages();
+                return View(allModels);
+            }
+            //call the service to retrieve the image view models
+            var searchedModels = _service.GetSearchedImages(searchString);
+
+            return View(searchedModels);
         }
 
         // GET: Images/Details/5
@@ -43,22 +51,30 @@ namespace Bothniabladet.Controllers
                 return NotFound();
             }
 
-            var image = _service.GetImageDetail(id);
+            var imageViewModel = _service.GetImageDetail(id);
             
-            if (image == null)
+            if (imageViewModel == null)
             {
                 return NotFound();
             }
-            //add image to viewbag
-            ViewBag.ImageDataUrl = image.ImageDataString;
+            ICollection<string> thumbnailDataStrings = new List<string>();
 
-            return View(image);
+            foreach (EditedImage editedImage in imageViewModel.EditedImages) 
+            {
+                thumbnailDataStrings.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)));
+            }
+            //add thumbnail datastrings to the viewmodel, this whole process is ugly and the logic is in the wrong place. Refactor.
+            imageViewModel.ThumbNailDataStrings = thumbnailDataStrings;
+            //add image to viewbag
+            ViewBag.ImageDataUrl = imageViewModel.ImageDataString;
+
+            return View(imageViewModel);
         }
 
         // GET: Images/Create
         public IActionResult Create()
         {
-            return View(new CreateImageCommand());
+            return View(new CreateImageCommand() { Sections = _service.GetSectionChoices() });  //retrive the Section choices from the database
         }
 
         // POST: Images/Create
@@ -66,19 +82,20 @@ namespace Bothniabladet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateImageCommand cmd)
+        public async Task<IActionResult> Create(CreateImageCommand cmd, string[] dynamicField)
         {
+            cmd.Keywords = dynamicField;
             //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
                 
-                await cmd.ImageData.FormFile.CopyToAsync(memoryStream);
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile
                 // Upload the file if less than 12ish MB
                 if (memoryStream.Length < 12097152)
                 {
-                    cmd.ImageMemoryStream = memoryStream;
+                    cmd.ImageMemoryStream = memoryStream;   //add the image data to the command object
                     var id = _service.CreateImage(cmd);
-                    return RedirectToAction("");
+                    return RedirectToAction("");    //make this redirect to the added image's Details page.
                     //return RedirectToAction(nameof(View), new { id = id });
                 }
                 else
@@ -142,7 +159,38 @@ namespace Bothniabladet.Controllers
             return View(image);
         }
 
+        // POST: Images/AddEdited
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEdited(ImageDetailViewModel viewModel)
+        {
+            //Refactor: I'm really not fond of how I'm doing this here, but don't really know how to pass only the command from the view
+            AddEditedCommand cmd = viewModel.CreateEditedImage;
+            //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
+            using (var memoryStream = new MemoryStream())
+            {
+
+                await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile as a stream
+                // Upload the file if less than 12ish MB
+                if (memoryStream.Length < 12097152)
+                {
+                    var id = _service.CreateEditedImage(cmd);
+                    return RedirectToAction("");    //make this redirect to the added EditedImage's Details page.
+                    //return RedirectToAction(nameof(View), new { id = id });
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large.");
+                }
+            }
+
+            //If we got to here, something went wrong
+            return View(cmd);
+
+        }
+
         // GET: Images/Delete/5
+        //Refactor to use service
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,15 +213,26 @@ namespace Bothniabladet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var image = await _context.Images.FindAsync(id);
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
+            _service.SoftDeleteImage(id);
             return RedirectToAction(nameof(Index));
         }
 
+        //Refactor to use service
         private bool ImageExists(int id)
         {
             return _context.Images.Any(e => e.ImageId == id);
+        }
+
+        // GET: Images/Details/Download/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Download(int id)
+        {
+            Image image = _service.GetImage(id);
+            MemoryStream imageStream = new MemoryStream(image.ImageData);
+            if (imageStream == null)
+                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
+
+            return new FileContentResult(image.ImageData, "image/jpeg") { FileDownloadName = image.ImageTitle + ".jpeg"}; // returns a FileStreamResult
         }
     }
 }

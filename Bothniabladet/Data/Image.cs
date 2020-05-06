@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Bothniabladet.Data
         public int BasePrice { get; set; }
         public DateTime Issue { get; set; }
         public bool IsDeleted { get; set; }
+        public byte[] Thumbnail { get; set; }
 
 
         /*LINKS*/
@@ -23,8 +25,7 @@ namespace Bothniabladet.Data
         public ImageLicense ImageLicense { get; set; }     //1-1 unidirectional(?) to the image license object
         public ImageMetaData ImageMetaData { get; set; }    //1-1 unidirectional(?) to the metadata object
         public NewsSection Section { get; set; }        //using the enum
-        public SectionEnum SectionRelation { get; set; }
-        public HashSet<Keyword> Keywords { get; set; }      //Using a Hashset, doesn't help tho because all Keywords are unique anyway. This needs more work.
+        public ICollection<ImageKeyword> KeywordLink { get; set; }
 
         /*METHODS*/
 

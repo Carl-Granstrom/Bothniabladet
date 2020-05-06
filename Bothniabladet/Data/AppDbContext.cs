@@ -1,76 +1,98 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Bothniabladet.Models;
 
 namespace Bothniabladet.Data
 {
-  public class AppDbContext : DbContext
-  {
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-    public DbSet<Image> Images { get; set; }
-    //not sure how to handle the two-way relationships here but atm there is no jointable, the Invoices hold an FK to the Client
-    //I'm not sure how it will work querying for either of these, but you surely want to be able to query for both specific invoices
-    //and then navigate to the clint they belong to as well as finding all invoices that belong to a particular client. 
-    //So, navigation has to work both ways.
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Invoice> Invoices { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class AppDbContext : DbContext
     {
-      //storing the NewsSection enum as an integer
-      modelBuilder.Entity<Image>()
-          .Property(c => c.Section)
-          .HasConversion<string>();
+        public AppDbContext(
+            DbContextOptions<AppDbContext> options) 
+            : base(options)
+        {
+        }
 
-      modelBuilder.Entity<Image>()
-          .HasOne(c => c.SectionRelation)
-          .WithMany()
-          .HasForeignKey(c => c.Section);
+        public DbSet<Image> Images { get; set; }
+        //not sure how to handle the two-way relationships here but atm there is no jointable, the Invoices hold an FK to the Client
+        //I'm not sure how it will work querying for either of these, but you surely want to be able to query for both specific invoices
+        //and then navigate to the clint they belong to as well as finding all invoices that belong to a particular client. 
+        //So, navigation has to work both ways.
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<SectionEnum> Enums { get; set; }
+        public DbSet<ImageKeyword> ImageKeywords { get; set; }
+        public DbSet<Keyword> Keywords { get; set; }
 
-      //configuring Ownedproperty
-      modelBuilder.Entity<Image>()
-          .OwnsOne(s => s.ImageLicense);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //storing the NewsSection enum as an integer
+            modelBuilder.Entity<Image>()
+                .Property(c => c.Section)
+                .HasConversion<string>();
 
-      //configuring Ownedproperty
-      modelBuilder.Entity<Image>()
-          .OwnsOne(s => s.ImageMetaData);
+            //configuring Ownedproperty
+            modelBuilder.Entity<Image>()
+                .OwnsOne(s => s.ImageLicense);
 
-      //storing the enums in their own table
-      modelBuilder.Entity<SectionEnum>()
-          .ToTable("Enums");
+            //configuring Ownedproperty
+            modelBuilder.Entity<Image>()
+                .OwnsOne(s => s.ImageMetaData);
 
-      modelBuilder.Entity<SectionEnum>()
-          .Property(s => s.Name)
-          .HasConversion<string>();
+            //configuring EditedImages, one way relationship
+            modelBuilder.Entity<Image>()
+                .HasMany(c => c.EditedImages)
+                .WithOne(s => s.Image);
 
-      modelBuilder.Entity<SectionEnum>()
-          .HasKey(s => s.Name);
+            //configure compound primary key for ImageKeyword
+            modelBuilder.Entity<ImageKeyword>()
+                .HasKey(x => new { x.ImageId, x.KeywordId } );
 
-      base.OnModelCreating(modelBuilder);
+            //create a unique contraint on Keyword.Word
+            //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
+            //modelBuilder.Entity<Keyword>()
+            //    .HasIndex(k => k.Word)
+            //    .IsUnique();
 
-      //Create the enums in the database on startup
-      modelBuilder.Entity<SectionEnum>().HasData(
-          new SectionEnum
-          {
-            Name = NewsSection.CULTURE
-          },
-          new SectionEnum
-          {
-            Name = NewsSection.ECONOMY
-          },
-          new SectionEnum
-          {
-            Name = NewsSection.NEWS
-          },
-          new SectionEnum
-          {
-            Name = NewsSection.SPORTS
-          }
-          );
+            //storing the enums in their own table
+            modelBuilder.Entity<SectionEnum>()
+                .ToTable("Enums")
+                .HasKey(c => c.SectionEnumId);
+
+            modelBuilder.Entity<SectionEnum>()
+                .Property(s => s.Name)
+                .HasConversion<string>();
+
+            base.OnModelCreating(modelBuilder);
+
+            //Create the enums in the database on startup
+            modelBuilder.Entity<SectionEnum>().HasData(
+                new SectionEnum
+                {
+                    SectionEnumId = 1,
+                    Name = NewsSection.CULTURE
+                },
+                new SectionEnum
+                {
+                    SectionEnumId = 2,
+                    Name = NewsSection.ECONOMY
+                },
+                new SectionEnum
+                {
+                    SectionEnumId = 3,
+                    Name = NewsSection.NEWS
+                }, 
+                new SectionEnum
+                {
+                    SectionEnumId = 4,
+                    Name = NewsSection.INTERNATIONAL
+                },
+                new SectionEnum
+                {
+                    SectionEnumId = 5,
+                    Name = NewsSection.SPORTS
+                }
+                );
+        }
     }
-  }
 }
 

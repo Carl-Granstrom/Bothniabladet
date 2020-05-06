@@ -20,49 +20,64 @@ namespace Bothniabladet.Models.ImageModels
 {
     public class CreateImageCommand
     {
+        [Required]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$", ErrorMessage = "Title must start with a capital letter")]
+        [StringLength(40, ErrorMessage = "Title can be no more than 40 characters long")]
+        [Display(Name = "Image Title")]
         public string ImageTitle { get; set; }
+        [Required]
         public int BasePrice { get; set; }
         //I have to figure out how to not view the time here. Trying this.
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Issue { get; set; }
-        public string Section { get; set; } //this field will be populated from the Select Tag Helper in the view
+
+        [Required]
+        public NewsSection Section { get; set; } //this field will be populated from the Select Tag Helper in the view
         //this need to be populated from the databse(in the controller?) but using PH for now
         //this uses SelectListItems and they need to be converted to the enums again
-        public List<SelectListItem> Sections { get; } = new List<SelectListItem>
-        {
-            new SelectListItem() { Value = "CULTURE", Text = "CULTURE" },
-            new SelectListItem() { Value = "NEWS", Text = "NEWS" },
-            new SelectListItem() { Value = "ECONOMY", Text = "ECONOMY" },
-            new SelectListItem() { Value = "SPORTS", Text = "SPORTS" }
-        };
+        public ICollection<SelectListItem> Sections { get; set; }
 
-        //still need to add information needed by ImageLicense and ImageMetaData
-
-
+        [Required]
         [BindProperty]
         public ImageData ImageData { get; set; }
-
+        //not sure that this is a good way to use a stream. Refactor.
         public MemoryStream ImageMemoryStream { get; set; }
 
-        //this method will eventually handle the metadata extraction and the creation of a new image from the command object.
+        public ICollection<string> Keywords { get; set; }
+
+        /*METHODS*/
+
+        //this method handles the metadata extraction and the creation of a new image from the command object.
+        //change it so it matches EditedImage method instead, which is cleaner and siposes of streams properly since this implementation might cause a memory leak.
         public Data.Image ToImage()
         {
-            //placeholder before I cba to do the string conversion to correct enum.
-            NewsSection TmpSection = NewsSection.NEWS;
-
-            return new Data.Image
+            //ICollection<EditedImage> editedImages = new List<EditedImage>();
+            Data.Image image = new Data.Image
             {
                 ImageTitle = ImageTitle,
                 BasePrice = BasePrice,
+                EditedImages = new List<EditedImage>(),
                 Issue = Issue,
-                Section = TmpSection,
+                Section = Section,
+                Thumbnail = null,
                 ImageData = ImageMemoryStream.ToArray(),
                 //placeholders ImageLicense
-                ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3},
-                //Metadata extraction hopefully works now
-                ImageMetaData = ExtractMetaData(ImageMemoryStream)
+                ImageLicense = new ImageLicense() { LicenceType = ImageLicense.LicenseType.LICENSED, UsesLeft = 3 },
+                //Metadata extraction
+                ImageMetaData = ExtractMetaData(ImageMemoryStream),
             };
+
+
+            //This is all a bit convoluted, I'm sure it could be refactored to be a lot neater and clearer
+            //Get a thumbnail and put it in image.Thumbnail
+            //the new memorystream might potentially cause a mem leak, I'm not sure about streams. Should work a "using" in there.
+            System.Drawing.Image tmpThumb = System.Drawing.Image.FromStream(new MemoryStream(image.ImageData)).GetThumbnailImage(50, 50, null, IntPtr.Zero);
+            ImageConverter _converter = new ImageConverter();
+            image.Thumbnail = (byte[])_converter.ConvertTo(tmpThumb, typeof(byte[]));
+
+            return image;
         }
 
         //Extract image metadata to ImageMetaData objects using ExifLib
@@ -101,6 +116,8 @@ namespace Bothniabladet.Models.ImageModels
         //This methods extracts degrees, minutes and seconds but only returns the degrees. We could get a lot more fancy with our coordinates.
         private double CoordinateToDouble(byte[] rational)
         {
+            //check that the length of the rational is correct, if not, return 0
+            if (rational.Length != 24){ return 0; }
             uint degreesNumerator = BitConverter.ToUInt32(rational, 0);
             uint degreesDenominator = BitConverter.ToUInt32(rational, 4);
             uint minutesNumerator = BitConverter.ToUInt32(rational, 8);
