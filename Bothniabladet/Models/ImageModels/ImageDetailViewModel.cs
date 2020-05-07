@@ -58,6 +58,8 @@ namespace Bothniabladet.Models.ImageModels
             {
                 viewModel.EditedImages = new List<EditedImage>();
             }
+
+            //This is so that the ID and thumbnail of images can be handled as an object instead of multiple
             ICollection<GetEditedImageModel> editedImagesDataStrings = new List<GetEditedImageModel>();
             foreach (EditedImage editedImage in image.EditedImages)
             {
@@ -65,7 +67,6 @@ namespace Bothniabladet.Models.ImageModels
                 {
                     EditedImageId = editedImage.EditedImageId,
                     ImageTitle = editedImage.ImageTitle,
-                    ImageData = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)),
                     Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail))
                 });
             }
