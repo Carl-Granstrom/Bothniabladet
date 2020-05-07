@@ -63,7 +63,6 @@ namespace Bothniabladet.Controllers
                 {
                     EditedImageId = editedImage.EditedImageId,
                     ImageTitle = editedImage.ImageTitle,
-                    ImageData = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)),
                     Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail))
                 });
             }
