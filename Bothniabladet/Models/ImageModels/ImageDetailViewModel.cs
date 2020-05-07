@@ -31,7 +31,6 @@ namespace Bothniabladet.Models.ImageModels
         public ICollection<String> ThumbNailDataStrings { get; set; }
         public ICollection<EditedImage> EditedImages { get; set; }  //could remove this with better logic in the service/query
 
-
         public static ImageDetailViewModel FromImage(Image image)
         {
             //Create keyword list

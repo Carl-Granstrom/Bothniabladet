@@ -20,7 +20,7 @@
                 <div class="col overflow-auto" style="max-height:65vh">
                     @foreach (var item in Model.ThumbNailDataStrings)
                     {
-                        <a class="pb-1 pl-0 pr-0" href="#">
+                        <a class="pb-1 pl-0 pr-0" href="#" data-toggle="modal" data-target="#EnlargeImageModal">
                             <img class="img-thumbnail img-fluid mx-auto d-block" src="@item" />
                         </a>
                     }
@@ -29,8 +29,7 @@
                     <button class="btn btn-outline-success" type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
                 </div>
             </div>
-
-            <partial name="_PartialAddEditedImage" />
+            <partial name="_PartialAddEditedImageModal" />
         </div>
 
 
@@ -41,24 +40,7 @@
                     <img class="img-fluid mx-auto d-block" style="max-height:75vh" src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
                 </a>
             </div>
-            <div class="container">
-                <div class="modal fade" tabindex="-1" id="EnlargeImageModal"
-                     data-keyboard="false" data-backdrop="static">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
-                                <button type="button" class="close" data-dismiss="modal">
-                                    ×
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <img class="img-fluid" src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <partial name="_PartialViewFullImageModal" />
         </div>
 
 
