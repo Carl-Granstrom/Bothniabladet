@@ -30,6 +30,7 @@ namespace Bothniabladet.Models.ImageModels
         public AddEditedCommand CreateEditedImage { get; set; }     //will be populated from the view
         public ICollection<String> ThumbNailDataStrings { get; set; }
         public ICollection<EditedImage> EditedImages { get; set; }  //could remove this with better logic in the service/query
+        public int LicenseUsesLeft { get; set; }
 
 
         public static ImageDetailViewModel FromImage(Image image)
