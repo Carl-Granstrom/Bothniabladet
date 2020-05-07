@@ -216,5 +216,7 @@ namespace Bothniabladet.Services
             _context.SaveChanges();
             return originalImage.ImageId;
         }
+
+        
     }
 }

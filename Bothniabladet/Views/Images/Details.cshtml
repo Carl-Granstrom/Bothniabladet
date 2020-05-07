@@ -18,10 +18,10 @@
                     </small>
                 </div>
                 <div class="col overflow-auto" style="max-height:65vh">
-                    @foreach (var item in Model.ThumbNailDataStrings)
+                    @foreach (var item in Model.getEditedImageModels)
                     {
                         <a class="pb-1 pl-0 pr-0" href="#" data-toggle="modal" data-target="#EnlargeImageModal">
-                            <img class="img-thumbnail img-fluid mx-auto d-block" src="@item" />
+                            <img class="img-thumbnail img-fluid mx-auto d-block" src="@item.Thumbnail" />
                         </a>
                     }
                 </div>

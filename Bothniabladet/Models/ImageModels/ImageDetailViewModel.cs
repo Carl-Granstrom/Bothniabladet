@@ -28,8 +28,8 @@ namespace Bothniabladet.Models.ImageModels
         public string noGPS = "No GPS coordinates for this image";      //TODO: Replace this with logic in the View instead
         //Thumbnail data'
         public AddEditedCommand CreateEditedImage { get; set; }     //will be populated from the view
-        public ICollection<String> ThumbNailDataStrings { get; set; }
         public ICollection<EditedImage> EditedImages { get; set; }  //could remove this with better logic in the service/query
+        public ICollection<GetEditedImageModel> getEditedImageModels { get; set; }
 
         public static ImageDetailViewModel FromImage(Image image)
         {
@@ -58,13 +58,18 @@ namespace Bothniabladet.Models.ImageModels
             {
                 viewModel.EditedImages = new List<EditedImage>();
             }
-            ICollection<String> editedImagesDataStrings = new List<String>();
+            ICollection<GetEditedImageModel> editedImagesDataStrings = new List<GetEditedImageModel>();
             foreach (EditedImage editedImage in image.EditedImages)
             {
-                editedImagesDataStrings.Add(String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail)));
+                editedImagesDataStrings.Add(new GetEditedImageModel()
+                {
+                    EditedImageId = editedImage.EditedImageId,
+                    ImageTitle = editedImage.ImageTitle,
+                    ImageData = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)),
+                    Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail))
+                });
             }
-            viewModel.ThumbNailDataStrings = editedImagesDataStrings;
-
+            viewModel.getEditedImageModels = editedImagesDataStrings;
             return viewModel;
         }
     }
