@@ -3,114 +3,108 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="container-fluid">
 
-<a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a>
+    <hr />
 
-@*<h4>@Html.DisplayFor(model => model.Name)</h4>*@
-<hr />
-<div class="details-body-columns">
-    <div class="edit-image-container">
+    <div class="row">
+        <div class="col-2">
 
-        <table class="table">
-            <thead>
-                <tr>
-                    Edited Versions
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ThumbNailDataStrings)
-                {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            <img src="@item" />
-                        </td>
+                        Edited Versions
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ThumbNailDataStrings)
+                    {
+                        <tr>
+                            <td>
+                                <img class="img-fluid" src="@item" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-        <button type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
+            <button type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
 
-        <partial name="_PartialAddEditedImage" />
-    </div>
-
-    <div class="image-container">
-        <div class="container">
-            <a data-toggle="modal" data-target="#EnlargeImageModal">
-                <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
-            </a>
+            <partial name="_PartialAddEditedImage" />
         </div>
-        <div class="container">
-            <div class="modal fade" tabindex="-1" id="EnlargeImageModal"
-                 data-keyboard="false" data-backdrop="static">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
-                            <button type="button" class="close" data-dismiss="modal">
-                                ×
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+
+
+
+        <div class="col">
+            <div class="col my-auto px-0" style="background-color:black">
+                <a href="#" data-toggle="modal" data-target="#EnlargeImageModal">
+                    <img class="img-fluid mx-auto d-block" style="max-height:75vh" src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+                </a>
+            </div>
+            <div class="container">
+                <div class="modal fade" tabindex="-1" id="EnlargeImageModal"
+                     data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">@Html.DisplayFor(model => model.Name)</h4>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    ×
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-    </div>
-    <div class="information-column">
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Section)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Section)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Date)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Date)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Height)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Height)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Width)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Width)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.FileFormat)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.FileFormat)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.GPS)
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.GPS == "POINT (0 0)")
-                {@Html.DisplayFor(model => model.noGPS)}
-                @if (Model.GPS != "POINT (0 0)")
-                {@Html.DisplayFor(model => model.GPS)}
-            </dd>
 
+
+        <div class="col-2">
+
+            <table class="table-sm table">
+                <tbody>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name): </th>
+                        <td>@Html.DisplayFor(model => model.Name)</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Section): </th>
+                        <td>@Html.DisplayFor(model => model.Section)</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Date): </th>
+                        <td>@Html.DisplayFor(model => model.Date)</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Height): </th>
+                        <td>@Html.DisplayFor(model => model.Height)</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Width): </th>
+                        <td>@Html.DisplayFor(model => model.Width)</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.FileFormat): </th>
+                        <td>@Html.DisplayFor(model => model.FileFormat)</td>
+                    </tr>
+                    <tr>
+                        <th> @Html.DisplayNameFor(model => model.GPS): </th>
+                        <td>
+                            @if (Model.GPS == "POINT (0 0)")
+                            {@Html.DisplayFor(model => model.noGPS)}
+                            @if (Model.GPS != "POINT (0 0)")
+                            {@Html.DisplayFor(model => model.GPS)}
+                        </td>
+                </tbody>
+            </table>
             @*Download doesn't exist yet and it also need to be changed to purchase depending on login status*@
-        </dl>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> |
-        <a asp-action="Download" asp-route-id="@Model.Id">Ladda ner</a>
+            <a class="align-text-bottom" asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> |
+            <a class="align-text-bottom" asp-action="Download" asp-route-id="@Model.Id">Ladda ner</a>
+        </div>
     </div>
 </div>
