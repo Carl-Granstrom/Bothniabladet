@@ -11,25 +11,24 @@
     <div class="row">
         <div class="col-2">
 
-            <table class="table">
-                <thead>
-                    <tr>
+            <div class="col p-0">
+                <div class="col text-center pb-1 pl-0 pr-0">
+                    <small class="text-muted">
                         Edited Versions
-                    </tr>
-                </thead>
-                <tbody>
+                    </small>
+                </div>
+                <div class="col overflow-auto" style="max-height:65vh">
                     @foreach (var item in Model.ThumbNailDataStrings)
                     {
-                        <tr>
-                            <td>
-                                <img class="img-fluid" src="@item" />
-                            </td>
-                        </tr>
+                        <a class="pb-1 pl-0 pr-0" href="#">
+                            <img class="img-thumbnail img-fluid mx-auto d-block" src="@item" />
+                        </a>
                     }
-                </tbody>
-            </table>
-
-            <button type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
+                </div>
+                <div class="col text-center pt-1 pl-0 pr-0">
+                    <button class="btn btn-outline-success" type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
+                </div>
+            </div>
 
             <partial name="_PartialAddEditedImage" />
         </div>
@@ -54,7 +53,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <img src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
+                                <img class="img-fluid" src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.Name)" />
                             </div>
                         </div>
                     </div>
@@ -64,7 +63,7 @@
 
 
 
-        <div class="col-2">
+        <div class="col-3" style="max-height:75vh">
 
             <table class="table-sm table">
                 <tbody>
