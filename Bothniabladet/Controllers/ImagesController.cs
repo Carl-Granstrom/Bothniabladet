@@ -90,6 +90,8 @@ namespace Bothniabladet.Controllers
             {
                 return NotFound();
             }
+
+            
             //add edited image to viewbag
             ViewBag.ImageDataUrl = imageViewModel.ImageData;
 

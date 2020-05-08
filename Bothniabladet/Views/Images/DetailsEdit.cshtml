@@ -4,8 +4,30 @@
     ViewData["Title"] = "DetailsEdit";
 }
 
-<!DOCTYPE html>
+<div class="container-fluid">
 
-<div>
-    <h1>I guess it worked</h1>
+    @*Need to populate the original id*@
+    <a asp-action="Details" asp-route-id="@Model.OriginalId">Back to List</a>
+    <hr />
+
+    <div class="row">
+        <div class="col">
+            <div class="col my-auto px-0" style="background-color:black">
+                <a href="#">
+                    <img class="img-fluid mx-auto d-block" style="max-height:75vh" src="@ViewBag.ImageDataUrl" alt="@Html.DisplayFor(model => model.ImageTitle)" />
+                </a>
+            </div>
+        </div>
+
+        <div class="col-3" style="max-height:75vh">
+
+            <table class="table-sm table">
+                <tbody>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.ImageTitle): </th>
+                        <td>@Html.DisplayFor(model => model.ImageTitle)</td>
+                    </tr>
+            </table>
+        </div>
+    </div>
 </div>
