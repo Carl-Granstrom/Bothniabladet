@@ -52,24 +52,53 @@ namespace Bothniabladet.Controllers
             }
 
             var imageViewModel = _service.GetImageDetail(id);
-            
+
             if (imageViewModel == null)
             {
                 return NotFound();
             }
-            ICollection<string> thumbnailDataStrings = new List<string>();
-
-            foreach (EditedImage editedImage in imageViewModel.EditedImages) 
+            ICollection<GetEditedImageModel> editedImagesDataStrings = new List<GetEditedImageModel>();
+            foreach (EditedImage editedImage in imageViewModel.EditedImages)
             {
-                thumbnailDataStrings.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData)));
+                editedImagesDataStrings.Add(new GetEditedImageModel()
+                {
+                    EditedImageId = editedImage.EditedImageId,
+                    ImageTitle = editedImage.ImageTitle,
+                    Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail))
+                });
             }
-            //add thumbnail datastrings to the viewmodel, this whole process is ugly and the logic is in the wrong place. Refactor.
-            imageViewModel.ThumbNailDataStrings = thumbnailDataStrings;
+            imageViewModel.getEditedImageModels = editedImagesDataStrings;
             //add image to viewbag
             ViewBag.ImageDataUrl = imageViewModel.ImageDataString;
 
             return View(imageViewModel);
         }
+
+        //GET: Images/DetailsEdit/5/2 (get edited image)
+        public async Task<IActionResult> DetailsEdit(int? id, int? editId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if(editId == null)
+            {
+                return NotFound();
+            }
+            var imageViewModel = _service.GetImageModel(id, editId);
+
+            if(imageViewModel == null)
+            {
+                return NotFound();
+            }
+
+            
+            //add edited image to viewbag
+            ViewBag.ImageDataUrl = imageViewModel.ImageData;
+
+            return View(imageViewModel);
+        }
+
 
         // GET: Images/Create
         public IActionResult Create()
@@ -88,7 +117,7 @@ namespace Bothniabladet.Controllers
             //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
-                
+
                 await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile
                 // Upload the file if less than 12ish MB
                 if (memoryStream.Length < 12097152)

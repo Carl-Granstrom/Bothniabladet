@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class snapshotedit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -101,7 +101,7 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EditedImage",
+                name: "EditedImages",
                 columns: table => new
                 {
                     EditedImageId = table.Column<int>(nullable: false)
@@ -109,14 +109,15 @@ namespace Bothniabladet.Migrations
                     ImageTitle = table.Column<string>(nullable: true),
                     ImageData = table.Column<byte[]>(nullable: true),
                     Thumbnail = table.Column<byte[]>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     ImageId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EditedImage", x => x.EditedImageId);
+                    table.PrimaryKey("PK_EditedImages", x => x.EditedImageId);
                     table.ForeignKey(
-                        name: "FK_EditedImage_Images_ImageId",
+                        name: "FK_EditedImages_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "ImageId",
@@ -160,8 +161,8 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EditedImage_ImageId",
-                table: "EditedImage",
+                name: "IX_EditedImages_ImageId",
+                table: "EditedImages",
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
@@ -178,7 +179,7 @@ namespace Bothniabladet.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EditedImage");
+                name: "EditedImages");
 
             migrationBuilder.DropTable(
                 name: "Enums");
