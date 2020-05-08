@@ -73,6 +73,30 @@ namespace Bothniabladet.Controllers
             return View(imageViewModel);
         }
 
+        //GET: Images/DetailsEdit/5/2 (get edited image)
+        public async Task<IActionResult> DetailsEdit(int? id, int? editId)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if(editId == null)
+            {
+                return NotFound();
+            }
+            var imageViewModel = _service.GetImageModel(id, editId);
+
+            if(imageViewModel == null)
+            {
+                return NotFound();
+            }
+            //add edited image to viewbag
+            ViewBag.ImageDataUrl = imageViewModel.ImageData;
+
+            return View(imageViewModel);
+        }
+
+
         // GET: Images/Create
         public IActionResult Create()
         {

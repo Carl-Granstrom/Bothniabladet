@@ -59,7 +59,7 @@ namespace Bothniabladet.Models.ImageModels
                 viewModel.EditedImages = new List<EditedImage>();
             }
 
-            //This is so that the ID and thumbnail of images can be handled as an object instead of multiple
+            //Create edited image as a object that can be called in view
             ICollection<GetEditedImageModel> editedImagesDataStrings = new List<GetEditedImageModel>();
             foreach (EditedImage editedImage in image.EditedImages)
             {

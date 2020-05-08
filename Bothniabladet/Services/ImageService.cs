@@ -73,7 +73,7 @@ namespace Bothniabladet.Services
                 .ToList();
 
             List<Image> imagesByKeyword = new List<Image>();
-            foreach (Keyword keyword in foundKeywords) 
+            foreach (Keyword keyword in foundKeywords)
             {
                 foreach (ImageKeyword imgKey in keyword.KeywordLink)
                 {
@@ -133,6 +133,22 @@ namespace Bothniabladet.Services
             return imageViewModel;
         }
 
+        public GetEditedImageModel GetImageModel(int? id, int? editId)
+        {
+            GetEditedImageModel imageViewModel = _context.EditedImages
+                .Where(editedImage => editedImage.Image.ImageId == id)
+                .Where(editedImage => editedImage.EditedImageId == editId)
+                .Where(editedImage => !editedImage.IsDeleted)
+                .Select(editedImage => new GetEditedImageModel
+                {
+                    EditedImageId = editedImage.EditedImageId,
+                    ImageTitle = editedImage.ImageTitle,
+                    Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail)),
+                    ImageData = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.ImageData))
+                }).SingleOrDefault();
+            return imageViewModel;
+        }
+
         public ICollection<SelectListItem> GetSectionChoices()
         {
             //returns the enums as SelectListItems with the enum name as Text and Value
@@ -179,11 +195,11 @@ namespace Bothniabladet.Services
                 {
                     if (oldKeyword.Word == keywordString)
                     {
-                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword, KeywordId = oldKeyword.KeywordId, Image = image, ImageId = image.ImageId});
+                        image.KeywordLink.Add(new ImageKeyword { Keyword = oldKeyword, KeywordId = oldKeyword.KeywordId, Image = image, ImageId = image.ImageId });
                         added = true;
                     }
                 }
-                if (!added) 
+                if (!added)
                 {
                     tmpKeywords.Add(new Keyword { Word = keywordString });
                 }
@@ -217,6 +233,6 @@ namespace Bothniabladet.Services
             return originalImage.ImageId;
         }
 
-        
+
     }
 }

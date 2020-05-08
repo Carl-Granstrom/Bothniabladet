@@ -62,6 +62,9 @@ namespace Bothniabladet.Migrations
                     b.Property<string>("ImageTitle")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("Thumbnail")
                         .HasColumnType("varbinary(max)");
 
@@ -69,7 +72,7 @@ namespace Bothniabladet.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("EditedImage");
+                    b.ToTable("EditedImages");
                 });
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>

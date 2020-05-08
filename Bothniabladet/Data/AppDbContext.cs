@@ -22,6 +22,7 @@ namespace Bothniabladet.Data
         public DbSet<SectionEnum> Enums { get; set; }
         public DbSet<ImageKeyword> ImageKeywords { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
+        public DbSet<EditedImage> EditedImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

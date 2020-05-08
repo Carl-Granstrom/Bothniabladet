@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200503134515_mig1")]
-    partial class mig1
+    [Migration("20200508122200_snapshot-edit")]
+    partial class snapshotedit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,9 @@ namespace Bothniabladet.Migrations
                     b.Property<string>("ImageTitle")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("Thumbnail")
                         .HasColumnType("varbinary(max)");
 
@@ -71,7 +74,7 @@ namespace Bothniabladet.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.ToTable("EditedImage");
+                    b.ToTable("EditedImages");
                 });
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
