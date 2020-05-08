@@ -13,6 +13,7 @@ using System.Web;
 using System.IO;
 using Bothniabladet.Services;
 using Microsoft.AspNetCore.Http;
+using System.Drawing.Imaging;
 
 namespace Bothniabladet.Controllers
 {
@@ -218,6 +219,7 @@ namespace Bothniabladet.Controllers
         }
 
         // GET: Images/Delete/5
+        //Refactor to use service
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -244,9 +246,22 @@ namespace Bothniabladet.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Refactor to use service
         private bool ImageExists(int id)
         {
             return _context.Images.Any(e => e.ImageId == id);
+        }
+
+        // GET: Images/Details/Download/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Download(int id)
+        {
+            Image image = _service.GetImage(id);
+            MemoryStream imageStream = new MemoryStream(image.ImageData);
+            if (imageStream == null)
+                return NotFound(); // returns a NotFoundResult with Status404NotFound response.
+
+            return new FileContentResult(image.ImageData, "image/jpeg") { FileDownloadName = image.ImageTitle + ".jpeg"}; // returns a FileStreamResult
         }
     }
 }

@@ -125,13 +125,15 @@ namespace Bothniabladet.Services
                     Width = image.ImageMetaData.Width,
                     FileFormat = image.ImageMetaData.FileFormat,
                     GPS = image.ImageMetaData.Location.ToString(),
-                    EditedImages = image.EditedImages   //would prefer not to query for the whole image, only the thumbnail.
+                    EditedImages = image.EditedImages,   //would prefer not to query for the whole image, only the thumbnail.
+                    LicenseUsesLeft = image.ImageLicense.UsesLeft
                 })
                 .SingleOrDefault();
             if (imageViewModel.EditedImages == null) { imageViewModel.EditedImages = new List<EditedImage>(); }
 
             return imageViewModel;
         }
+
 
         public GetEditedImageModel GetImageModel(int? id, int? editId)
         {
@@ -148,6 +150,13 @@ namespace Bothniabladet.Services
                 }).SingleOrDefault();
             return imageViewModel;
         }
+        //Return a Bitmap of a single image by ID, this is used for file download
+        public Data.Image GetImage(int? id)
+        {
+            Data.Image image = _context.Images.Find(id);
+            return image;
+
+        }
 
         public ICollection<SelectListItem> GetSectionChoices()
         {
@@ -161,7 +170,8 @@ namespace Bothniabladet.Services
 
         }
 
-        //Add UPDATE here
+        //Add UPDATE here, low prio
+
         //Soft Delete
         public void SoftDeleteImage(int id)
         {
@@ -170,7 +180,6 @@ namespace Bothniabladet.Services
             image.IsDeleted = true;
             _context.SaveChanges();
         }
-
 
         //Create a new Image
         public int CreateImage(CreateImageCommand cmd)
@@ -233,6 +242,30 @@ namespace Bothniabladet.Services
             return originalImage.ImageId;
         }
 
+        //Use Licenced Image - This only updates the number of uses and throws an error if there are no uses left
+        //Make sure to have the view lock the button and display a warning if there are no uses left
+        //returns the number of Licensed uses left.
+        public int UseLicense(int id)
+        {
+            Image image = _context.Images.Find(id);
+            if (image.ImageLicense.LicenceType == ImageLicense.LicenseType.LICENSED)
+            {
+                if (image.ImageLicense.UsesLeft > 0)
+                {
+                    image.ImageLicense.UsesLeft--;
+                }
+                else
+                {
+                    throw new Exception("The Licence of this image permits no further use.");
+                }
+            }
+            else
+            {
+                throw new Exception("This image is not licensed and therefore has unlimited uses");
+            }
 
+            _context.SaveChanges();
+            return image.ImageLicense.UsesLeft;
+        }
     }
 }
