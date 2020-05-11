@@ -17,7 +17,6 @@
 </head>
 <body>
   <header>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" asp-area="" asp-controller="Images" asp-action="Index">Bothniabladet</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,8 +37,17 @@
           <input class="form-control mr-sm-2" name="searchString" type="search" placeholder="Sök bilder..." aria-label="Sök efter bilder">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
         </form>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Logga in</a>
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registrera</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+          <h5 class="nav-link">  @User.Identity.Name</h5>
+          <a class="nav-link" asp-controller="Account" asp-action="signOut">Logga Ut</a>
+         
+        }
+        else
+        {
+          <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Logga in</a>
+          <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registrera</a>
+        }
       </div>
     </nav>
 

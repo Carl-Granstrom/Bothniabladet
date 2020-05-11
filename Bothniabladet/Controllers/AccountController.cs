@@ -43,23 +43,27 @@ namespace Bothniabladet.Controllers
       if (ModelState.IsValid)
       {
         IdentityUser user = await userManager.FindByEmailAsync(login.Email);
-        if(user != null)
+        if (user != null)
         {
           await signInManager.SignOutAsync();
-          if((await signInManager.PasswordSignInAsync(user, login.Password, false, false)).Succeeded)
+          if ((await signInManager.PasswordSignInAsync(user, login.Password, false, false)).Succeeded)
           {
             return Redirect(login?.ReturnUrl ?? "/Images/Index");
           }
+          else
+          {
+            ViewBag.Message = "Fel e-mail adress eller lösenord";
+          }
         }
       }
-      ModelState.AddModelError("", "Fel e-mail adress eller lösenord");
+
       return View(login);
     }
 
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register (NewUser newUser)
+    public async Task<IActionResult> Register(NewUser newUser)
     {
       if (ModelState.IsValid)
       {
@@ -81,7 +85,7 @@ namespace Bothniabladet.Controllers
         if (insertrec.Succeeded)
         {
           ModelState.Clear();
-          ViewBag.Massage = "Användaren " + newUser.UserName + " är nu registrerad";
+          ViewBag.Message = "Användaren " + newUser.UserName + " är nu registrerad";
         }
         else
         {
@@ -92,6 +96,11 @@ namespace Bothniabladet.Controllers
         }
       }
       return View();
+    }
+    public async Task<IActionResult> signOut(string returnurl = "/")
+    {
+      await signInManager.SignOutAsync();
+      return Redirect(returnurl);
     }
   }
 }

@@ -23,12 +23,12 @@
       </p>
       <p>
         <input asp-for="ConfirmPassword" placeholder="Upprepa lösenord" />
-        <span asp-validation-for="ConfirmPassword"></span>
+        <span asp-validation-for="ConfirmPassword" class="validation-summary-errors"></span>
       </p>
       <p>
         <button>Registrera</button>
       </p>
-      <h5>@ViewBag.Massage</h5>
+      <h5>@ViewBag.Message</h5>
     </form>
   </div>
 </div>

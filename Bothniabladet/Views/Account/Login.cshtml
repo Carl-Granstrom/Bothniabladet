@@ -20,6 +20,7 @@
         <button>Logga in</button>
       </p>
       <p class="message">Ej medlem? <a asp-controller="Account" asp-action="Register">Skapa konto</a></p>
+      <h5 class="login-error">@ViewBag.Message</h5>
     </form>
   </div>
 </div>
