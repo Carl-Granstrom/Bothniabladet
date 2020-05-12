@@ -119,7 +119,6 @@ namespace Bothniabladet.Controllers
             //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
-
                 await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile
                 // Upload the file if less than 12ish MB
                 if (memoryStream.Length < 12097152)
