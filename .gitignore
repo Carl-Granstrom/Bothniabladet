@@ -5,7 +5,6 @@
 
 #Gitignore specific to this project:
 
-appsettings.json
 
 
 # User-specific files
@@ -343,3 +342,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+Bothniabladet/appsettings.json
