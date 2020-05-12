@@ -14,9 +14,11 @@ using System.IO;
 using Bothniabladet.Services;
 using Microsoft.AspNetCore.Http;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bothniabladet.Controllers
 {
+    [Authorize]
     public class ImagesController : Controller
     {
         //possible to remove the AppDbContext once Services are fully implemented
@@ -111,13 +113,11 @@ namespace Bothniabladet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateImageCommand cmd, string[] dynamicField)
+        public async Task<IActionResult> Create(CreateImageCommand cmd)
         {
-            cmd.Keywords = dynamicField;
             //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
-
                 await cmd.ImageData.FormFile.CopyToAsync(memoryStream); //get the image data from the formfile
                 // Upload the file if less than 12ish MB
                 if (memoryStream.Length < 12097152)

@@ -44,7 +44,7 @@ namespace Bothniabladet.Models.ImageModels
         public ImageData ImageData { get; set; }
         //not sure that this is a good way to use a stream. Refactor.
         public MemoryStream ImageMemoryStream { get; set; }
-
+        [Required]
         public ICollection<string> Keywords { get; set; }
 
         /*METHODS*/

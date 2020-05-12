@@ -187,12 +187,15 @@ namespace Bothniabladet.Services
             List<Keyword> oldKeywords = _context.Keywords
                 .Include(keyword => keyword.KeywordLink)
                 .ToList();
+            if (cmd.Keywords.First() != null && cmd.Keywords.Count > 0)
+            {
+                cmd.Keywords = cmd.Keywords.First().Split(',');
+            }
             Image image = cmd.ToImage();
             image.KeywordLink = new List<ImageKeyword>();           //the many-many link between image and keyword
             _context.Add(image);
             image.CreatedAt = DateTime.Now;
             _context.SaveChanges();
-
 
             ICollection<Keyword> tmpKeywords = new List<Keyword>(); //the new keywords that need to be added
 
