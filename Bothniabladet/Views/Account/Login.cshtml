@@ -1,28 +1,28 @@
 ﻿
 @model LoginModel
 
-@{
-    ViewData["Title"] = "Login Page";
-}
-
-<h2>Inloggning för Bothniabladet</h2>
-
-<form asp-controller="Account" asp-action="Login" method="post">
-    <p>
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
-    </p>
-    <p>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </p>
-    <p>
+<div class="form-box">
+  <h2 class="logReg-header">Inloggning</h2>
+  <div class="form">
+    <form asp-controller="Account" asp-action="Login" method="post">
+      <p>
+        <input asp-for="Email" placeholder="E-mail" />
+        <span asp-validation-for="Email" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="Password" placeholder="Lösenord" />
+        <span asp-validation-for="Password" class="validation-summary-errors"></span>
+      </p>
+      <p>
         <input type="hidden" asp-for="ReturnUrl" />
-    </p>
-    <p>
-        <div asp-validation-summary="All"></div>
-        <input type="submit" value="Logga in" />
-    </p>
-</form>
+      </p>
+      <p>
+        <button>Logga in</button>
+      </p>
+      <p class="message">Ej medlem? <a asp-controller="Account" asp-action="Register">Skapa konto</a></p>
+      <h5 class="login-error">@ViewBag.Message</h5>
+    </form>
+  </div>
+</div>
+
+

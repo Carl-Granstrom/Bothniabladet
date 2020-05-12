@@ -17,6 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Migrations\20200506093741_Bothnia.cs" />
+    <Compile Include="Migrations\20200506093741_Bothnia.Designer.cs" />
+    <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
+    <Compile Include="Migrations\AppIdentityDb\20200506093809_Identity.cs" />
+    <Compile Include="Migrations\AppIdentityDb\20200506093809_Identity.Designer.cs" />
+    <Compile Include="Migrations\AppIdentityDb\AppIdentityDbContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GeoAPI.Core" Version="1.7.5" />
     <PackageReference Include="MetadataExtractor" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.RazorPages" Version="2.2.5" />
@@ -36,6 +45,13 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3" />
+
   </ItemGroup>
 
 
