@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Bothniabladet.Migrations.AppIdentityDb
+namespace Bothniabladet.Migrations
 {
-    public partial class Identiy : Migration
+    public partial class mig2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

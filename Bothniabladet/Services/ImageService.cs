@@ -141,8 +141,10 @@ namespace Bothniabladet.Services
                 .Where(editedImage => editedImage.Image.ImageId == id)
                 .Where(editedImage => editedImage.EditedImageId == editId)
                 .Where(editedImage => !editedImage.IsDeleted)
+                .Include(editedImage => editedImage.Image)
                 .Select(editedImage => new GetEditedImageModel
                 {
+                    OriginalId = editedImage.Image.ImageId,
                     EditedImageId = editedImage.EditedImageId,
                     ImageTitle = editedImage.ImageTitle,
                     Thumbnail = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(editedImage.Thumbnail)),

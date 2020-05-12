@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Bothniabladet.Migrations.AppIdentityDb
+namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20200512150742_Identiy")]
-    partial class Identiy
+    [Migration("20200512182110_mig2")]
+    partial class mig2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

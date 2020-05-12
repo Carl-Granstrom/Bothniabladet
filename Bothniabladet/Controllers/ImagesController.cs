@@ -17,8 +17,8 @@ using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Bothniabladet.Controllers
-{//sdsddafs
-  [Authorize]
+{
+    [Authorize]
     public class ImagesController : Controller
     {
         //possible to remove the AppDbContext once Services are fully implemented
