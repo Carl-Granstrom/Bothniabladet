@@ -18,8 +18,8 @@ namespace Bothniabladet.Controllers
         {
             _logger = logger;
         }
-
-        public IActionResult Index()
+    //sdsddafs
+    public IActionResult Index()
         {
             return View();
         }

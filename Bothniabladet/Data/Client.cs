@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 
 namespace Bothniabladet.Data
-{
-    public class Client
+{//sdsddafs
+  public class Client
     {
 
         /*VARIABLES*/

@@ -97,6 +97,7 @@ namespace Bothniabladet.Controllers
       }
       return View();
     }
+    //sdsddafs//sdsddafs
     public async Task<IActionResult> signOut(string returnurl = "/")
     {
       await signInManager.SignOutAsync();
