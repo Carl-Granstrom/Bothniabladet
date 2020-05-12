@@ -33,6 +33,7 @@ namespace Bothniabladet
       services.AddScoped<ImageService>();
 
       var currentAssembly = Assembly.GetExecutingAssembly().GetName().Name;
+      services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"), obj => obj.MigrationsAssembly(currentAssembly)));
       services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();

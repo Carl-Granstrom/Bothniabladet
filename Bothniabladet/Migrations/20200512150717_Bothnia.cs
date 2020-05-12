@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class Bothnia : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
