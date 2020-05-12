@@ -197,7 +197,6 @@ namespace Bothniabladet.Services
             image.CreatedAt = DateTime.Now;
             _context.SaveChanges();
 
-
             ICollection<Keyword> tmpKeywords = new List<Keyword>(); //the new keywords that need to be added
 
             bool added = false;

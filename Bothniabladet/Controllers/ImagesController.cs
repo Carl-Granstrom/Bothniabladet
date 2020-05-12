@@ -113,9 +113,8 @@ namespace Bothniabladet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateImageCommand cmd, string[] dynamicField)
+        public async Task<IActionResult> Create(CreateImageCommand cmd)
         {
-            cmd.Keywords = dynamicField;
             //conversions between images and bytearrays could be handled by a conversionservice to simplify the controller code
             using (var memoryStream = new MemoryStream())
             {
