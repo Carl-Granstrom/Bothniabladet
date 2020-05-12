@@ -28,14 +28,15 @@ namespace Bothniabladet
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllersWithViews();
       var connString = Configuration.GetConnectionString("TestDatabase");    //get the connection string from the configuration file
       services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
       services.AddScoped<ImageService>();
 
       var currentAssembly = Assembly.GetExecutingAssembly().GetName().Name;
-      services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),obj=>obj.MigrationsAssembly(currentAssembly)));
-      services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
+      services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+      services.AddMvc();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
