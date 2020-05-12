@@ -25,18 +25,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Hem <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/">Hem <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Images" asp-action="Create">Ladda upp bilder</a>
                     </li>
+                    <li class="nav-item">
+                        <form class="form-inline mx-auto">
+                            <input class="form-control mr-sm-2" name="searchString" type="search" placeholder="Sök bilder..." aria-label="Sök efter bilder">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
+                        </form>
+                    </li>
                 </ul>
 
-                @*The search no workning*@
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" name="searchString" type="search" placeholder="Sök bilder..." aria-label="Sök efter bilder">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
-                </form>
+                
                 @*The login page link is broken beacuse the service isn't added yet*@
                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Logga in</a>
             </div>
