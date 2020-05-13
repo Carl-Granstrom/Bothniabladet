@@ -30,15 +30,25 @@ namespace Bothniabladet
     {
       var connString = Configuration.GetConnectionString("TestDatabase");    //get the connection string from the configuration file
       services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
-      services.AddScoped<ImageService>();
 
-      var currentAssembly = Assembly.GetExecutingAssembly().GetName().Name;
-      services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"), obj => obj.MigrationsAssembly(currentAssembly)));
+      services.AddScoped<ImageService>();
       services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+      services.Configure<IdentityOptions>(options =>
+      {
+        // Default Password settings.
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase =false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 0;
+      });
+
       services.AddMvc();
-      //sdsddafs
+   
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

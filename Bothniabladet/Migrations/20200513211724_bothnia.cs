@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using NetTopologySuite.Geometries;
 
-namespace Bothniabladet.Migrations.AppDb
+namespace Bothniabladet.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class bothnia : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

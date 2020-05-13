@@ -17,11 +17,12 @@ namespace Bothniabladet.Models
     [EmailAddress]
     public String Email { get; set; }
 
-    [Required]
+    [StringLength(420, ErrorMessage ="Lösen ordet måste vara minst 6 tecken",MinimumLength = 6)]
+    [Required(ErrorMessage = "Ange ett lösenord")]
     [Display(Name = "Lösenord")]
     [DataType(DataType.Password)]
     public String Password { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Upprepa lösenord")]
     [DataType(DataType.Password)]
     [Display(Name = "Upprepa lösenord")]
     [Compare("Password", ErrorMessage = "Lösen orden matchar inte")]

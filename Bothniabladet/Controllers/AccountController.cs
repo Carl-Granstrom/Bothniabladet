@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Bothniabladet.Models;
 using Bothniabladet.Data;
-
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Bothniabladet.Controllers
 {
