@@ -254,6 +254,7 @@ namespace Bothniabladet.Controllers
 
         // GET: Images/Details/Download/5
         [HttpGet("{id}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Download(int id)
         {
             Image image = _service.GetImage(id);
