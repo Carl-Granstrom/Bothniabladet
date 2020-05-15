@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bothniabladet.Models.Checkout
 {
-    public class CheckoutViewModel
+    public class AddressAndPaymentModel
     {
 
     }
