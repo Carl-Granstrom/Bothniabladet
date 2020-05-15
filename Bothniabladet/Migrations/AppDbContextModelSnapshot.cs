@@ -105,10 +105,15 @@ namespace Bothniabladet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShoppingCartCartId")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("Thumbnail")
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("ImageId");
+
+                    b.HasIndex("ShoppingCartCartId");
 
                     b.ToTable("Images");
                 });
@@ -214,6 +219,30 @@ namespace Bothniabladet.Migrations
                             SectionEnumId = 5,
                             Name = "SPORTS"
                         });
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.ShoppingCart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CartId");
+
+                    b.ToTable("ShoppingCart");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -421,6 +450,10 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
+                    b.HasOne("Bothniabladet.Data.ShoppingCart", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ShoppingCartCartId");
+
                     b.OwnsOne("Bothniabladet.Data.ImageLicense", "ImageLicense", b1 =>
                         {
                             b1.Property<int>("ImageId")

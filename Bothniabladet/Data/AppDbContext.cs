@@ -23,6 +23,7 @@ namespace Bothniabladet.Data
         public DbSet<ImageKeyword> ImageKeywords { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<EditedImage> EditedImages { get; set; }
+        public DbSet<ShoppingCart> ShoppingCart { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,7 +47,11 @@ namespace Bothniabladet.Data
 
             //configure compound primary key for ImageKeyword
             modelBuilder.Entity<ImageKeyword>()
-                .HasKey(x => new { x.ImageId, x.KeywordId } );
+                .HasKey(x => new { x.ImageId, x.KeywordId });
+
+            //configure compound primary key for Shoppingcart
+            modelBuilder.Entity<ShoppingCart>()
+                .HasKey(x => new { x.CartId });
 
             //create a unique contraint on Keyword.Word
             //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
@@ -81,7 +86,7 @@ namespace Bothniabladet.Data
                 {
                     SectionEnumId = 3,
                     Name = NewsSection.NEWS
-                }, 
+                },
                 new SectionEnum
                 {
                     SectionEnumId = 4,

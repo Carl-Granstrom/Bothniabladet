@@ -100,8 +100,8 @@
             else
             {
                 // Popup modal with attached item in the basket case
-                <a class="align-text-bottom" asp-controller="Checkout" asp-action="AddItem" data-toggle="modal" data-target="#OpenBasketCaseModal">Lägg i varukorgen</a>
-                @Html.Partial("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.AddressAndPaymentModel())
+                <a class="align-text-bottom" asp-controller="Checkout" asp-action="AddItem" asp-route-id="@Model.Id" data-toggle="modal" data-target="#OpenBasketCaseModal">Lägg i varukorgen</a>
+                @Html.Partial("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
             }
 
         </div>
