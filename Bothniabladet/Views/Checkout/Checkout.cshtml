@@ -9,7 +9,8 @@
 
     @*Header*@
     <div class="row">
-        <a asp-action="Index">Back to List</a>
+        @*Better way than the previous version to handle go back (Even though it's in JavaScript)*@
+        <a href='javascript:history.go(-1)'>Back to List</a>
         <hr />
     </div>
 
@@ -18,7 +19,7 @@
 
         @*The Image that are going to be sold*@
         <div class="col">
-            <u>Image holder</u>
+            <u>Items from purchase</u>
         </div>
 
         @*The information form to fill out*@

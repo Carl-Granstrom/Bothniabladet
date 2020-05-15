@@ -7,7 +7,7 @@ namespace Bothniabladet.Data
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public AppDbContext(
-            DbContextOptions<AppDbContext> options) 
+            DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
