@@ -14,23 +14,22 @@ namespace Bothniabladet.Controllers
     public class CheckoutController : Controller
     {
 
-        // GET: /Checkout/AddressAndPayment
-        public IActionResult AddressAndPayment()
-        {
-            return View();
-        }
-
-        // Add item to modal and show
-        public IActionResult AddItem()
-        {
-            return View();
-        }
-
-
+        // GET: /Checkout/Checkout (For now, need to remove the last checkout)
         public IActionResult Checkout()
         {
             return View();
         }
 
+        // Add item to modal and repopulate the modal too show all items
+        public IActionResult AddItem()
+        {
+            return View();
+        }
+
+        // After purchase add all items to the user and return to main page
+        public IActionResult Purchase()
+        {
+            return View();
+        }
     }
 }
