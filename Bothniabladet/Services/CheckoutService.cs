@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Bothniabladet.Data;
@@ -13,6 +12,16 @@ namespace Bothniabladet.Services
 {
     public class CheckoutService
     {
+        AppDbContext _context;
+        readonly ILogger _logger;
+        //constructor
+        public CheckoutService(AppDbContext context, ILoggerFactory factory)
+        {
+            _context = context;
+            _logger = factory.CreateLogger<ImageService>();
+
+        }
+
 
     }
 }

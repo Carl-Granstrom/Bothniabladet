@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Bothniabladet.Models.Checkout;
-using Bothniabladet.Services;
 using Bothniabladet.Data;
 using Microsoft.AspNetCore.Authorization;
 
@@ -14,8 +13,9 @@ namespace Bothniabladet.Controllers
     public class CheckoutController : Controller
     {
 
-        // GET: /Checkout/Checkout (For now, need to remove the last checkout)
-        public IActionResult Checkout()
+        // GET: /Checkout/AddressAndPayment (For now, need to remove the last checkout)
+
+        public IActionResult AddressAndPayment()
         {
             return View();
         }
@@ -26,8 +26,8 @@ namespace Bothniabladet.Controllers
             return View();
         }
 
-        // After purchase add all items to the user and return to main page
-        public IActionResult Purchase()
+        // GET: /Checkout/Complete
+        public IActionResult Complete()
         {
             return View();
         }
