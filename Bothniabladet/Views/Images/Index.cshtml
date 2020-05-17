@@ -9,13 +9,15 @@
 @*Place the filters here*@
 
 @*If user selects to show as list else show as boxes*@
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <a href="/Images/BoxView">
-                <div class="custom-control custom-switch">
-                    <span>Byt till lådvy</span>
-                </div>
-            </a>
-        </ol>
+    <nav >
+        <ul class="pagination">
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                    Listvy
+                    <span class="sr-only">(current)</span>
+                </span>
+            </li>
+            <li class="page-item"><a class="page-link" href="/Images/BoxView">Lådvy</a></li>
+        </ul>
     </nav>
     <partial name="_PartialImageListElement" />

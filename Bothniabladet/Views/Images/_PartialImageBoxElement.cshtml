@@ -2,27 +2,31 @@
 @model IEnumerable<Bothniabladet.Models.ImageModels.ImageSummaryViewModel>
 
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         @foreach (var item in Model)
         {
-            <div class="card shadow-lg m-2" style="width: 18rem;">
-                <a asp-action="Details" asp-route-id="@item.Id">
-                    <img src="@item.ThumbnailDataString" class="card-img-top" alt="">
-                </a>
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name) </h5>
-                    <hr />
-                    <p class="card-text">
-                        @Html.DisplayFor(modelItem => item.Section) - @Html.DisplayFor(modelItem => item.Date)<br>
-                        @foreach (String keyword in item.Keywords)
-                        {
-                            <span class="badge badge-primary">
-                               @keyword
-                            </span>
-                        }
-                    </p>
-                </div>
+        <div class="card shadow-lg m-3 p-0 col-md-3">
+            <a asp-action="Details" asp-route-id="@item.Id" style="width:100%;">
+                <img src="@item.ThumbnailDataString" class="card-img-top" alt="" style="width:100%;">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name) </h5>
+                <hr />
+                <p class="card-text">
+                    @Html.DisplayFor(modelItem => item.Section) - @Html.DisplayFor(modelItem => item.Date)<br>
+                    @foreach (String keyword in item.Keywords)
+                    {
+                        <span class="badge badge-primary">
+                            @keyword
+                        </span>
+                    }
+                </p>
             </div>
+            <div class="card-footer">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="card-link">Redigera</a>
+                <a asp-action="Delete" asp-route-id="@item.Id"class="card-link">Radera</a>
+            </div>
+        </div>
         }
     </div>
 </div>
