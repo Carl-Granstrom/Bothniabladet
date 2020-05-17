@@ -17,8 +17,8 @@
 </div>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-6">
         <form asp-action="Create"
               asp-controller="Images"
               method="post"
@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <label asp-for="ImageTitle" class="control-label">Bildnamn</label>
-                <input type="text" asp-for="ImageTitle" class="form-control" placeholder="Katt.jpg" />
+                <input type="text" asp-for="ImageTitle" class="form-control" placeholder="T.ex. Katt i solsken" />
                 <span asp-validation-for="ImageTitle" class="text-danger"></span>
             </div>
 
@@ -69,7 +69,7 @@
             <input type="text" style="display:none" asp-for="Keywords" class="form-control" id="Keywords" />
 
             <div class="form-group">
-                <label for="keywords" class="control-label">Taggar:</label>
+                <label for="keywords" class="control-label">Taggar: (separera med mellanslag)</label>
                 <div id="keyword_parent"></div>
                 <span class="badge badge-pill badge-primary"></span>
                 <input type="text" id="keyword_field" value="" />
