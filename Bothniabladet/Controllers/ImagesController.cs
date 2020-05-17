@@ -40,7 +40,19 @@ namespace Bothniabladet.Controllers
             }
             //call the service to retrieve the image view models
             var searchedModels = _service.GetSearchedImages(searchString);
+            return View(searchedModels);
+        }
 
+        public IActionResult BoxView(string searchString)
+        {
+            //List all images if there is no search string specified
+            if (String.IsNullOrEmpty(searchString))
+            {
+                var allModels = _service.GetImages();
+                return View(allModels);
+            }
+            //call the service to retrieve the image view models
+            var searchedModels = _service.GetSearchedImages(searchString);
             return View(searchedModels);
         }
 

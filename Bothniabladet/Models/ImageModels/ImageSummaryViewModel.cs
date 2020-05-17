@@ -11,6 +11,7 @@ namespace Bothniabladet.Models.ImageModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string ThumbnailDataString { get; set; }
+        public string ImageDataString { get; set; }
         public string Section { get; set; }
         public List<string> Keywords { get; set; }
         public ICollection<ImageKeyword> KeywordLink { get; set; }
@@ -31,6 +32,7 @@ namespace Bothniabladet.Models.ImageModels
                 Id = image.ImageId,
                 Name = image.ImageTitle,
                 ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
+                ImageDataString = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
                 Section = image.Section.ToString(),
                 Keywords = Keywords,
                 Date = image.Issue
