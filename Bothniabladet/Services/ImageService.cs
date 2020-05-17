@@ -45,6 +45,7 @@ namespace Bothniabladet.Services
                     Id = image.ImageId,
                     Name = image.ImageTitle,
                     ThumbnailDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)),
+                    ImageDataString = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.ImageData)),
                     Section = image.Section.ToString(),
                     //statiska nyckelord för test, ändra när keywords är implementerat
                     Keywords = keywordStrings,

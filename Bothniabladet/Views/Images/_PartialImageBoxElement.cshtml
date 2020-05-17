@@ -7,7 +7,7 @@
         {
         <div class="card shadow-lg m-3 p-0 col-md-3">
             <a asp-action="Details" asp-route-id="@item.Id" style="width:100%;">
-                <img src="@item.ThumbnailDataString" class="card-img-top" alt="" style="width:100%;">
+                <img src="@item.ImageDataString" class="card-img-top" alt="" style="width:100%;">
             </a>
             <div class="card-body">
                 <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name) </h5>
