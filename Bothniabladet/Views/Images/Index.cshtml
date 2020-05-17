@@ -4,16 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<a></a>
+
 
 @*Place the filters here*@
 
 @*If user selects to show as list else show as boxes*@
-@if (1 == 1)
-{
+    <nav >
+        <ul class="pagination">
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                    Listvy
+                    <span class="sr-only">(current)</span>
+                </span>
+            </li>
+            <li class="page-item"><a class="page-link" href="/Images/BoxView">Lådvy</a></li>
+        </ul>
+    </nav>
     <partial name="_PartialImageListElement" />
-}
-else
-{
-    <partial name="_PartialImageBoxElement" />
-}

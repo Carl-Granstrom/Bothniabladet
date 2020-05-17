@@ -1,0 +1,29 @@
+﻿
+@model IEnumerable<Bothniabladet.Models.ImageModels.ImageSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+@*Place the filters here*@
+
+@*If user selects to show as list else show as boxes*@
+    <nav>
+        <ul class="pagination">
+            <li class="page-item " aria-current="page">
+  
+                <a class="page-link" href="/Images/Index">Listvy</a>
+            </li>
+            <li class="page-item active">
+                <span class="page-link ">
+                    Lådvy
+                </span>
+
+                <span class="sr-only">(current)</span>
+            </li>
+        </ul>
+    </nav>
+
+<partial name="_PartialImageBoxElement" />
