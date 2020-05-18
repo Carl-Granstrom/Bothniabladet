@@ -15,11 +15,11 @@ namespace Bothniabladet.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<ApplicationUser> userManager;
+        private SignInManager<ApplicationUser> signInManager;
         private RoleManager<IdentityRole> roleManager;
 
-        public AccountController(UserManager<IdentityUser> userMgr, SignInManager<IdentityUser> signInMgr, RoleManager<IdentityRole> roleMgr)
+        public AccountController(UserManager<ApplicationUser> userMgr, SignInManager<ApplicationUser> signInMgr, RoleManager<IdentityRole> roleMgr)
         {
             userManager = userMgr;
             signInManager = signInMgr;
@@ -44,7 +44,7 @@ namespace Bothniabladet.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = await userManager.FindByEmailAsync(login.Email);
+                ApplicationUser user = await userManager.FindByEmailAsync(login.Email);
                 if (user != null)
                 {
                     await signInManager.SignOutAsync();
@@ -70,7 +70,7 @@ namespace Bothniabladet.Controllers
             if (ModelState.IsValid)
             {
 
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
                     UserName = newUser.UserName,
                     Email = newUser.Email

@@ -16,7 +16,7 @@ namespace Bothniabladet.Data
         //Links
         public int ImageId { get; set; }
         public Image Image { get; set; }
-        public int UserId { get; set; }
+        public String UserId { get; set; }
         public ApplicationUser User { get; set; } 
 
     }

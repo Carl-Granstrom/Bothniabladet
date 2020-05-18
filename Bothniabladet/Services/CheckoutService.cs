@@ -39,7 +39,6 @@ namespace Bothniabladet.Services
                 .Where(shoppingCart => !shoppingCart.Completed)
                 .Select(shoppingCart => new ShoppingCartModel
                 {
-                    CartId = shoppingCart.ShoppingCartId,
                     Name = shoppingCart.User.UserName,
                     Email = shoppingCart.User.Email
 
@@ -64,16 +63,14 @@ namespace Bothniabladet.Services
 
         public void AddItem(int id)
         {
-            var ShoppingCartImage = new ShoppingCartImage();
-
             ShoppingCartModel shoppingCartModel = GetShoppingCart();
-            shoppingCartModel.Images.Add(_context.
-                .Where(image => image.ShoppingCartImages.ImageId == id)
-                .Where(image => !image.IsDeleted)
-                .Select(image => new Image
+            shoppingCartModel.Images.Add(_context.ShoppingCart
+                .Where(shoppingCart => shoppingCart.ImageId == id)
+                .Where(shoppingCart => shoppingCart.Image.IsDeleted)
+                .Select(shoppingCart => new Image
                 {
-                    BasePrice = image.BasePrice,
-                    ImageData = image.ImageData
+                    BasePrice = shoppingCart.Image.BasePrice,
+                    ImageData = shoppingCart.Image.ImageData
                 })
                 .SingleOrDefault());
 

@@ -223,26 +223,6 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCart",
-                columns: table => new
-                {
-                    ShoppingCartId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Completed = table.Column<bool>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCart", x => x.ShoppingCartId);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCart_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
@@ -290,6 +270,32 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShoppingCart",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    Completed = table.Column<bool>(nullable: false),
+                    Owns = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCart", x => new { x.ImageId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_ShoppingCart_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCart_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImageKeywords",
                 columns: table => new
                 {
@@ -310,30 +316,6 @@ namespace Bothniabladet.Migrations
                         column: x => x.KeywordId,
                         principalTable: "Keywords",
                         principalColumn: "KeywordId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShoppingCartImage",
-                columns: table => new
-                {
-                    ShoppingCartId = table.Column<int>(nullable: false),
-                    ImageId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCartImage", x => new { x.ShoppingCartId, x.ImageId });
-                    table.ForeignKey(
-                        name: "FK_ShoppingCartImage_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "ImageId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCartImage_ShoppingCart_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCart",
-                        principalColumn: "ShoppingCartId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -407,11 +389,6 @@ namespace Bothniabladet.Migrations
                 name: "IX_ShoppingCart_UserId",
                 table: "ShoppingCart",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCartImage_ImageId",
-                table: "ShoppingCartImage",
-                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -444,7 +421,7 @@ namespace Bothniabladet.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCartImage");
+                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -457,9 +434,6 @@ namespace Bothniabladet.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
-
-            migrationBuilder.DropTable(
-                name: "ShoppingCart");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

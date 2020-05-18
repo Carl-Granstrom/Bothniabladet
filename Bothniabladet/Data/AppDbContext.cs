@@ -63,7 +63,7 @@ namespace Bothniabladet.Data
             //configure image to shoppingcartImage
             modelBuilder.Entity<ShoppingCart>()
                 .HasOne(si => si.Image)
-                .WithMany(i => i.ShoppingCartImages)
+                .WithMany(i => i.ShoppingCart)
                 .HasForeignKey(si => si.ImageId);
 
             //create a unique contraint on Keyword.Word
