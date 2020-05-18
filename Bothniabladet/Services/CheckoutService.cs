@@ -35,14 +35,13 @@ namespace Bothniabladet.Services
         public ShoppingCartModel GetShoppingCart()
         {
             ShoppingCartModel shoppingCartModel = _context.ShoppingCart
-                .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Where(shoppingCart => shoppingCart.User.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
                 .Where(shoppingCart => !shoppingCart.Completed)
                 .Select(shoppingCart => new ShoppingCartModel
                 {
-                    CartId = shoppingCart.CartId,
-                    Images = shoppingCart.Images,
-                    Name = shoppingCart.Name,
-                    Email = shoppingCart.Email
+                    CartId = shoppingCart.ShoppingCartId,
+                    Name = shoppingCart.User.UserName,
+                    Email = shoppingCart.User.Email
 
                 }).SingleOrDefault();
 
@@ -55,9 +54,7 @@ namespace Bothniabladet.Services
 
             var newShoppingCart = new ShoppingCart();
 
-            newShoppingCart.UserId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            newShoppingCart.Name = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            newShoppingCart.Email = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            //newShoppingCart.User.Id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             newShoppingCart.Completed = false;
             _context.Add(newShoppingCart);
             _context.SaveChanges();

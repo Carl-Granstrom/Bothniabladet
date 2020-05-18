@@ -49,9 +49,22 @@ namespace Bothniabladet.Data
             modelBuilder.Entity<ImageKeyword>()
                 .HasKey(x => new { x.ImageId, x.KeywordId });
 
-            //configure compound primary key for Shoppingcart
-            modelBuilder.Entity<ShoppingCart>()
-                .HasKey(x => new { x.CartId });
+            //configure the many to many relationship of images and shoppingcart
+            modelBuilder.Entity<ShoppingCartImage>()
+                .HasKey(si => new { si.ShoppingCartId, si.ImageId });
+
+            //configure shoppingcart to shoppingcartImage
+            modelBuilder.Entity<ShoppingCartImage>()
+                .HasOne(si => si.ShoppingCart)
+                .WithMany(s => s.ShoppingCartImages)
+                .HasForeignKey(si => si.ShoppingCartId);
+
+            //configure image to shoppingcartImage
+            modelBuilder.Entity<ShoppingCartImage>()
+                .HasOne(si => si.Image)
+                .WithMany(i => i.ShoppingCartImages)
+                .HasForeignKey(si => si.ImageId);
+
 
             //create a unique contraint on Keyword.Word
             //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.

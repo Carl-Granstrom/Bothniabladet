@@ -21,21 +21,21 @@ namespace Bothniabladet.Models.Checkout
             // Add all attached images if there are any
             List<String> thumbnail = new List<string>();
             var Price = 0;
-            if (shoppingCart.Images != null)
+            if (shoppingCart.ShoppingCartImages != null)
             {
-                foreach (Image image in shoppingCart.Images)
+                foreach (ShoppingCartImage image in shoppingCart.ShoppingCartImages)
                 {
-                    thumbnail.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Thumbnail)));
-                    Price += image.BasePrice; // Could add the discount here
+                    thumbnail.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Image.Thumbnail)));
+                    Price += image.Image.BasePrice; // Could add the discount here
                 }
             }
             return new ShoppingCartModel
             {
-                CartId = shoppingCart.CartId,
+                CartId = shoppingCart.ShoppingCartId,
                 ImagesStringData = thumbnail,
                 Price = Price,
-                Name = shoppingCart.Name,
-                Email = shoppingCart.Email
+                Name = shoppingCart.User.UserName,
+                Email = shoppingCart.User.Email
             };
         }
     }

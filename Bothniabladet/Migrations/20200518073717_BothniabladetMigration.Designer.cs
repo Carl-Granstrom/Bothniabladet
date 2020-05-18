@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200515222406_ShoppingCart")]
-    partial class ShoppingCart
+    [Migration("20200518073717_BothniabladetMigration")]
+    partial class BothniabladetMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,15 +107,10 @@ namespace Bothniabladet.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShoppingCartCartId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Thumbnail")
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("ImageId");
-
-                    b.HasIndex("ShoppingCartCartId");
 
                     b.ToTable("Images");
                 });
@@ -225,7 +220,7 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.ShoppingCart", b =>
                 {
-                    b.Property<int>("CartId")
+                    b.Property<int>("ShoppingCartId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -233,18 +228,29 @@ namespace Bothniabladet.Migrations
                     b.Property<bool>("Completed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("CartId");
+                    b.HasKey("ShoppingCartId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingCart");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.ShoppingCartImage", b =>
+                {
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShoppingCartId", "ImageId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("ShoppingCartImage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -452,10 +458,6 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.Image", b =>
                 {
-                    b.HasOne("Bothniabladet.Data.ShoppingCart", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ShoppingCartCartId");
-
                     b.OwnsOne("Bothniabladet.Data.ImageLicense", "ImageLicense", b1 =>
                         {
                             b1.Property<int>("ImageId")
@@ -531,6 +533,28 @@ namespace Bothniabladet.Migrations
                     b.HasOne("Bothniabladet.Data.Client", "Client")
                         .WithMany("Invoices")
                         .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.ShoppingCart", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.ShoppingCartImage", b =>
+                {
+                    b.HasOne("Bothniabladet.Data.Image", "Image")
+                        .WithMany("ShoppingCartImages")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bothniabladet.Data.ShoppingCart", "ShoppingCart")
+                        .WithMany("ShoppingCartImages")
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

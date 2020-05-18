@@ -25,14 +25,15 @@ namespace Bothniabladet.Controllers
         }
 
         // GET: /Checkout/AddressAndPayment (For now, need to remove the last checkout)
-        public IActionResult AddressAndPayment()
+        public async Task<IActionResult> AddressAndPayment()
         {
-            return View();
+            var shoppingCartModel = _service.GetShoppingCart();
+            return View(shoppingCartModel);
         }
 
         // Add item to modal shoppingcart and repopulate the modal too show all items
         [HttpPost]
-        public IActionResult AddItem(int id)
+        public async Task<IActionResult> AddItem(int id)
         {
             var shoppingCartModel = _service.GetShoppingCart();
             
@@ -44,9 +45,8 @@ namespace Bothniabladet.Controllers
             if(id != 0)
             {
                 _service.AddItem(id);
+                shoppingCartModel = _service.GetShoppingCart();
             }
-
-            shoppingCartModel = _service.GetShoppingCart();
             return View(shoppingCartModel);
         }
 

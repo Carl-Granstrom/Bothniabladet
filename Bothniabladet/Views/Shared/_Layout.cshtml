@@ -33,9 +33,9 @@
             @if (User.IsInRole("Customer"))
             {
           <li class="nav-item">
-              <a class="nav-link text-dark" asp-controller="Checkout" asp-action="addItem" asp-route-id=0 nav-link="#" data-toggle="modal" data-target="#OpenBasketCaseModal">Kundvagn</a>
+              <a class="nav-link text-dark" href="#" data-toggle="modal" data-target="#OpenBasketCaseModal">Kundvagn</a>
               @*Not a supernice way of doing the partial, there probably is a better way*@
-              @Html.Partial("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
+              @await Html.PartialAsync("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
           </li>
             }
         </ul>

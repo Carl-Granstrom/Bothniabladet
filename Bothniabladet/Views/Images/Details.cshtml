@@ -93,15 +93,19 @@
             @if (User.IsInRole("Admin"))
             {
                 <div>
-                    <a class="align-text-bottom" asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> | 
+                    <a class="align-text-bottom" asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> |
                     <a class="align-text-bottom" asp-action="Download" asp-route-id="@Model.Id">Ladda ner</a>
                 </div>
             }
             else
             {
                 // Popup modal with attached item in the basket case
-                <a class="align-text-bottom" asp-controller="Checkout" asp-action="AddItem" asp-route-id="@Model.Id" data-toggle="modal" data-target="#OpenBasketCaseModal">Lägg i varukorgen</a>
-                @Html.Partial("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
+                <form asp-controller="Checkout" asp-action="AddItem" method="post">
+                    <input type="text" name="id" value="@Model.Id"/>
+                    <button type="submit" data-toggle="modal" data-target="#OpenBasketCaseModal">Add to basket</button>
+                    @await Html.PartialAsync("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
+                </form>
+
             }
 
         </div>

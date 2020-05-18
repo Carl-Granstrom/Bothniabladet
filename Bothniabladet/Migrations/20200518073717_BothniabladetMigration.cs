@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class ShoppingCart : Migration
+    public partial class BothniabladetMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,34 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageTitle = table.Column<string>(nullable: true),
+                    ImageData = table.Column<byte[]>(nullable: true),
+                    BasePrice = table.Column<int>(nullable: false),
+                    Issue = table.Column<DateTime>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Thumbnail = table.Column<byte[]>(nullable: true),
+                    ImageLicense_LicenceType = table.Column<int>(nullable: true),
+                    ImageLicense_UsesLeft = table.Column<int>(nullable: true),
+                    ImageMetaData_Height = table.Column<int>(nullable: true),
+                    ImageMetaData_Width = table.Column<int>(nullable: true),
+                    ImageMetaData_FileSize = table.Column<long>(nullable: true),
+                    ImageMetaData_FileFormat = table.Column<string>(nullable: true),
+                    ImageMetaData_DateTaken = table.Column<DateTime>(nullable: true),
+                    ImageMetaData_Location = table.Column<Point>(type: "geometry", nullable: true),
+                    Section = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.ImageId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Keywords",
                 columns: table => new
                 {
@@ -86,22 +114,6 @@ namespace Bothniabladet.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keywords", x => x.KeywordId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShoppingCart",
-                columns: table => new
-                {
-                    CartId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Completed = table.Column<bool>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCart", x => x.CartId);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,6 +223,26 @@ namespace Bothniabladet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShoppingCart",
+                columns: table => new
+                {
+                    ShoppingCartId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Completed = table.Column<bool>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCart", x => x.ShoppingCartId);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCart_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
@@ -230,41 +262,6 @@ namespace Bothniabladet.Migrations
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    ImageId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageTitle = table.Column<string>(nullable: true),
-                    ImageData = table.Column<byte[]>(nullable: true),
-                    BasePrice = table.Column<int>(nullable: false),
-                    Issue = table.Column<DateTime>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    Thumbnail = table.Column<byte[]>(nullable: true),
-                    ImageLicense_LicenceType = table.Column<int>(nullable: true),
-                    ImageLicense_UsesLeft = table.Column<int>(nullable: true),
-                    ImageMetaData_Height = table.Column<int>(nullable: true),
-                    ImageMetaData_Width = table.Column<int>(nullable: true),
-                    ImageMetaData_FileSize = table.Column<long>(nullable: true),
-                    ImageMetaData_FileFormat = table.Column<string>(nullable: true),
-                    ImageMetaData_DateTaken = table.Column<DateTime>(nullable: true),
-                    ImageMetaData_Location = table.Column<Point>(type: "geometry", nullable: true),
-                    Section = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ShoppingCartCartId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.ImageId);
-                    table.ForeignKey(
-                        name: "FK_Images_ShoppingCart_ShoppingCartCartId",
-                        column: x => x.ShoppingCartCartId,
-                        principalTable: "ShoppingCart",
-                        principalColumn: "CartId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -313,6 +310,30 @@ namespace Bothniabladet.Migrations
                         column: x => x.KeywordId,
                         principalTable: "Keywords",
                         principalColumn: "KeywordId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCartImage",
+                columns: table => new
+                {
+                    ShoppingCartId = table.Column<int>(nullable: false),
+                    ImageId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCartImage", x => new { x.ShoppingCartId, x.ImageId });
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartImage_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartImage_ShoppingCart_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCart",
+                        principalColumn: "ShoppingCartId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -378,14 +399,19 @@ namespace Bothniabladet.Migrations
                 column: "KeywordId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_ShoppingCartCartId",
-                table: "Images",
-                column: "ShoppingCartCartId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Invoices_ClientId",
                 table: "Invoices",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCart_UserId",
+                table: "ShoppingCart",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartImage_ImageId",
+                table: "ShoppingCartImage",
+                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -418,13 +444,10 @@ namespace Bothniabladet.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
+                name: "ShoppingCartImage");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Keywords");
@@ -433,7 +456,13 @@ namespace Bothniabladet.Migrations
                 name: "Clients");
 
             migrationBuilder.DropTable(
+                name: "Images");
+
+            migrationBuilder.DropTable(
                 name: "ShoppingCart");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
