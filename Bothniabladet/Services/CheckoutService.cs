@@ -56,6 +56,7 @@ namespace Bothniabladet.Services
 
             //newShoppingCart.User.Id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             newShoppingCart.Completed = false;
+            newShoppingCart.User.Id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context.Add(newShoppingCart);
             _context.SaveChanges();
 
@@ -63,9 +64,11 @@ namespace Bothniabladet.Services
 
         public void AddItem(int id)
         {
+            var ShoppingCartImage = new ShoppingCartImage();
+
             ShoppingCartModel shoppingCartModel = GetShoppingCart();
-            shoppingCartModel.Images.Add(_context.Images
-                .Where(image => image.ImageId == id)
+            shoppingCartModel.Images.Add(_context.
+                .Where(image => image.ShoppingCartImages.ImageId == id)
                 .Where(image => !image.IsDeleted)
                 .Select(image => new Image
                 {

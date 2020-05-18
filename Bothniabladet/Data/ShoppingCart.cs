@@ -10,13 +10,14 @@ namespace Bothniabladet.Data
     public class ShoppingCart
     {
         //Variables
-        public int ShoppingCartId { get; set; }
-        public bool Completed { get; set; } // Check if customer has a unfinished cart
-
+        public bool Completed { get; set; } // Check if customer has the image in the cart
+        public bool Owns { get; set; } // Check if owner owns the image
 
         //Links
-        public ICollection<ShoppingCartImage> ShoppingCartImages { get; set; } // Many to many realtionship with images
-        public IdentityUser User { get; set; } // 1-1 A customer can only have one shoppingcart
+        public int ImageId { get; set; }
+        public Image Image { get; set; }
+        public int UserId { get; set; }
+        public ApplicationUser User { get; set; } 
 
     }
 }

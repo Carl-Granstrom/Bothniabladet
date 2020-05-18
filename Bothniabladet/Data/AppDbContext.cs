@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bothniabladet.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    // IdentityUser was changed to ApplicationUser because we want to add custom data to the user (owned images for example)
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(
             DbContextOptions<AppDbContext> options)
@@ -49,22 +50,21 @@ namespace Bothniabladet.Data
             modelBuilder.Entity<ImageKeyword>()
                 .HasKey(x => new { x.ImageId, x.KeywordId });
 
-            //configure the many to many relationship of images and shoppingcart
-            modelBuilder.Entity<ShoppingCartImage>()
-                .HasKey(si => new { si.ShoppingCartId, si.ImageId });
+            //configure the many to many relationship of images and User for the shoppingcart
+            modelBuilder.Entity<ShoppingCart>()
+                .HasKey(iu => new { iu.ImageId, iu.UserId });
 
             //configure shoppingcart to shoppingcartImage
-            modelBuilder.Entity<ShoppingCartImage>()
-                .HasOne(si => si.ShoppingCart)
-                .WithMany(s => s.ShoppingCartImages)
-                .HasForeignKey(si => si.ShoppingCartId);
+            modelBuilder.Entity<ShoppingCart>()
+                .HasOne(iu => iu.User)
+                .WithMany(u => u.ShoppingCart)
+                .HasForeignKey(iu => iu.UserId);
 
             //configure image to shoppingcartImage
-            modelBuilder.Entity<ShoppingCartImage>()
+            modelBuilder.Entity<ShoppingCart>()
                 .HasOne(si => si.Image)
                 .WithMany(i => i.ShoppingCartImages)
                 .HasForeignKey(si => si.ImageId);
-
 
             //create a unique contraint on Keyword.Word
             //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
