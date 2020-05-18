@@ -1,39 +1,40 @@
 ﻿
 @{
-    @model NewUser
-   
+  @model NewUser
+
         Layout = "_loginLayout";
-   
+
 }
 
 <div class="form-box">
-    <h2 class="logReg-header">Registrera ett konto</h2>
-    <div class="form">
-        <form asp-controller="Account" asp-action="Register" method="post">
-            <div asp-validation-summary="ModelOnly"></div>
-            <p>
+  <h2 class="logReg-header">Registrera ett konto</h2>
+  <div class="form">
+    <form asp-controller="Account" asp-action="Register" method="post">
+      <div asp-validation-summary="ModelOnly"></div>
+      <p>
 
-                <input asp-for="UserName" placeholder="Användarnamn" />
-                <span asp-validation-for="UserName" class="validation-summary-errors"></span>
-            </p>
-            <p>
-                <input asp-for="Email" placeholder="E-mail" />
-                <span asp-validation-for="Email" class="validation-summary-errors"></span>
-            </p>
-            <p>
-                <input asp-for="Password" placeholder="Lösenord minst 6 tecken" />
-                <span asp-validation-for="Password" class="validation-summary-errors"></span>
-            </p>
-            <p>
-                <input asp-for="ConfirmPassword" placeholder="Upprepa lösenord" />
-                <span asp-validation-for="ConfirmPassword" class="validation-summary-errors"></span>
-            </p>
-            <p>
-                <button>Registrera</button>
-            </p>
-            <h5>@ViewBag.Message</h5>
-        </form>
-    </div>
+        <input asp-for="UserName" placeholder="Användarnamn" />
+        <span asp-validation-for="UserName" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="Email" placeholder="E-mail" />
+        <span asp-validation-for="Email" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="Password" placeholder="Lösenord minst 6 tecken" />
+        <span asp-validation-for="Password" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <input asp-for="ConfirmPassword" placeholder="Upprepa lösenord" />
+        <span asp-validation-for="ConfirmPassword" class="validation-summary-errors"></span>
+      </p>
+      <p>
+        <button>Registrera</button>
+      </p>
+      <hp class="message"><a asp-controller="Account" asp-action="Login"><h6>Tillbaka till logga in</h6></a></hp>
+      <h5>@ViewBag.Message</h5>
+    </form>
+  </div>
 </div>
 
 

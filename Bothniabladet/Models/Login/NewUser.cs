@@ -17,7 +17,7 @@ namespace Bothniabladet.Models
     [EmailAddress]
     public String Email { get; set; }
 
-    [StringLength(420, ErrorMessage ="Lösen ordet måste vara minst 6 tecken",MinimumLength = 6)]
+    [StringLength(420, ErrorMessage ="Lösenordet måste vara minst 6 tecken",MinimumLength = 6)]
     [Required(ErrorMessage = "Ange ett lösenord")]
     [Display(Name = "Lösenord")]
     [DataType(DataType.Password)]
