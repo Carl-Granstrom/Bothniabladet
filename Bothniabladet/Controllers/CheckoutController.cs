@@ -24,6 +24,7 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
+        // GET: /Checkout/AddressAndPayment
         public IActionResult AddressAndPayment()
         {
             return View(_service.GetShoppingCart()); // Shows item in the shoppingcart
@@ -38,12 +39,22 @@ namespace Bothniabladet.Controllers
             return View(_service.GetShoppingCart()); // Shows the new item in the shoppingcart
         }
 
+        //Better name would be to prefer but not top priotity right now
+
         // GET: /Checkout/Complete
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Complete()
         {
             return View();
         }
+
+        //POST: /Checkout/FinalForm
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FinalForm()
+        {
+            _service.CompleteTransaction();
+            return View();
+        }
+
     }
 }

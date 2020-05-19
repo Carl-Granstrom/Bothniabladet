@@ -1,0 +1,76 @@
+﻿@model Bothniabladet.Models.Checkout.CompletePurchaseModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container-fluid">
+    <h1>Betalningsinformation</h1>
+    <hr />
+    @*Main content*@
+    <div class="row">
+
+        @*The information form to fill out*@
+        <div class="col-md-4">
+            <form asp-action="FinalForm"
+                  asp-controller="Checkout"
+                  method="post"
+                  enctype="multipart/form-data">
+
+
+                <div class="form-group">
+                    <label asp-for="fName" class="control-label">Förnamn</label>
+                    <input type="text" asp-for="fName" class="form-control" placeholder="Förnamn" />
+                    <span asp-validation-for="fName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="lName" class="control-label">Förnamn</label>
+                    <input type="text" asp-for="lName" class="form-control" placeholder="Efternamn" />
+                    <span asp-validation-for="lName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label">Address</label>
+                    <input type="text" asp-for="Address" class="form-control" placeholder="Address" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label asp-for="PaymentMethod" class="btn btn-secondary active">
+                            <input type="radio" name="options" id="option1" checked> Paypal
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="option2"> Kort
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="option3"> Bank
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label asp-for="Private" class="btn btn-secondary active">
+                            <input type="radio" name="options" id="option1" checked> Privat
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="option2"> Företag
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Discount" class="control-label">Rabatt kod:</label>
+                    <input type="text" asp-for="Discount" class="form-control" placeholder="xxx-xxx-xxx" />
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Slutför" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

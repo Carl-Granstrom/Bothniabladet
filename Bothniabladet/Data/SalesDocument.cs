@@ -5,19 +5,18 @@ using System.Threading.Tasks;
 
 namespace Bothniabladet.Data
 {
-    public class DocumentOfSales
+    public class SalesDocument
     {
-        //Variables
-        public int SalesId { get; set; }
-        public String fName { get; set; }
-        public String lName { get; set; }
+        public int DocumentId { get; set; }
+        public bool Closed { get; set; }
+        public string fName { get; set; }
+        public string lName { get; set; }
         public String Address { get; set; }
         public String PaymentMethod { get; set; }
         public bool Private { get; set; } // If false the the person is doing this for a company
         public double Discount { get; set; }
-        
-        //Links
-        public ICollection<DocumentOfSalesIndex> DocumentOfSalesIndex { get; set; }
-        public ApplicationUser User { get; set; } // User is linked directly to this document
+
+        //links
+        public ICollection<UserDocuments> UserDocuments { get; set; }
     }
 }

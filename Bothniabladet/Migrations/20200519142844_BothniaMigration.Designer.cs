@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200518094623_BothniabladetMigration")]
-    partial class BothniabladetMigration
+    [Migration("20200519142844_BothniaMigration")]
+    partial class BothniaMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

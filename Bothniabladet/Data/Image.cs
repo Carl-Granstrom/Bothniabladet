@@ -27,8 +27,7 @@ namespace Bothniabladet.Data
         public NewsSection Section { get; set; }        //using the enum
         public ICollection<ImageKeyword> KeywordLink { get; set; }
         public ICollection<ShoppingCart> ShoppingCart { get; set; }  // Many to many realtionship with User 
-        public ICollection<DocumentOfSalesIndex> DocumentOfSalesIndex { get; set; } // Image can be contained in multiple sales
-
+       
         /*METHODS*/
 
         /*Convenience variables and methods*/

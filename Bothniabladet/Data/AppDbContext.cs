@@ -25,7 +25,7 @@ namespace Bothniabladet.Data
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<EditedImage> EditedImages { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
-        public DbSet<DocumentOfSales> DocumentOfSales { get; set; }
+        public DbSet<ApplicationUser> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,8 +51,6 @@ namespace Bothniabladet.Data
             modelBuilder.Entity<ImageKeyword>()
                 .HasKey(x => new { x.ImageId, x.KeywordId });
 
-            
-            
             //configure the many to many relationship of images and User for the shoppingcart
             modelBuilder.Entity<ShoppingCart>()
                 .HasKey(iu => new { iu.ImageId, iu.UserId });
@@ -69,30 +67,19 @@ namespace Bothniabladet.Data
                 .WithMany(i => i.ShoppingCart)
                 .HasForeignKey(si => si.ImageId);
 
-            
 
-            //configure user to salesdocument
-            modelBuilder.Entity<DocumentOfSales>()
-                .HasOne(du => du.User)
-                .WithMany(u => u.DocumentOfSales)
-                .HasForeignKey(du => du.User);
+            modelBuilder.Entity<UserDocuments>()
+                .HasKey(iu => new { iu.SalesDocumentId, iu.UserId });
 
+            modelBuilder.Entity<UserDocuments>()
+                .HasOne(iu => iu.User)
+                .WithMany(u => u.UserDocuments)
+                .HasForeignKey(iu => iu.UserId);
 
-            
-            //configure the many to many relationship between salesdocument and Image
-            modelBuilder.Entity<DocumentOfSalesIndex>()
-                .HasKey(si => new { si.ImageId, si.SalesDocument });
-
-            modelBuilder.Entity<DocumentOfSalesIndex>()
+            modelBuilder.Entity<UserDocuments>()
                 .HasOne(si => si.SalesDocument)
-                .WithMany(s => s.DocumentOfSalesIndex)
-                .HasForeignKey(si => si.SalesDocument);
-
-            modelBuilder.Entity<DocumentOfSalesIndex>()
-                .HasOne(si => si.Image)
-                .WithMany(i => i.DocumentOfSalesIndex)
-                .HasForeignKey(si => si.ImageId);
-
+                .WithMany(i => i.UserDocuments)
+                .HasForeignKey(si => si.SalesDocumentId);
 
             //create a unique contraint on Keyword.Word
             //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
