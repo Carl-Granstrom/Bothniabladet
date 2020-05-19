@@ -7,7 +7,7 @@ namespace Bothniabladet.Data
 {
     public class SalesDocument
     {
-        public int DocumentId { get; set; }
+        public int SalesDocumentId { get; set; }
         public bool Closed { get; set; }
         public string fName { get; set; }
         public string lName { get; set; }

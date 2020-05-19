@@ -238,6 +238,39 @@ namespace Bothniabladet.Migrations
                     b.ToTable("Keywords");
                 });
 
+            modelBuilder.Entity("Bothniabladet.Data.SalesDocument", b =>
+                {
+                    b.Property<int>("SalesDocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Closed")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Private")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("fName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SalesDocumentId");
+
+                    b.ToTable("SalesDocument");
+                });
+
             modelBuilder.Entity("Bothniabladet.Data.SectionEnum", b =>
                 {
                     b.Property<int>("SectionEnumId")
@@ -297,6 +330,24 @@ namespace Bothniabladet.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ShoppingCart");
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.UserDocuments", b =>
+                {
+                    b.Property<int>("SalesDocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Closed")
+                        .HasColumnType("bit");
+
+                    b.HasKey("SalesDocumentId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserDocuments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -526,6 +577,21 @@ namespace Bothniabladet.Migrations
 
                     b.HasOne("Bothniabladet.Data.ApplicationUser", "User")
                         .WithMany("ShoppingCart")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Bothniabladet.Data.UserDocuments", b =>
+                {
+                    b.HasOne("Bothniabladet.Data.SalesDocument", "SalesDocument")
+                        .WithMany("UserDocuments")
+                        .HasForeignKey("SalesDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bothniabladet.Data.ApplicationUser", "User")
+                        .WithMany("UserDocuments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

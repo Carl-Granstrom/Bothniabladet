@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace Bothniabladet.Migrations
 {
-    public partial class BothniaMigration : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -114,6 +114,25 @@ namespace Bothniabladet.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keywords", x => x.KeywordId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SalesDocument",
+                columns: table => new
+                {
+                    SalesDocumentId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Closed = table.Column<bool>(nullable: false),
+                    fName = table.Column<string>(nullable: true),
+                    lName = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    PaymentMethod = table.Column<string>(nullable: true),
+                    Private = table.Column<bool>(nullable: false),
+                    Discount = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesDocument", x => x.SalesDocumentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -318,6 +337,31 @@ namespace Bothniabladet.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserDocuments",
+                columns: table => new
+                {
+                    SalesDocumentId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    Closed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDocuments", x => new { x.SalesDocumentId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserDocuments_SalesDocument_SalesDocumentId",
+                        column: x => x.SalesDocumentId,
+                        principalTable: "SalesDocument",
+                        principalColumn: "SalesDocumentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserDocuments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Enums",
                 columns: new[] { "SectionEnumId", "Name" },
@@ -388,6 +432,11 @@ namespace Bothniabladet.Migrations
                 name: "IX_ShoppingCart_UserId",
                 table: "ShoppingCart",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDocuments_UserId",
+                table: "UserDocuments",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -423,6 +472,9 @@ namespace Bothniabladet.Migrations
                 name: "ShoppingCart");
 
             migrationBuilder.DropTable(
+                name: "UserDocuments");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -433,6 +485,9 @@ namespace Bothniabladet.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "SalesDocument");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

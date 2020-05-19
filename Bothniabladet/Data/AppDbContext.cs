@@ -67,7 +67,6 @@ namespace Bothniabladet.Data
                 .WithMany(i => i.ShoppingCart)
                 .HasForeignKey(si => si.ImageId);
 
-
             modelBuilder.Entity<UserDocuments>()
                 .HasKey(iu => new { iu.SalesDocumentId, iu.UserId });
 
