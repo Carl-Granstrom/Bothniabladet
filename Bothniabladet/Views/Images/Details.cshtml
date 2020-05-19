@@ -99,15 +99,13 @@
             }
             else
             {
-                // Popup modal with attached item in the basket case
-                <form asp-controller="Checkout" asp-action="AddItem" method="post">
-                    <input type="text" name="id" value="@Model.Id"/>
-                    <button type="submit" data-toggle="modal" data-target="#OpenBasketCaseModal">Add to basket</button>
-                    @await Html.PartialAsync("~/Views/Checkout/_PartialBasketCaseModal.cshtml", new Bothniabladet.Models.Checkout.ShoppingCartModel())
-                </form>
-
+                <div>
+                    <form asp-controller="Checkout" asp-action="AddressAndPayment" method="post" role="form">
+                        @Html.HiddenFor(id => id.Id)
+                        <button type="submit">Lägg i kundvagn</button>
+                    </form>
+                </div>
             }
-
         </div>
     </div>
 </div>

@@ -34,46 +34,45 @@ namespace Bothniabladet.Services
         // Loads active users shoppingcart
         public ShoppingCartModel GetShoppingCart()
         {
+            // Query images linked to account
+            List<ShoppingCart> shoppingCartIndex = _context.ShoppingCart
+                .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Where(shoppingCart => !shoppingCart.Owns)
+                .Include(shoppingCart => shoppingCart.Image)
+                .ToList();
+
+            // Add imaegs to temporary holder
+            List<Image> imageIndex = new List<Image>();
+            foreach (ShoppingCart p in shoppingCartIndex)
+            {
+                imageIndex.Add(p.Image);
+            }
+
+            // Query accountinformation
             ShoppingCartModel shoppingCartModel = _context.ShoppingCart
-                .Where(shoppingCart => shoppingCart.User.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
-                .Where(shoppingCart => !shoppingCart.Completed)
+                .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Where(shoppingCart => !shoppingCart.Owns)
                 .Select(shoppingCart => new ShoppingCartModel
                 {
-                    Name = shoppingCart.User.UserName,
-                    Email = shoppingCart.User.Email
-
+                    User = shoppingCart.User
                 }).SingleOrDefault();
+
+            shoppingCartModel.Images = imageIndex;
 
             return shoppingCartModel;
         }
-
-        // Adds a new shoppingcart to a user
-        public void NewShoppingCart()
-        {
-
-            var newShoppingCart = new ShoppingCart();
-
-            //newShoppingCart.User.Id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            newShoppingCart.Completed = false;
-            newShoppingCart.User.Id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _context.Add(newShoppingCart);
-            _context.SaveChanges();
-
-        }
-
+        //Adds a item to the shoppingcart, if owned true item does not exist in shoppingcart
         public void AddItem(int id)
         {
-            ShoppingCartModel shoppingCartModel = GetShoppingCart();
-            shoppingCartModel.Images.Add(_context.ShoppingCart
-                .Where(shoppingCart => shoppingCart.ImageId == id)
-                .Where(shoppingCart => shoppingCart.Image.IsDeleted)
-                .Select(shoppingCart => new Image
-                {
-                    BasePrice = shoppingCart.Image.BasePrice,
-                    ImageData = shoppingCart.Image.ImageData
-                })
-                .SingleOrDefault());
+            Image image = _context.Images.Find(id);
+            ApplicationUser user = _context.Users.Find(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var newShoppingCart = new ShoppingCart();
 
+            newShoppingCart.Image = image;
+            newShoppingCart.User = user;
+            newShoppingCart.Owns = false;
+            _context.Add(newShoppingCart);
+            _context.SaveChanges();
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Bothniabladet.Data
     public class ShoppingCart
     {
         //Variables
-        public bool Completed { get; set; } // Check if customer has the image in the cart
         public bool Owns { get; set; } // Check if owner owns the image
 
         //Links

@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Bothniabladet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200518090319_BothniabladetMigration")]
+    [Migration("20200518094623_BothniabladetMigration")]
     partial class BothniabladetMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,9 +290,6 @@ namespace Bothniabladet.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Owns")
                         .HasColumnType("bit");

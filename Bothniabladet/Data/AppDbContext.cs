@@ -25,6 +25,7 @@ namespace Bothniabladet.Data
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<EditedImage> EditedImages { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public ApplicationUser User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

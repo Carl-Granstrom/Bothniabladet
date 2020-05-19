@@ -24,30 +24,16 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
-        // GET: /Checkout/AddressAndPayment (For now, need to remove the last checkout)
-        public async Task<IActionResult> AddressAndPayment()
-        {
-            var shoppingCartModel = _service.GetShoppingCart();
-            return View(shoppingCartModel);
-        }
-
-        // Add item to modal shoppingcart and repopulate the modal too show all items
+        // POST: /Checkout/AddressAndPayment
         [HttpPost]
-        public async Task<IActionResult> AddItem(int id)
+        [ValidateAntiForgeryToken]
+        public IActionResult AddressAndPayment(int id)
         {
-            var shoppingCartModel = _service.GetShoppingCart();
-            
-            if (shoppingCartModel == null) //If the shopping cart is empty create new
+            if (id != -1)
             {
-                _service.NewShoppingCart();
+                _service.AddItem(id);  // Adds the new item to the shoppingcart
             }
-            
-            if(id != 0)
-            {
-                _service.AddItem(id);
-                shoppingCartModel = _service.GetShoppingCart();
-            }
-            return View(shoppingCartModel);
+            return View(_service.GetShoppingCart()); // Shows the new item in the shoppingcart
         }
 
         // GET: /Checkout/Complete

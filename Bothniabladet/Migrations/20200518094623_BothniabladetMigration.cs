@@ -275,7 +275,6 @@ namespace Bothniabladet.Migrations
                 {
                     ImageId = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    Completed = table.Column<bool>(nullable: false),
                     Owns = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

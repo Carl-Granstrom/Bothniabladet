@@ -289,9 +289,6 @@ namespace Bothniabladet.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Completed")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Owns")
                         .HasColumnType("bit");
 
