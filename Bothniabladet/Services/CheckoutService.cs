@@ -32,33 +32,26 @@ namespace Bothniabladet.Services
         }
 
         // Loads active users shoppingcart
-        public ShoppingCartModel GetShoppingCart()
+        public ICollection<ShoppingCartModel> GetShoppingCart()
         {
-            // Query images linked to account
-            List<ShoppingCart> shoppingCartIndex = _context.ShoppingCart
+            // Fetch the index for the images
+            List<ShoppingCart> index = _context.ShoppingCart
                 .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
                 .Where(shoppingCart => !shoppingCart.Owns)
-                .Include(shoppingCart => shoppingCart.Image)
+                .Include(shoppingCart => shoppingCart)
                 .ToList();
 
-            // Add imaegs to temporary holder
-            List<Image> imageIndex = new List<Image>();
-            foreach (ShoppingCart p in shoppingCartIndex)
+            List<ShoppingCartModel> shoppingCartModel = new List<ShoppingCartModel>();
+            foreach (ShoppingCart shoppingCart in index)
             {
-                imageIndex.Add(p.Image);
-            }
-
-            // Query accountinformation
-            ShoppingCartModel shoppingCartModel = _context.ShoppingCart
-                .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
-                .Where(shoppingCart => !shoppingCart.Owns)
-                .Select(shoppingCart => new ShoppingCartModel
+                shoppingCartModel.Add(new ShoppingCartModel
                 {
-                    User = shoppingCart.User
-                }).SingleOrDefault();
-
-            shoppingCartModel.Images = imageIndex;
-
+                    Images = shoppingCart.Image,
+                    Price = shoppingCart.Image.BasePrice,
+                    User = shoppingCart.User,
+                    ImagesStringData = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(shoppingCart.Image.Thumbnail))
+                });
+            }
             return shoppingCartModel;
         }
         //Adds a item to the shoppingcart, if owned true item does not exist in shoppingcart

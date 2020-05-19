@@ -32,12 +32,9 @@
                     </li>
                     @if (User.IsInRole("Customer"))
                     {
-                        <li class="nav-item">
-                            <form asp-controller="Checkout" asp-action="AddressAndPayment" method="post" role="form">
-                                <input type="hidden" value="-1" name="id"/>
-                                <button class="nav-link text-dark" type="submit" style="border:none; background:none">Kundvagn</button>
-                            </form>
-                        </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Checkout" asp-action="AddressAndPayment">Kundvagn</a>
+                </li>
                     }
                 </ul>
 

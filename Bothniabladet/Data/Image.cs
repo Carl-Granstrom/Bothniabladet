@@ -26,7 +26,8 @@ namespace Bothniabladet.Data
         public ImageMetaData ImageMetaData { get; set; }    //1-1 unidirectional(?) to the metadata object
         public NewsSection Section { get; set; }        //using the enum
         public ICollection<ImageKeyword> KeywordLink { get; set; }
-        public ICollection<ShoppingCart> ShoppingCart { get; set; } // Many to many realtionship with User
+        public ICollection<ShoppingCart> ShoppingCart { get; set; }  // Many to many realtionship with User 
+        public ICollection<DocumentOfSalesIndex> DocumentOfSalesIndex { get; set; } // Image can be contained in multiple sales
 
         /*METHODS*/
 

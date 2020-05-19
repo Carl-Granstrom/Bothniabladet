@@ -1,40 +1,57 @@
-﻿using Bothniabladet.Data;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using Bothniabladet.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bothniabladet.Models.Checkout
 {
     public class ShoppingCartModel
     {
-        public ICollection<String> ImagesStringData { get; set; } // Add images to view
-        public ICollection<Image> Images { get; set; } // Populate model with images
-        public int Price { get; set; }
-
+        public String ImagesStringData { get; set; } // Add images to view
+        public Image Images { get; set; } // Populate model with images
         public ApplicationUser User { get; set; }
+        public int Price { get; set; }
+        [Required]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$", ErrorMessage = "Title must start with a capital letter")]
+        [StringLength(40, ErrorMessage = "Title can be no more than 40 characters long")]
+        [Display(Name = "Förnamn")]
+        public string fName { get; set; }
+        [Required]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$", ErrorMessage = "Title must start with a capital letter")]
+        [StringLength(40, ErrorMessage = "Title can be no more than 40 characters long")]
+        [Display(Name = "Efternamn")]
+        public string lName { get; set; }
 
-        public static ShoppingCartModel ShoppingCart(ShoppingCart shoppingCart)
+
+        public String Address { get; set; }
+        public String PaymentMethod { get; set; }
+        public bool Private { get; set; } // If false the the person is doing this for a company
+        public double Discount { get; set; }
+
+
+        public static ShoppingCartModel FromShoppingCart(ShoppingCart shoppingCart)
         {
-            // Add all attached images if there are any
-            List<String> thumbnail = new List<string>();
-            var Price = 0;
-            if (shoppingCart.Image != null)
-            {
-                foreach (Image image in s)
-                {
-                    thumbnail.Add(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image.Image.Thumbnail)));
-                    Price += image.Image.BasePrice; // Could add the discount here
-                }
-            }
+
             return new ShoppingCartModel
             {
-                //CartId = shoppingCart.ShoppingCartId,
-                ImagesStringData = thumbnail,
-                Price = Price,
-
+                Images = shoppingCart.Image,
+                User = shoppingCart.User,
+                ImagesStringData = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(shoppingCart.Image.Thumbnail)),
+                Price = shoppingCart.Image.BasePrice
             };
+        }
+
+        public Data.DocumentOfSales toSale()
+        {
+            Data.DocumentOfSales salesDocument = new Data.DocumentOfSales
+            {
+                fName = fName,
+                lName = lName,
+                Address= Address,
+                PaymentMethod = PaymentMethod,
+                Private = Private,
+            };
+
+            return salesDocument;
         }
     }
 }

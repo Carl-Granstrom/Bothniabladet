@@ -24,19 +24,23 @@ namespace Bothniabladet.Controllers
             _service = service;
         }
 
+        public IActionResult AddressAndPayment()
+        {
+            return View(_service.GetShoppingCart()); // Shows item in the shoppingcart
+        }
+
         // POST: /Checkout/AddressAndPayment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddressAndPayment(int id)
+        public async Task<IActionResult> AddressAndPayment(int id)
         {
-            if (id != -1)
-            {
-                _service.AddItem(id);  // Adds the new item to the shoppingcart
-            }
+            _service.AddItem(id);  // Adds the new item to the shoppingcart
             return View(_service.GetShoppingCart()); // Shows the new item in the shoppingcart
         }
 
         // GET: /Checkout/Complete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Complete()
         {
             return View();
