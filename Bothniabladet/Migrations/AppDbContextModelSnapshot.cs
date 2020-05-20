@@ -240,7 +240,7 @@ namespace Bothniabladet.Migrations
 
             modelBuilder.Entity("Bothniabladet.Data.SalesDocument", b =>
                 {
-                    b.Property<int>("DocumentId")
+                    b.Property<int>("SalesDocumentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -266,7 +266,7 @@ namespace Bothniabladet.Migrations
                     b.Property<string>("lName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DocumentId");
+                    b.HasKey("SalesDocumentId");
 
                     b.ToTable("SalesDocument");
                 });

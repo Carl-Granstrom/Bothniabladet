@@ -20,7 +20,7 @@ namespace Bothniabladet.Services
     public class CheckoutService
     {
         //Fetch the current user
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         AppDbContext _context;
         readonly ILogger _logger;
         //constructor
@@ -34,37 +34,56 @@ namespace Bothniabladet.Services
         // Loads active users shoppingcart
         public ICollection<ShoppingCartModel> GetShoppingCart()
         {
-            // Fetch the index for the images
-            List<ShoppingCart> index = _context.ShoppingCart
-                .Where(shoppingCart => shoppingCart.UserId == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
-                .Where(shoppingCart => !shoppingCart.Owns)
-                .Include(shoppingCart => shoppingCart)
-                .ToList();
+            ApplicationUser user = _context.User
+                .Where(user => user.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Include(user => user.ShoppingCart)
+                    .ThenInclude(sc => sc.Image)
+                .SingleOrDefault();
 
-            List<ShoppingCartModel> shoppingCartModel = new List<ShoppingCartModel>();
-            foreach (ShoppingCart shoppingCart in index)
+            ICollection<ShoppingCartModel> shoppingCartModels = new List<ShoppingCartModel>();
+            foreach (ShoppingCart sc in user.ShoppingCart)
             {
-                shoppingCartModel.Add(new ShoppingCartModel
+                shoppingCartModels.Add(new ShoppingCartModel()
                 {
-                    Images = shoppingCart.Image,
-                    Price = shoppingCart.Image.BasePrice,
-                    User = shoppingCart.User,
-                    ImagesStringData = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(shoppingCart.Image.Thumbnail))
+                    Images = sc.Image,
+                    Price = sc.Image.BasePrice,
+                    User = sc.User,
+                    ImagesStringData = string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(sc.Image.Thumbnail))
                 });
             }
-            return shoppingCartModel;
+
+            return shoppingCartModels;
         }
         //Adds a item to the shoppingcart, if owned true item does not exist in shoppingcart
         public void AddItem(int id)
         {
             Image image = _context.Images.Find(id);
-            ApplicationUser user = _context.User.Find(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var newShoppingCart = new ShoppingCart();
+            ApplicationUser user = _context.User
+                .Where(user => user.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .Include(user => user.ShoppingCart)
+                .SingleOrDefault();
+            if (user.ShoppingCart == null)
+            {
+                user.ShoppingCart = new List<ShoppingCart>();
+            }
+            bool inCart = false;
+            foreach (ShoppingCart sc in user.ShoppingCart)
+            {
+                if (sc.ImageId == image.ImageId)
+                {
+                    inCart = true;
+                }
+            }
+            if (!inCart)
+            {
+                user.ShoppingCart.Add(new ShoppingCart()
+                {
+                    Image = image,
+                    User = user,
+                    Owns = false
+                });
+            }
 
-            newShoppingCart.Image = image;
-            newShoppingCart.User = user;
-            newShoppingCart.Owns = false;
-            _context.Add(newShoppingCart);
             _context.SaveChanges();
         }
 

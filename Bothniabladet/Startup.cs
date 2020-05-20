@@ -32,6 +32,7 @@ namespace Bothniabladet
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connString, x => x.UseNetTopologySuite()));     //enable spatial data with Topology Suite
             services.AddScoped<CheckoutService>();
             services.AddScoped<ImageService>();
+            services.AddHttpContextAccessor();
             services.AddIdentity<ApplicationUser, IdentityRole>()
                       .AddEntityFrameworkStores<AppDbContext>()
                       .AddDefaultTokenProviders();
