@@ -30,7 +30,7 @@ namespace Bothniabladet.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SalesDocument>()
-                .HasKey(x => x.DocumentId);
+                .HasKey(x => x.SalesDocumentId);
 
             //storing the NewsSection enum as an integer
             modelBuilder.Entity<Image>()
