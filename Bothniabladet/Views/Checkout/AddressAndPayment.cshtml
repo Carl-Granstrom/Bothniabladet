@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Bothniabladet.Models.Checkout.ShoppingCartModel>
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+
+<div class="container-fluid">
+
+    @*Header*@
+    <div class="row">
+        @*Better way than the previous version to handle go back (Even though it's in JavaScript)*@
+        <a href='javascript:history.go(-1)'>Back to List</a>
+        <hr />
+    </div>
+
+    <h1>Köp</h1>
+    <hr />
+    @*Main content*@
+    <div class="col">
+
+        @*The Image that are going to be sold*@
+        <div class="col-md-6 overflow-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Thumbnail
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Images.BasePrice)
+                        </th>
+                        <th>
+                            Operations
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Images" asp-action="Details" asp-route-id="@item.Images.ImageId">
+                                    <img src="@item.ImagesStringData" />
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                <a asp-action="">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3 align-text-bottom align-text-bottom ">
+            <div class="col">
+                <h2>Summa: </h2>
+            </div>
+            <div class="col">
+                <h2>
+                    @{
+                        int sum = 0;
+                        foreach (var item in Model)
+                        {
+                            sum += item.Images.BasePrice;
+                        }
+                        @Html.DisplayFor(modelItem => sum)
+                    }
+                </h2>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary" asp-controller="Checkout" asp-action="Complete">Köp</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

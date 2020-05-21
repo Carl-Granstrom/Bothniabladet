@@ -5,7 +5,8 @@
 }
 <div class="container-fluid">
 
-    <a asp-action="Index">Back to List</a>
+    @*Better way than the previous version to handle go back (Even though it's in JavaScript)*@
+    <a href='javascript:history.go(-1)'>Back to List</a>
     <hr />
 
     <div class="row">
@@ -25,11 +26,15 @@
                         </a>
                     }
                 </div>
-                <div class="col text-center pt-1 pl-0 pr-0">
-                    <button class="btn btn-outline-success" type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
-                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="col text-center pt-1 pl-0 pr-0">
+                        <button class="btn btn-outline-success" type="button" data-toggle="modal" data-target="#AddEditedImageModal">Lägg till</button>
+                    </div>
+                    <partial name="_PartialAddEditedImageModal" />
+                }
             </div>
-            <partial name="_PartialAddEditedImageModal" />
+
         </div>
 
 
@@ -84,8 +89,23 @@
                 </tbody>
             </table>
             @*Download doesn't exist yet and it also need to be changed to purchase depending on login status*@
-            <a class="align-text-bottom" asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> |
-            <a class="align-text-bottom" asp-action="Download" asp-route-id="@Model.Id">Ladda ner</a>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div>
+                    <a class="align-text-bottom" asp-action="Edit" asp-route-id="@Model.Id">Redigera</a> |
+                    <a class="align-text-bottom" asp-action="Download" asp-route-id="@Model.Id">Ladda ner</a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <form asp-controller="Checkout" asp-action="AddressAndPayment" method="post" role="form">
+                        @Html.HiddenFor(id => id.Id)
+                        <button type="submit">Lägg i kundvagn</button>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 </div>

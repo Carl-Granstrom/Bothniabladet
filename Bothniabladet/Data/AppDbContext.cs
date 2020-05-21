@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bothniabladet.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    // IdentityUser was changed to ApplicationUser because we want to add custom data to the user (owned images for example)
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(
-            DbContextOptions<AppDbContext> options) 
+            DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
@@ -23,9 +24,14 @@ namespace Bothniabladet.Data
         public DbSet<ImageKeyword> ImageKeywords { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<EditedImage> EditedImages { get; set; }
+        public DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public DbSet<ApplicationUser> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<SalesDocument>()
+                .HasKey(x => x.DocumentId);
+
             //storing the NewsSection enum as an integer
             modelBuilder.Entity<Image>()
                 .Property(c => c.Section)
@@ -46,7 +52,36 @@ namespace Bothniabladet.Data
 
             //configure compound primary key for ImageKeyword
             modelBuilder.Entity<ImageKeyword>()
-                .HasKey(x => new { x.ImageId, x.KeywordId } );
+                .HasKey(x => new { x.ImageId, x.KeywordId });
+
+            //configure the many to many relationship of images and User for the shoppingcart
+            modelBuilder.Entity<ShoppingCart>()
+                .HasKey(iu => new { iu.ImageId, iu.UserId });
+
+            //configure shoppingcart to shoppingcartImage
+            modelBuilder.Entity<ShoppingCart>()
+                .HasOne(iu => iu.User)
+                .WithMany(u => u.ShoppingCart)
+                .HasForeignKey(iu => iu.UserId);
+
+            //configure image to shoppingcartImage
+            modelBuilder.Entity<ShoppingCart>()
+                .HasOne(si => si.Image)
+                .WithMany(i => i.ShoppingCart)
+                .HasForeignKey(si => si.ImageId);
+
+            modelBuilder.Entity<UserDocuments>()
+                .HasKey(iu => new { iu.SalesDocumentId, iu.UserId });
+
+            modelBuilder.Entity<UserDocuments>()
+                .HasOne(iu => iu.User)
+                .WithMany(u => u.UserDocuments)
+                .HasForeignKey(iu => iu.UserId);
+
+            modelBuilder.Entity<UserDocuments>()
+                .HasOne(si => si.SalesDocument)
+                .WithMany(i => i.UserDocuments)
+                .HasForeignKey(si => si.SalesDocumentId);
 
             //create a unique contraint on Keyword.Word
             //Commented this out because handling unique constraints on a many-many is hairy at best, and a disaster at worst.
@@ -81,7 +116,7 @@ namespace Bothniabladet.Data
                 {
                     SectionEnumId = 3,
                     Name = NewsSection.NEWS
-                }, 
+                },
                 new SectionEnum
                 {
                     SectionEnumId = 4,

@@ -13,7 +13,8 @@
 }
 <h1>Ladda upp en bild</h1>
 <div>
-    <a asp-action="Index">Back to List</a>
+    @*Better way than the previous version to handle go back (Even though it's in JavaScript)*@
+    <a href='javascript:history.go(-1)'>Back to List</a>
 </div>
 
 <hr />

@@ -12,7 +12,7 @@ namespace Bothniabladet.Data
     public static async Task EnsuredPopulated(IServiceProvider services)
     {
 
-      var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+      var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
       var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
       await CreateRoles(roleManager);
@@ -26,9 +26,9 @@ namespace Bothniabladet.Data
       }
     }
 
-    public static async Task CreateUsers(UserManager<IdentityUser> uManager)
+    public static async Task CreateUsers(UserManager<ApplicationUser> uManager)
     {
-      IdentityUser Admin = new IdentityUser
+      ApplicationUser Admin = new ApplicationUser
       {
         UserName = "Admin",
         Email = "Admin@admin.com"

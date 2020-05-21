@@ -6,8 +6,8 @@
 
 <div class="container-fluid">
 
-    @*Need to populate the original id*@
-    <a asp-action="Details" asp-route-id="@Model.OriginalId">Back to List</a>
+    @*Better way than the previous version to handle go back (Even though it's in JavaScript)*@
+    <a href='javascript:history.go(-1)'>Back to List</a>
     <hr />
 
     <div class="row">
